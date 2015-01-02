@@ -10,17 +10,21 @@ import Foundation
 
 public class PromiseSource<T> {
   public let promise: Promise<T>
+  public var warnUnresolvedDeinit: Bool
 
-  public init() {
+  public init(warnUnresolvedDeinit: Bool = true) {
     self.promise = Promise<T>()
+    self.warnUnresolvedDeinit = warnUnresolvedDeinit
   }
 
   deinit {
-    switch promise.state {
-    case .Unresolved:
-      println("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
-    default:
-      break
+    if warnUnresolvedDeinit {
+      switch promise.state {
+      case .Unresolved:
+        println("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
+      default:
+        break
+      }
     }
   }
 
