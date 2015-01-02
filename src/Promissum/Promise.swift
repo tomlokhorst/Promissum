@@ -8,6 +8,8 @@
 
 import Foundation
 
+public let PromissumErrorDomain = "com.nonstrict.Promissum"
+
 public class Promise<T> {
   private(set) var state = State<T>.Unresolved
   private var resolvedHandlers: [T -> Void] = []
