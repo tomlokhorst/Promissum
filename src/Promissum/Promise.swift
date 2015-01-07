@@ -46,8 +46,8 @@ public class Promise<T> {
     let cont: T -> Void = { val in
       var transformedPromise = continuation(val)
       transformedPromise
-        .thenVoid(source.resolve)
-        .catchVoid(source.reject)
+        .then(source.resolve)
+        .catch(source.reject)
     }
 
     addResolvedHandler(cont)
@@ -56,7 +56,7 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func thenVoid(handler: T -> Void) -> Promise<T> {
+  public func then(handler: T -> Void) -> Promise<T> {
     addResolvedHandler(handler)
 
     return self
@@ -82,8 +82,8 @@ public class Promise<T> {
     let cont: NSError -> Void = { error in
       var transformedPromise = continuation(error)
       transformedPromise
-        .thenVoid(source.resolve)
-        .catchVoid(source.reject)
+        .then(source.resolve)
+        .catch(source.reject)
     }
 
     addErrorHandler(cont)
@@ -92,7 +92,7 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func catchVoid(continuation: NSError -> Void) -> Promise<T> {
+  public func catch(continuation: NSError -> Void) -> Promise<T> {
     addErrorHandler(continuation)
 
     return self

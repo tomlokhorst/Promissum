@@ -18,10 +18,10 @@ class ResolveRejectTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { _ in
+    p.then { _ in
       state = "resolved"
     }
-    p.catchVoid { _ in
+    p.catch { _ in
       state = "rejected"
     }
 
@@ -37,10 +37,10 @@ class ResolveRejectTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { _ in
+    p.then { _ in
       state = "resolved"
     }
-    p.catchVoid { _ in
+    p.catch { _ in
       state = "rejected"
     }
 
@@ -56,7 +56,7 @@ class ResolveRejectTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { _ in
+    p.then { _ in
       state = "resolved"
     }
     p.finally { _ in
@@ -77,7 +77,7 @@ class ResolveRejectTests: XCTestCase {
     p.finally { _ in
       state = "finally"
     }
-    p.thenVoid { _ in
+    p.then { _ in
       state = "resolved"
     }
 

@@ -27,7 +27,7 @@ class InitialValueTests: XCTestCase {
 
     let p = Promise(value: 42)
 
-    p.thenVoid { x in
+    p.then { x in
       value = x
     }
 
@@ -40,7 +40,7 @@ class InitialValueTests: XCTestCase {
     let p = Promise(value: 42)
       .map { $0 + 1 }
 
-    p.thenVoid { x in
+    p.then { x in
       value = x
     }
 
@@ -53,7 +53,7 @@ class InitialValueTests: XCTestCase {
     let p = Promise(value: 42)
       .flatMap { Promise(value: $0 + 1) }
 
-    p.thenVoid { x in
+    p.then { x in
       value = x
     }
 

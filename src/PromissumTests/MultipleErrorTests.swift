@@ -18,10 +18,10 @@ class MultipleErrorTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.catchVoid { _ in
+    p.catch { _ in
       calls += 1
     }
-    p.catchVoid { _ in
+    p.catch { _ in
       calls += 1
     }
 
@@ -36,11 +36,11 @@ class MultipleErrorTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.catchVoid { _ in
+    p.catch { _ in
       calls += 1
     }
     p.mapError { $0.code + 1 }
-      .thenVoid { _ in
+      .then { _ in
         calls += 1
       }
 
@@ -55,11 +55,11 @@ class MultipleErrorTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.catchVoid { _ in
+    p.catch { _ in
       calls += 1
     }
     p.flatMapError { Promise(value: $0.code + 1) }
-      .thenVoid { _ in
+      .then { _ in
         calls += 1
       }
 
@@ -74,11 +74,11 @@ class MultipleErrorTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.catchVoid { _ in
+    p.catch { _ in
       calls += 1
     }
     p.flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil))  }
-      .catchVoid { _ in
+      .catch { _ in
         calls += 1
       }
 

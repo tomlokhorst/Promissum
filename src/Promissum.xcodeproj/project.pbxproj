@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		E20506D31A1A9C0E00A9644B /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506CE1A1A9C0E00A9644B /* Promise.swift */; };
 		E20506D41A1A9C0E00A9644B /* Promises.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506CF1A1A9C0E00A9644B /* Promises.swift */; };
-		E20506D51A1A9C0E00A9644B /* Promises+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506D01A1A9C0E00A9644B /* Promises+Extension.swift */; };
 		E20506D61A1A9C0E00A9644B /* PromiseSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506D11A1A9C0E00A9644B /* PromiseSource.swift */; };
 		E20506D71A1A9C0E00A9644B /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506D21A1A9C0E00A9644B /* State.swift */; };
 		E21860F41A1A9BB3005B6047 /* Promissum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E21860E81A1A9BB3005B6047 /* Promissum.framework */; };
@@ -35,7 +34,6 @@
 /* Begin PBXFileReference section */
 		E20506CE1A1A9C0E00A9644B /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		E20506CF1A1A9C0E00A9644B /* Promises.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promises.swift; sourceTree = "<group>"; };
-		E20506D01A1A9C0E00A9644B /* Promises+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promises+Extension.swift"; sourceTree = "<group>"; };
 		E20506D11A1A9C0E00A9644B /* PromiseSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseSource.swift; sourceTree = "<group>"; };
 		E20506D21A1A9C0E00A9644B /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		E21860E81A1A9BB3005B6047 /* Promissum.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promissum.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,16 +68,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E20506D81A1A9C6900A9644B /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				E20506CE1A1A9C0E00A9644B /* Promise.swift */,
-				E20506D11A1A9C0E00A9644B /* PromiseSource.swift */,
-				E20506D21A1A9C0E00A9644B /* State.swift */,
-			);
-			name = Core;
-			sourceTree = "<group>";
-		};
 		E21860DE1A1A9BB3005B6047 = {
 			isa = PBXGroup;
 			children = (
@@ -101,9 +89,10 @@
 		E21860EA1A1A9BB3005B6047 /* Promissum */ = {
 			isa = PBXGroup;
 			children = (
-				E20506D81A1A9C6900A9644B /* Core */,
+				E20506CE1A1A9C0E00A9644B /* Promise.swift */,
 				E20506CF1A1A9C0E00A9644B /* Promises.swift */,
-				E20506D01A1A9C0E00A9644B /* Promises+Extension.swift */,
+				E20506D11A1A9C0E00A9644B /* PromiseSource.swift */,
+				E20506D21A1A9C0E00A9644B /* State.swift */,
 				E21860EB1A1A9BB3005B6047 /* Supporting Files */,
 			);
 			path = Promissum;
@@ -247,7 +236,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E20506D31A1A9C0E00A9644B /* Promise.swift in Sources */,
-				E20506D51A1A9C0E00A9644B /* Promises+Extension.swift in Sources */,
 				E20506D61A1A9C0E00A9644B /* PromiseSource.swift in Sources */,
 				E20506D71A1A9C0E00A9644B /* State.swift in Sources */,
 				E20506D41A1A9C0E00A9644B /* Promises.swift in Sources */,

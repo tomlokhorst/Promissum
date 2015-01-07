@@ -22,7 +22,7 @@ public class Promises {
     for (ix, promise) in enumerate(promises) {
 
       promise
-        .thenVoid { value in
+        .then { value in
           results[ix] = value
           remaining = remaining - 1
 
@@ -32,7 +32,7 @@ public class Promises {
       }
 
       promise
-        .catchVoid { error in
+        .catch { error in
           source.reject(error)
       }
     }

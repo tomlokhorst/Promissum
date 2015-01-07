@@ -31,7 +31,7 @@ class SourceValueTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { x in
+    p.then { x in
       value = x
     }
 
@@ -47,7 +47,7 @@ class SourceValueTests: XCTestCase {
     let p = source.promise
       .map { $0 + 1 }
 
-    p.thenVoid { x in
+    p.then { x in
       value = x
     }
 
@@ -63,7 +63,7 @@ class SourceValueTests: XCTestCase {
     let p = source.promise
       .flatMap { Promise(value: $0 + 1) }
 
-    p.thenVoid { x in
+    p.then { x in
       value = x
     }
 

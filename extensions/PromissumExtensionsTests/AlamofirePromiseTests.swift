@@ -20,13 +20,13 @@ class AlamofirePromiseTests: XCTestCase {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     Alamofire.request(.GET, url).responseJSONPromise()
-      .thenVoid { json in
+      .then { json in
         let name_ = json["name"] as? String
         if name_ == "Promissum" {
           expectation.fulfill()
         }
       }
-      .catchVoid { e in
+      .catch { e in
         println(e)
       }
 

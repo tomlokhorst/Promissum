@@ -18,10 +18,10 @@ class MultipleValueTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { _ in
+    p.then { _ in
       calls += 1
     }
-    p.thenVoid { _ in
+    p.then { _ in
       calls += 1
     }
 
@@ -36,11 +36,11 @@ class MultipleValueTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { _ in
+    p.then { _ in
       calls += 1
     }
     p.map { $0 + 1 }
-      .thenVoid { _ in
+      .then { _ in
         calls += 1
       }
 
@@ -55,11 +55,11 @@ class MultipleValueTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.thenVoid { _ in
+    p.then { _ in
       calls += 1
     }
     p.flatMap { Promise(value: $0 + 1) }
-      .thenVoid { _ in
+      .then { _ in
         calls += 1
       }
 
