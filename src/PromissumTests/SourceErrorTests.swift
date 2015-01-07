@@ -56,7 +56,7 @@ class SourceErrorTests: XCTestCase {
     XCTAssert(value == 43, "Value should be set")
   }
 
-  func testErrorFlatMap() {
+  func testErrorFlatMapValue() {
     var value: Int?
 
     let source = PromiseSource<Int>()
@@ -72,7 +72,7 @@ class SourceErrorTests: XCTestCase {
     XCTAssert(value == 43, "Value should be set")
   }
 
-  func testErrorFlatMap2() {
+  func testErrorFlatMapError() {
     var error: NSError?
 
     let source = PromiseSource<Int>()
