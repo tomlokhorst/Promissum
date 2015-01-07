@@ -38,4 +38,30 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
   return source.promise
 }
 
-// TODO: whenEither / whenAny
+public func whenEither<T>(promise1: Promise<T>, promise2: Promise<T>) -> Promise<T> {
+  return whenAny([promise1, promise2])
+}
+
+public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
+  let source = PromiseSource<T>()
+  var remaining = promises.count
+
+  for promise in promises {
+
+    promise
+      .then { value in
+        source.resolve(value)
+      }
+
+    promise
+      .catch { error in
+        remaining = remaining - 1
+
+        if remaining == 0 {
+          source.reject(error)
+        }
+      }
+  }
+
+  return source.promise
+}
