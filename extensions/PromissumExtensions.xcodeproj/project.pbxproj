@@ -12,6 +12,9 @@
 		E2406B1F1A5BBD6E000E5C78 /* Alamofire+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */; };
 		E2406B211A5BBDBF000E5C78 /* Promissum.framework in Embeded Frameworks */ = {isa = PBXBuildFile; fileRef = E2406B101A5BBBBD000E5C78 /* Promissum.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2406B221A5BBDBF000E5C78 /* Alamofire.framework in Embeded Frameworks */ = {isa = PBXBuildFile; fileRef = E2406B191A5BBCC9000E5C78 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E26288401A5F38A30087390A /* tiny-networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E262883F1A5F38A30087390A /* tiny-networking.swift */; };
+		E26288421A5F38DF0087390A /* TinyNetworking+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */; };
+		E26288471A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */; };
 		E28B567D1A5C926E00F2D6B0 /* CoreDataKit.framework in Embeded Frameworks */ = {isa = PBXBuildFile; fileRef = E28B567A1A5C926200F2D6B0 /* CoreDataKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */; };
 /* End PBXBuildFile section */
@@ -93,6 +96,9 @@
 		E2406B0A1A5BBBBD000E5C78 /* Promissum.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Promissum.xcodeproj; path = ../src/Promissum.xcodeproj; sourceTree = "<group>"; };
 		E2406B131A5BBCC9000E5C78 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Promise.swift"; sourceTree = "<group>"; };
+		E262883F1A5F38A30087390A /* tiny-networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "tiny-networking.swift"; path = "External/tiny-networking.swift"; sourceTree = "<group>"; };
+		E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TinyNetworking+Promise.swift"; sourceTree = "<group>"; };
+		E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinyNetworkingPromiseTests.swift; sourceTree = "<group>"; };
 		E28B56741A5C926200F2D6B0 /* CoreDataKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CoreDataKit.xcodeproj; path = CoreDataKit/CoreDataKit.xcodeproj; sourceTree = "<group>"; };
 		E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreDataKit+Promise.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -140,9 +146,11 @@
 		E2406AF01A5BBB8D000E5C78 /* PromissumExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				E2406AF11A5BBB8D000E5C78 /* Supporting Files */,
 				E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */,
 				E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */,
+				E26288381A5F387A0087390A /* External */,
+				E2406AF11A5BBB8D000E5C78 /* Supporting Files */,
+				E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */,
 			);
 			path = PromissumExtensions;
 			sourceTree = "<group>";
@@ -160,6 +168,7 @@
 			children = (
 				E2406B001A5BBB8D000E5C78 /* AlamofirePromiseTests.swift */,
 				E2406AFE1A5BBB8D000E5C78 /* Supporting Files */,
+				E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */,
 			);
 			path = PromissumExtensionsTests;
 			sourceTree = "<group>";
@@ -188,6 +197,14 @@
 				E2406B1B1A5BBCC9000E5C78 /* AlamofireTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E26288381A5F387A0087390A /* External */ = {
+			isa = PBXGroup;
+			children = (
+				E262883F1A5F38A30087390A /* tiny-networking.swift */,
+			);
+			name = External;
 			sourceTree = "<group>";
 		};
 		E28B56751A5C926200F2D6B0 /* Products */ = {
@@ -366,6 +383,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2406B1F1A5BBD6E000E5C78 /* Alamofire+Promise.swift in Sources */,
+				E26288421A5F38DF0087390A /* TinyNetworking+Promise.swift in Sources */,
+				E26288401A5F38A30087390A /* tiny-networking.swift in Sources */,
 				E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +393,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E26288471A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift in Sources */,
 				E2406B011A5BBB8D000E5C78 /* AlamofirePromiseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
