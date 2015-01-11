@@ -9,12 +9,16 @@
 import Foundation
 
 public class PromiseSource<T> {
-  public let promise: Promise<T>
+  public let promise: Promise<T>!
   public var warnUnresolvedDeinit: Bool
 
+  internal var resolvedHandlers: [T -> Void] = []
+  internal var errorHandlers: [NSError -> Void] = []
+
   public init(warnUnresolvedDeinit: Bool = true) {
-    self.promise = Promise<T>()
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
+
+    self.promise = Promise(source: self)
   }
 
   deinit {
@@ -29,10 +33,52 @@ public class PromiseSource<T> {
   }
 
   public func resolve(value: T) {
-    self.promise.tryResolve(value)
+
+    switch promise.state {
+    case State<T>.Unresolved:
+      promise.state = State<T>.Resolved(value)
+
+      executeResolvedHandlers(value)
+    default:
+      break
+    }
   }
 
   public func reject(error: NSError) {
-    self.promise.tryReject(error)
+
+    switch promise.state {
+    case State<T>.Unresolved:
+      promise.state = State<T>.Rejected(error)
+
+      executeErrorHandlers(error)
+    default:
+      break
+    }
+  }
+
+  private func executeResolvedHandlers(value: T) {
+
+    // Call all previously scheduled handlers
+    callHandlers(value, resolvedHandlers)
+
+    // Cleanup
+    resolvedHandlers = []
+    errorHandlers = []
+  }
+
+  private func executeErrorHandlers(error: NSError) {
+
+    // Call all previously scheduled handlers
+    callHandlers(error, errorHandlers)
+
+    // Cleanup
+    resolvedHandlers = []
+    errorHandlers = []
+  }
+}
+
+internal func callHandlers<T>(arg: T, handlers: [T -> Void]) {
+  for handler in handlers {
+    handler(arg)
   }
 }

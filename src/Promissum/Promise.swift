@@ -11,11 +11,10 @@ import Foundation
 public let PromissumErrorDomain = "com.nonstrict.Promissum"
 
 public class Promise<T> {
-  private(set) var state = State<T>.Unresolved
-  private var resolvedHandlers: [T -> Void] = []
-  private var errorHandlers: [NSError -> Void] = []
+  internal(set) var state: State<T>
 
-  internal init() {
+  internal init(source: PromiseSource<T>) {
+    self.state = State.Unresolved(source)
   }
 
   public init(value: T) {
@@ -24,6 +23,44 @@ public class Promise<T> {
 
   public init(error: NSError) {
     state = State<T>.Rejected(error)
+  }
+
+  public func value() -> T? {
+    switch state {
+    case State<T>.Resolved(let getter):
+      let val = getter()
+      return val
+    default:
+      return nil
+    }
+  }
+
+  public func error() -> NSError? {
+    switch state {
+    case State<T>.Rejected(let error):
+      return error
+    default:
+      return nil
+    }
+  }
+
+  public func then(handler: T -> Void) -> Promise<T> {
+    addResolvedHandler(handler)
+
+    return self
+  }
+
+  public func catch(continuation: NSError -> Void) -> Promise<T> {
+    addErrorHandler(continuation)
+
+    return self
+  }
+
+  public func finally(continuation: () -> Void) -> Promise<T> {
+    addResolvedHandler({ _ in continuation() })
+    addErrorHandler({ _ in continuation() })
+
+    return self
   }
 
   public func map<U>(continuation: T -> U) -> Promise<U> {
@@ -56,12 +93,6 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func then(handler: T -> Void) -> Promise<T> {
-    addResolvedHandler(handler)
-
-    return self
-  }
-
   public func mapError(continuation: NSError -> T) -> Promise<T> {
     let source = PromiseSource<T>()
 
@@ -92,30 +123,17 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func catch(continuation: NSError -> Void) -> Promise<T> {
-    addErrorHandler(continuation)
-
-    return self
-  }
-
-  public func finally(continuation: () -> Void) -> Promise<T> {
-    addResolvedHandler({ _ in continuation() })
-    addErrorHandler({ _ in continuation() })
-
-    return self
-  }
-
   private func addResolvedHandler(handler: T -> Void) {
 
     switch state {
-    case State<T>.Unresolved:
+    case let State<T>.Unresolved(source):
       // Save handler for later
-      resolvedHandlers.append(handler)
+      source.resolvedHandlers.append(handler)
 
     case State<T>.Resolved(let getter):
       // Value is already available, call handler immediately
-      let val = getter()
-      handler(val)
+      let value = getter()
+      callHandlers(value, [handler])
 
     case State<T>.Rejected:
       break;
@@ -125,86 +143,16 @@ public class Promise<T> {
   private func addErrorHandler(handler: NSError -> Void) {
 
     switch state {
-    case State<T>.Unresolved:
+    case let State<T>.Unresolved(source):
       // Save handler for later
-      errorHandlers.append(handler)
+      source.errorHandlers.append(handler)
 
     case State<T>.Rejected(let error):
       // Error is already available, call handler immediately
-      handler(error)
+      callHandlers(error, [handler])
 
     case State<T>.Resolved:
       break;
-    }
-  }
-
-  private func executeResolvedHandlers(value: T) {
-
-    // Call all previously scheduled handlers
-    for handler in resolvedHandlers {
-      handler(value)
-    }
-
-    // Cleanup
-    resolvedHandlers = []
-    errorHandlers = []
-  }
-
-  private func executeErrorHandlers(error: NSError) {
-
-    // Call all previously scheduled handlers
-    for handler in errorHandlers {
-      handler(error)
-    }
-
-    // Cleanup
-    resolvedHandlers = []
-    errorHandlers = []
-  }
-
-  public func value() -> T? {
-    switch state {
-    case State<T>.Resolved(let getter):
-      let val = getter()
-      return val
-    default:
-      return nil
-    }
-  }
-
-  public func error() -> NSError? {
-    switch state {
-    case State<T>.Rejected(let error):
-      return error
-    default:
-      return nil
-    }
-  }
-
-  internal func tryResolve(value: T) -> Bool {
-    switch state {
-    case State<T>.Unresolved:
-      state = State<T>.Resolved(value)
-
-      executeResolvedHandlers(value)
-
-      return true
-    default:
-      return false
-    }
-  }
-
-  internal func tryReject(error: NSError) -> Bool {
-
-    switch state {
-    case State<T>.Unresolved:
-      state = State<T>.Rejected(error)
-
-      executeErrorHandlers(error)
-
-      return true
-    default:
-      return false
     }
   }
 }

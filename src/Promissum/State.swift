@@ -9,7 +9,7 @@
 import Foundation
 
 public enum State<T> {
-  case Unresolved
+  case Unresolved(PromiseSource<T>)
   case Resolved(@autoclosure () -> T)
   case Rejected(NSError)
 }
