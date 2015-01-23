@@ -12,6 +12,7 @@
 		E20506D61A1A9C0E00A9644B /* PromiseSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506D11A1A9C0E00A9644B /* PromiseSource.swift */; };
 		E20506D71A1A9C0E00A9644B /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20506D21A1A9C0E00A9644B /* State.swift */; };
 		E21860F41A1A9BB3005B6047 /* Promissum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E21860E81A1A9BB3005B6047 /* Promissum.framework */; };
+		E2218CDB1A643169009FE208 /* Delay+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2218CDA1A643169009FE208 /* Delay+Promise.swift */; };
 		E28B56881A5DCEFE00F2D6B0 /* WhenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28B56871A5DCEFE00F2D6B0 /* WhenTests.swift */; };
 		E2DD5F0A1A548F2500A7A4BE /* InitialValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DD5F091A548F2500A7A4BE /* InitialValueTests.swift */; };
 		E2DD5F0F1A549A3500A7A4BE /* InitialErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DD5F0E1A549A3500A7A4BE /* InitialErrorTests.swift */; };
@@ -41,6 +42,7 @@
 		E21860EC1A1A9BB3005B6047 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E21860F31A1A9BB3005B6047 /* PromissumTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromissumTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21860F91A1A9BB3005B6047 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2218CDA1A643169009FE208 /* Delay+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Delay+Promise.swift"; sourceTree = "<group>"; };
 		E28B56871A5DCEFE00F2D6B0 /* WhenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhenTests.swift; sourceTree = "<group>"; };
 		E2DD5F091A548F2500A7A4BE /* InitialValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialValueTests.swift; sourceTree = "<group>"; };
 		E2DD5F0E1A549A3500A7A4BE /* InitialErrorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialErrorTests.swift; sourceTree = "<group>"; };
@@ -73,9 +75,10 @@
 		E21860DE1A1A9BB3005B6047 = {
 			isa = PBXGroup;
 			children = (
-				E21860EA1A1A9BB3005B6047 /* Promissum */,
-				E21860F71A1A9BB3005B6047 /* PromissumTests */,
 				E21860E91A1A9BB3005B6047 /* Products */,
+				E21860EA1A1A9BB3005B6047 /* Promissum */,
+				E2218CD91A643151009FE208 /* PromissumExtensions */,
+				E21860F71A1A9BB3005B6047 /* PromissumTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +133,15 @@
 				E21860F91A1A9BB3005B6047 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E2218CD91A643151009FE208 /* PromissumExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				E2218CDA1A643169009FE208 /* Delay+Promise.swift */,
+			);
+			name = PromissumExtensions;
+			path = Promissum;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +254,7 @@
 				E20506D61A1A9C0E00A9644B /* PromiseSource.swift in Sources */,
 				E20506D71A1A9C0E00A9644B /* State.swift in Sources */,
 				E20506D41A1A9C0E00A9644B /* Combinators.swift in Sources */,
+				E2218CDB1A643169009FE208 /* Delay+Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
