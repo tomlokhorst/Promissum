@@ -50,6 +50,7 @@ class ViewController: UIViewController {
     whenBoth(jsonPromise, fadeoutPromise)
       .map { json, _ in parseJson(json) }
       .flatMap(storeInCoreData)
+      .flatMap(delay(0.5))
       .then { project in
         self.nameLabel.text = project.name
         self.descriptionLabel.text = project.descr

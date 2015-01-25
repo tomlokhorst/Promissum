@@ -1,24 +1,42 @@
 <img src="https://cloud.githubusercontent.com/assets/75655/5077599/2f2d9f8c-6ea5-11e4-98d2-cdb72f6686a8.png" width="170" alt="Promissum">
 <hr>
 
-Promissum is a promises library written in Swift.
+Promissum is a promises library written in Swift. It features some known functions from Function Programming like, `map` and `flatMap`.
+
+It has useful combinators for working with promises like; `whenAll` for doing something when multiple promises complete, and `whenAny` for doing something when a single one of a list of promises completes. As well as their binary counterparts: `whenBoth` and `whenEither`.
+
+Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit, Alamofire and CoreDataKit, and contributions for extensions to other libraries are very welcome.
 
 Example
 -------
 
-An example using the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/Alamofire%2BPromise.swift) extension:
+This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
+
+In this example, JSON data is loaded from the Github API. It is then parsed, and stored into CoreData.
+If both those succeed the result is shown to the user, if either of those fail, a description of the error is shown to the user.
 
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
-
     Alamofire.request(.GET, url).responseJSONPromise()
-      .then { json in
-        if let name = json["name"] as? String {
-          println("This is \(name)!")
+      .map(parseJson)
+      .flatMap(storeInCoreData)
+      .then { project in
+
+        // Show project name and description
+        self.nameLabel.text = project.name
+        self.descriptionLabel.text = project.descr
+
+        UIView.animateWithDuration(0.5) {
+          self.detailsView.alpha = 1
         }
       }
       .catch { e in
-        println("An error occurred: \(e)")
+
+        // Either an Alamofire error or a CoreData error occured
+        self.errorLabel.text = e.localizedDescription
+        self.errorView.alpha = 1
       }
+
+See [FadeExample/ViewController.swift](https://github.com/tomlokhorst/Promissum/blob/develop/examples/FadeExample/FadeExample/ViewController.swift) for an extended version of this example.
 
 
 Installation
