@@ -65,3 +65,9 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
 
   return source.promise
 }
+
+extension Promise {
+  public func void() -> Promise<Void> {
+    return self.map { _ in }
+  }
+}
