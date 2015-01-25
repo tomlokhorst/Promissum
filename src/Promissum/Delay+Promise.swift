@@ -14,12 +14,28 @@ public func delay(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_g
   dispatch_after(when, queue, block)
 }
 
-public func delayPromise(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Void> {
-  let source = PromiseSource<Void>()
+public func delayPromise<T>(seconds: NSTimeInterval, value: T, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<T> {
+  let source = PromiseSource<T>()
 
-  delay(seconds, queue: queue, source.resolve)
+  delay(seconds, queue: queue) {
+    source.resolve(value)
+  }
 
   return source.promise
+}
+
+public func delayErrorPromise<T>(seconds: NSTimeInterval, error: NSError, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<T> {
+  let source = PromiseSource<T>()
+
+  delay(seconds, queue: queue) {
+    source.reject(error)
+  }
+
+  return source.promise
+}
+
+public func delayPromise(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Void> {
+  return delayPromise(seconds, (), queue: queue)
 }
 
 public func delay<T>(seconds: NSTimeInterval)(value: T) -> Promise<T> {
