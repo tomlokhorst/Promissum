@@ -24,8 +24,6 @@ class TinyNetworkingPromiseTests: XCTestCase {
       headers: [:],
       parse: decodeJSON)
 
-
-    // Start the asynchroneous downloading of a large file, passing in the cancellation token
     apiRequestPromise({ _ in }, baseURL, repoResource)
       .then { json in
         let name_ = json["name"] as? String
@@ -43,7 +41,7 @@ class TinyNetworkingPromiseTests: XCTestCase {
         println(e)
       }
 
-    // Wait for 1 second for the download to be cancelled
+    // Wait for 1 second for the request to finish
     waitForExpectationsWithTimeout(5.0, handler: nil)
   }
 }
