@@ -13,7 +13,7 @@ import PromissumExtensions
 
 class TinyNetworkingPromiseTests: XCTestCase {
 
-  func testAlamofire() {
+  func testTinyNetworking() {
     let expectation = expectationWithDescription("Request not completed")
 
     let baseURL = NSURL(string: "https://api.github.com")!
