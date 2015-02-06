@@ -50,6 +50,11 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
   let source = PromiseSource<T>()
   var remaining = promises.count
 
+  if remaining == 0 {
+    let userInfo = [ NSLocalizedDescriptionKey: "whenAny: empty array of promises provided" ]
+    source.reject(NSError(domain: PromissumErrorDomain, code: 0, userInfo: userInfo))
+  }
+
   for promise in promises {
 
     promise
