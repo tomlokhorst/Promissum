@@ -115,4 +115,67 @@ class WhenTests: XCTestCase {
 
     XCTAssert(value == 2, "Value should be 2")
   }
+
+  func testWhenAllResolved() {
+    var values: [Int]?
+
+    let source1 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int>()
+    let p1 = source1.promise
+    let p2 = source2.promise
+
+    whenAll([p1, p2])
+      .then { xs in
+        values = xs
+      }
+
+    source2.resolve(2)
+    source1.resolve(1)
+
+    XCTAssert(values != nil && values! == [1, 2], "Values should be [1, 2]")
+  }
+
+  func testWhenAnyResolved() {
+    var value: Int?
+
+    let source1 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int>()
+    let p1 = source1.promise
+    let p2 = source2.promise
+
+    whenAny([p1, p2])
+      .then { x in
+        value = x
+      }
+
+    source2.resolve(2)
+
+    XCTAssert(value == 2, "Value should be 2")
+  }
+
+  func testWhenAllEmpy() {
+    var values: [Int]?
+
+    let promises: [Promise<Int>] = []
+
+    whenAll(promises)
+      .then { xs in
+        values = xs
+      }
+
+    XCTAssert(values != nil && values! == [], "Values should be [1]")
+  }
+
+  func testWhenAnyEmpty() {
+    var error: NSError?
+
+    let promises: [Promise<Int>] = []
+
+    whenAny(promises)
+      .catch { e in
+        error = e
+      }
+
+    XCTAssert(error != nil, "Error should be set")
+  }
 }
