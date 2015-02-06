@@ -17,6 +17,10 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
   var results = promises.map { $0.value() }
   var remaining = promises.count
 
+  if remaining == 0 {
+    source.resolve([])
+  }
+  
   for (ix, promise) in enumerate(promises) {
 
     promise
