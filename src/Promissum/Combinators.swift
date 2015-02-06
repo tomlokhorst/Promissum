@@ -86,13 +86,13 @@ public func whenAllFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
   for (ix, promise) in enumerate(promises) {
     
     promise
-      . finally { () -> Void in
+      .finally {
         remaining = remaining - 1
-        
+
         if remaining == 0 {
           source.resolve()
         }
-    }
+      }
   }
   
   return source.promise
