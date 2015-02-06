@@ -178,4 +178,23 @@ class WhenTests: XCTestCase {
 
     XCTAssert(error != nil, "Error should be set")
   }
+
+  func testWhenAllFinalized() {
+    var finalized = false
+
+    let source1 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int>()
+    let p1 = source1.promise
+    let p2 = source2.promise
+
+    whenAllFinalized([p1, p2])
+      .then {
+        finalized = true
+      }
+
+    source1.resolve(1)
+    source2.reject(NSError(domain: PromissumErrorDomain, code: 2, userInfo: nil))
+
+    XCTAssert(finalized, "Value should be 2")
+  }
 }
