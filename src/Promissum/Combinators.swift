@@ -17,6 +17,10 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
   var results = promises.map { $0.value() }
   var remaining = promises.count
 
+  if remaining == 0 {
+    source.resolve([])
+  }
+  
   for (ix, promise) in enumerate(promises) {
 
     promise
@@ -46,6 +50,11 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
   let source = PromiseSource<T>()
   var remaining = promises.count
 
+  if remaining == 0 {
+    let userInfo = [ NSLocalizedDescriptionKey: "whenAny: empty array of promises provided" ]
+    source.reject(NSError(domain: PromissumErrorDomain, code: 0, userInfo: userInfo))
+  }
+
   for promise in promises {
 
     promise
@@ -60,6 +69,49 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
         if remaining == 0 {
           source.reject(error)
         }
+      }
+  }
+
+  return source.promise
+}
+
+public func whenAllFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
+  let source = PromiseSource<Void>()
+  var remaining = promises.count
+
+  if remaining == 0 {
+    source.resolve()
+  }
+
+  for promise in promises {
+
+    promise
+      .finally {
+        remaining = remaining - 1
+
+        if remaining == 0 {
+          source.resolve()
+        }
+      }
+  }
+
+  return source.promise
+}
+
+public func whenAnyFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
+  let source = PromiseSource<Void>()
+  var remaining = promises.count
+
+  if remaining == 0 {
+    let userInfo = [ NSLocalizedDescriptionKey: "whenAnyFinalized: empty array of promises provided" ]
+    source.reject(NSError(domain: PromissumErrorDomain, code: 0, userInfo: userInfo))
+  }
+
+  for promise in promises {
+
+    promise
+      .finally {
+        source.resolve()
       }
   }
 
