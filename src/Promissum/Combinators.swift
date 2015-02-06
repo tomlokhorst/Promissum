@@ -66,6 +66,29 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
   return source.promise
 }
 
+public func whenAllFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
+  let source = PromiseSource<Void>()
+  var remaining = promises.count
+
+  if remaining == 0 {
+    source.resolve()
+  }
+  
+  for (ix, promise) in enumerate(promises) {
+    
+    promise
+      . finally { () -> Void in
+        remaining = remaining - 1
+        
+        if remaining == 0 {
+          source.resolve()
+        }
+    }
+  }
+  
+  return source.promise
+}
+
 extension Promise {
   public func void() -> Promise<Void> {
     return self.map { _ in }
