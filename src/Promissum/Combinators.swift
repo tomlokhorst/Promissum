@@ -8,6 +8,19 @@
 
 import Foundation
 
+public func flatten<T>(promise: Promise<Promise<T>>) -> Promise<T> {
+  let source = PromiseSource<T>()
+
+  promise
+    .catch(source.reject)
+    .then { p in
+      p.catch(source.reject).then(source.resolve)
+      return
+    }
+
+  return source.promise
+}
+
 public func whenBoth<A, B>(promiseA: Promise<A>, promiseB: Promise<B>) -> Promise<(A, B)> {
   return promiseA.flatMap { valueA in promiseB.map { valueB in (valueA, valueB) } }
 }

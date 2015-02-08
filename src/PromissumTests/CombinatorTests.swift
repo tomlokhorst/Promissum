@@ -1,5 +1,5 @@
 //
-//  WhenTests.swift
+//  CombinatorTests.swift
 //  Promissum
 //
 //  Created by Tom Lokhorst on 2015-01-07.
@@ -10,7 +10,63 @@ import Foundation
 import XCTest
 import Promissum
 
-class WhenTests: XCTestCase {
+class CombinatorTests: XCTestCase {
+
+  func testFlattenValueValue() {
+    var value: Int?
+
+    let source1 = PromiseSource<Promise<Int>>()
+    let source2 = PromiseSource<Int>()
+    let outer = source1.promise
+    let inner = source2.promise
+
+    flatten(outer)
+      .then { x in
+        value = x
+      }
+
+    source1.resolve(inner)
+    source2.resolve(42)
+
+    XCTAssert(value == 42, "Value should be 42")
+  }
+
+  func testFlattenValueError() {
+    var error: NSError?
+
+    let source1 = PromiseSource<Promise<Int>>()
+    let source2 = PromiseSource<Int>()
+    let outer = source1.promise
+    let inner = source2.promise
+
+    flatten(outer)
+      .catch { e in
+        error = e
+      }
+
+    source1.resolve(inner)
+    source2.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssert(error?.code == 42, "Error should be 42")
+  }
+
+  func testFlattenErrorError() {
+    var error: NSError?
+
+    let source1 = PromiseSource<Promise<Int>>()
+    let source2 = PromiseSource<Int>()
+    let outer = source1.promise
+    let inner = source2.promise
+
+    flatten(outer)
+      .catch { e in
+        error = e
+      }
+
+    source1.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssert(error?.code == 42, "Error should be 42")
+  }
 
   func testBothValue() {
     var value: Int?
