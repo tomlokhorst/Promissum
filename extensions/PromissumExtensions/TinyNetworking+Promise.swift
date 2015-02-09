@@ -33,11 +33,6 @@ public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseU
   return source.promise
 }
 
-public class Box<T> {
-  public let unbox: T
-  public init(_ value: T) { self.unbox = value }
-}
-
 extension Reason: Printable {
   public var description: String {
     switch self {
@@ -45,8 +40,8 @@ extension Reason: Printable {
       return "CouldNotParseJSON"
     case .NoData:
       return "NoData"
-    case let .NoSuccessStatusCode(statusCode):
-      return "NoSuccessStatusCode(\(statusCode))"
+    case let .NoSuccessStatusCode(x):
+      return "NoSuccessStatusCode(\(x.statusCode))"
     case let .Other(error):
       return "Other(\(error))"
     }

@@ -71,7 +71,7 @@ extension UIViewController {
   public func dismissViewControllerPromise(animated flag: Bool) -> Promise<Void> {
     let source = PromiseSource<Void>()
 
-    self.dismissViewControllerAnimated(flag, source.resolve)
+    self.dismissViewControllerAnimated(flag, completion: source.resolve)
 
     return source.promise
   }

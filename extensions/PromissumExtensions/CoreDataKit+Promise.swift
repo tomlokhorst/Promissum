@@ -14,11 +14,11 @@ import Promissum
 extension Result {
   func toPromise() -> Promise<T> {
     switch self {
-    case let .Success(boxedObject):
-      return Promise<T>(value: boxedObject())
+    case let .Success(boxed):
+      return Promise(value: boxed.unbox)
 
     case let .Failure(error):
-      return Promise<T>(error: error)
+      return Promise(error: error)
     }
   }
 }
@@ -42,8 +42,8 @@ extension NSManagedObjectContext {
     performBlock(block) { result in
       dispatch_async(dispatch_get_main_queue()) {
         switch result {
-        case let .Success(commitAction):
-          promiseSource.resolve(commitAction())
+        case let .Success(boxed):
+          promiseSource.resolve(boxed.unbox)
 
         case let .Failure(error):
           promiseSource.reject(error)
