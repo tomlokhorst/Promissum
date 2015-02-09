@@ -19,11 +19,11 @@ public class Promise<T> {
   }
 
   public init(value: T) {
-    state = State<T>.Resolved(value)
+    state = .Resolved(Box(value))
   }
 
   public init(error: NSError) {
-    state = State<T>.Rejected(error)
+    state = .Rejected(error)
   }
 
   public func map<U>(continuation: T -> U) -> Promise<U> {
@@ -112,10 +112,9 @@ public class Promise<T> {
       // Save handler for later
       resolvedHandlers.append(handler)
 
-    case State<T>.Resolved(let getter):
+    case State<T>.Resolved(let boxed):
       // Value is already available, call handler immediately
-      let val = getter()
-      handler(val)
+      handler(boxed.unbox)
 
     case State<T>.Rejected:
       break;
@@ -164,9 +163,8 @@ public class Promise<T> {
 
   public func value() -> T? {
     switch state {
-    case State<T>.Resolved(let getter):
-      let val = getter()
-      return val
+    case State<T>.Resolved(let boxed):
+      return boxed.unbox
     default:
       return nil
     }
@@ -184,7 +182,7 @@ public class Promise<T> {
   internal func tryResolve(value: T) -> Bool {
     switch state {
     case State<T>.Unresolved:
-      state = State<T>.Resolved(value)
+      state = .Resolved(Box(value))
 
       executeResolvedHandlers(value)
 
@@ -198,7 +196,7 @@ public class Promise<T> {
 
     switch state {
     case State<T>.Unresolved:
-      state = State<T>.Rejected(error)
+      state = .Rejected(error)
 
       executeErrorHandlers(error)
 
