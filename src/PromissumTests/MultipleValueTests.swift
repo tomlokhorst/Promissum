@@ -46,7 +46,7 @@ class MultipleValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    XCTAssertEqual(calls, 2, "Calls should be 2")
   }
 
   func testValueFlatMap() {
@@ -65,7 +65,7 @@ class MultipleValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    XCTAssertEqual(calls, 2, "Calls should be 2")
   }
 
   func testFinally() {
@@ -84,6 +84,6 @@ class MultipleValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    XCTAssertEqual(calls, 2, "Calls should be 2")
   }
 }

@@ -29,6 +29,8 @@ class SideEffectOrderTests : XCTestCase {
       }
 
     source.resolve(42)
+
+    XCTAssertEqual(step, 2, "Should be step 2")
   }
 
   func testCatch() {
@@ -48,6 +50,8 @@ class SideEffectOrderTests : XCTestCase {
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssertEqual(step, 2, "Should be step 2")
   }
 
   func testMap() {
@@ -57,21 +61,29 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .then { _ in
+      .then { value in
+        XCTAssertEqual(value, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
       }
-      .map { x in
+      .map { value in
+        XCTAssertEqual(value, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 2, "Should be step 2")
-        return x
+        return value + 1
       }
-      .then { _ in
+      .then { value in
+        XCTAssertEqual(value, 43, "Value should be 43")
+
         step += 1
         XCTAssertEqual(step, 3, "Should be step 3")
       }
 
     source.resolve(42)
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testMapError() {
@@ -81,21 +93,29 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .catch { _ in
+      .catch { error in
+        XCTAssertEqual(error.code, 42, "Error should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
       }
       .mapError { error in
+        XCTAssertEqual(error.code, 42, "Error should be 42")
+
         step += 1
         XCTAssertEqual(step, 2, "Should be step 2")
-        return error.code
+        return error.code + 1
       }
-      .catch { _ in
+      .then { value in
+        XCTAssertEqual(value, 43, "Value should be 43")
+
         step += 1
         XCTAssertEqual(step, 3, "Should be step 3")
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testMap2() {
@@ -105,23 +125,31 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .map { x in
+      .map { value in
+        XCTAssertEqual(value, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
-        return x
+        return value + 1
       }
 
-    p.then { _ in
+    p.then { value in
+      XCTAssertEqual(value, 42, "Value should be 42")
+
       step += 1
       XCTAssertEqual(step, 2, "Should be step 2")
     }
 
-    q.then { _ in
+    q.then { value in
+      XCTAssertEqual(value, 43, "Value should be 43")
+
       step += 1
       XCTAssertEqual(step, 3, "Should be step 3")
     }
 
     source.resolve(42)
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testMapError2() {
@@ -132,22 +160,30 @@ class SideEffectOrderTests : XCTestCase {
 
     let q: Promise<Int> = p
       .mapError { error in
+        XCTAssertEqual(error.code, 42, "Error should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
-        return error.code
+        return error.code + 1
       }
 
-    p.catch { _ in
+    p.catch { error in
+      XCTAssertEqual(error.code, 42, "Error should be 42")
+
       step += 1
       XCTAssertEqual(step, 2, "Should be step 2")
     }
 
-    q.catch { _ in
+    q.then { value in
+      XCTAssertEqual(value, 43, "Value should be 43")
+
       step += 1
       XCTAssertEqual(step, 3, "Should be step 3")
     }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testFlatMap() {
@@ -157,21 +193,29 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .then { _ in
+      .then { value in
+        XCTAssertEqual(value, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
       }
-      .flatMap { x in
+      .flatMap { value in
+        XCTAssertEqual(value, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 2, "Should be step 2")
-        return Promise(value: x)
+        return Promise(value: value + 1)
       }
-      .then { _ in
+      .then { value in
+        XCTAssertEqual(value, 43, "Value should be 43")
+
         step += 1
         XCTAssertEqual(step, 3, "Should be step 3")
       }
 
     source.resolve(42)
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testFlatMapError() {
@@ -181,21 +225,29 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .catch { _ in
+      .catch { error in
+        XCTAssertEqual(error.code, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
       }
       .flatMapError { error in
+        XCTAssertEqual(error.code, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 2, "Should be step 2")
-        return Promise(error: error)
+        return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
       }
-      .catch { _ in
+      .catch { error in
+        XCTAssertEqual(error.code, 43, "Value should be 43")
+
         step += 1
         XCTAssertEqual(step, 3, "Should be step 3")
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testFlatMap2() {
@@ -205,23 +257,31 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .flatMap { x in
+      .flatMap { value in
+        XCTAssertEqual(value, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
-        return Promise(value: x)
+        return Promise(value: value)
       }
 
-    p.then { _ in
+    p.then { value in
+      XCTAssertEqual(value, 42, "Value should be 42")
+
       step += 1
       XCTAssertEqual(step, 2, "Should be step 2")
     }
 
-    q.then { _ in
+    q.then { value in
+      XCTAssertEqual(value, 43, "Value should be 43")
+
       step += 1
       XCTAssertEqual(step, 3, "Should be step 3")
     }
 
     source.resolve(42)
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 
   func testFlatMapError2() {
@@ -232,21 +292,29 @@ class SideEffectOrderTests : XCTestCase {
 
     let q: Promise<Int> = p
       .flatMapError { error in
+        XCTAssertEqual(error.code, 42, "Value should be 42")
+
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
-        return Promise(error: error)
+        return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
       }
 
-    p.catch { _ in
+    p.catch { error in
+      XCTAssertEqual(error.code, 42, "Value should be 42")
+
       step += 1
       XCTAssertEqual(step, 2, "Should be step 2")
     }
 
-    q.catch { _ in
+    q.catch { error in
+      XCTAssertEqual(error.code, 43, "Value should be 43")
+
       step += 1
       XCTAssertEqual(step, 3, "Should be step 3")
     }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssertEqual(step, 3, "Should be step 3")
   }
 }
