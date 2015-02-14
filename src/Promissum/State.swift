@@ -10,7 +10,7 @@ import Foundation
 
 public enum State<T> {
   case Unresolved(PromiseSource<T>)
-  case Resolved(@autoclosure () -> T)
+  case Resolved(Box<T>)
   case Rejected(NSError)
 }
 
@@ -20,8 +20,8 @@ extension State: Printable {
     switch self {
     case .Unresolved:
       return "Unresolved"
-    case .Resolved(let getter):
-      let val = getter()
+    case .Resolved(let boxed):
+      let val = boxed.unbox
       return "Resolved(\(val))"
     case .Rejected(let error):
       return "Rejected(\(error))"

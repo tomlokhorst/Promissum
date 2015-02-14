@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import CoreDataKit
+import enum CoreDataKit.Result
 import Promissum
 
 extension Result {

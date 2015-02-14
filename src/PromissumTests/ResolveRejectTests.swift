@@ -59,7 +59,7 @@ class ResolveRejectTests: XCTestCase {
     p.then { _ in
       state = "resolved"
     }
-    p.finally { _ in
+    p.finally {
       state = "finally"
     }
 
@@ -74,7 +74,7 @@ class ResolveRejectTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    p.finally { _ in
+    p.finally {
       state = "finally"
     }
     p.then { _ in
