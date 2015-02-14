@@ -62,10 +62,8 @@ public class Promise<T> {
 
   public func map<U>(transform: T -> U) -> Promise<U> {
     let source = PromiseSource<U>(
-      onAddHandler: { p, handler in
-        self.addResultHandler({ _ in
-          p.addResultHandler(handler)
-        })
+      onAddHandler: { executeAddHandler in
+        self.addResultHandler { _ in executeAddHandler() }
       },
       warnUnresolvedDeinit: true)
 
@@ -106,10 +104,8 @@ public class Promise<T> {
 
   public func mapError(transform: NSError -> T) -> Promise<T> {
     let source = PromiseSource<T>(
-      onAddHandler: { p, handler in
-        self.addResultHandler({ _ in
-          p.addResultHandler(handler)
-        })
+      onAddHandler: { executeAddHandler in
+        self.addResultHandler { _ in executeAddHandler() }
       },
       warnUnresolvedDeinit: true)
 
@@ -197,7 +193,7 @@ public class Promise<T> {
     return self
   }
 
-  private func addResultHandler(handler: Result<T> -> Void) {
+  internal func addResultHandler(handler: Result<T> -> Void) {
 
     switch state {
     case State<T>.Unresolved(let source):

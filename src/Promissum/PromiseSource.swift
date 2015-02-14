@@ -15,13 +15,13 @@ public class PromiseSource<T> {
 
   private var handlers: [Result<T> -> Void] = []
 
-  private let onAddHandler: ((Promise<T>, ResultHandler) -> Void)?
+  private let onAddHandler: ((() -> Void) -> Void)?
 
   public convenience init(warnUnresolvedDeinit: Bool = true) {
     self.init(onAddHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  public init(onAddHandler: ((Promise<T>, ResultHandler) -> Void)?, warnUnresolvedDeinit: Bool) {
+  public init(onAddHandler: ((() -> Void) -> Void)?, warnUnresolvedDeinit: Bool) {
     self.onAddHandler = onAddHandler
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
@@ -65,7 +65,12 @@ public class PromiseSource<T> {
 
   internal func addHander(handler: Result<T> -> Void) {
     if let onAddHandler = onAddHandler {
-      onAddHandler(promise, handler)
+      let executeAddHandler: () -> Void = {
+        self.promise.addResultHandler(handler)
+        return
+      }
+
+      onAddHandler(executeAddHandler)
     }
     else {
       handlers.append(handler)
