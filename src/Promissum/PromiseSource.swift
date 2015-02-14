@@ -9,25 +9,20 @@
 import Foundation
 
 public class PromiseSource<T> {
-  public typealias ResolveHandler = T -> Void
-  public typealias ErrorHandler = NSError -> Void
-
+  typealias ResultHandler = Result<T> -> Void
   public let promise: Promise<T>!
   public var warnUnresolvedDeinit: Bool
 
-  private var resolvedHandlers: [ResolveHandler] = []
-  private var errorHandlers: [ErrorHandler] = []
+  private var handlers: [Result<T> -> Void] = []
 
-  private let onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?
-  private let onCatchHandler: ((Promise<T>, ErrorHandler) -> Void)?
+  private let onAddHandler: ((Promise<T>, ResultHandler) -> Void)?
 
   public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(onThenHandler: nil, onCatchHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(onAddHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  public init(onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?, onCatchHandler: ((Promise<T>, ErrorHandler) -> Void)?, warnUnresolvedDeinit: Bool) {
-    self.onThenHandler = onThenHandler
-    self.onCatchHandler = onCatchHandler
+  public init(onAddHandler: ((Promise<T>, ResultHandler) -> Void)?, warnUnresolvedDeinit: Bool) {
+    self.onAddHandler = onAddHandler
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
     self.promise = Promise(source: self)
@@ -50,7 +45,7 @@ public class PromiseSource<T> {
     case State<T>.Unresolved:
       promise.state = State<T>.Resolved(Box(value))
 
-      executeResolvedHandlers(value)
+      executeResultHandlers(.Value(Box(value)))
     default:
       break
     }
@@ -62,48 +57,28 @@ public class PromiseSource<T> {
     case State<T>.Unresolved:
       promise.state = State<T>.Rejected(error)
 
-      executeErrorHandlers(error)
+      executeResultHandlers(.Error(error))
     default:
       break
     }
   }
 
-  internal func addResolvedHander(handler: ResolveHandler) {
-    if let onThenHandler = onThenHandler {
-      onThenHandler(promise, handler)
+  internal func addHander(handler: Result<T> -> Void) {
+    if let onAddHandler = onAddHandler {
+      onAddHandler(promise, handler)
     }
     else {
-      resolvedHandlers.append(handler)
+      handlers.append(handler)
     }
   }
 
-  internal func addErrorHandler(handler: ErrorHandler) {
-    if let onCatchHandler = onCatchHandler {
-      onCatchHandler(promise, handler)
-    }
-    else {
-      errorHandlers.append(handler)
-    }
-  }
-
-  private func executeResolvedHandlers(value: T) {
+  private func executeResultHandlers(result: Result<T>) {
 
     // Call all previously scheduled handlers
-    callHandlers(value, resolvedHandlers)
+    callHandlers(result, handlers)
 
     // Cleanup
-    resolvedHandlers = []
-    errorHandlers = []
-  }
-
-  private func executeErrorHandlers(error: NSError) {
-
-    // Call all previously scheduled handlers
-    callHandlers(error, errorHandlers)
-
-    // Cleanup
-    resolvedHandlers = []
-    errorHandlers = []
+    handlers = []
   }
 }
 
