@@ -86,38 +86,6 @@ class SideEffectOrderTests : XCTestCase {
     XCTAssertEqual(step, 3, "Should be step 3")
   }
 
-  func testMapError() {
-    var step = 0
-
-    let source = PromiseSource<Int>()
-    let p = source.promise
-
-    let q: Promise<Int> = p
-      .catch { error in
-        XCTAssertEqual(error.code, 42, "Error should be 42")
-
-        step += 1
-        XCTAssertEqual(step, 1, "Should be step 1")
-      }
-      .mapError { error in
-        XCTAssertEqual(error.code, 42, "Error should be 42")
-
-        step += 1
-        XCTAssertEqual(step, 2, "Should be step 2")
-        return error.code + 1
-      }
-      .then { value in
-        XCTAssertEqual(value, 43, "Value should be 43")
-
-        step += 1
-        XCTAssertEqual(step, 3, "Should be step 3")
-      }
-
-    source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
-
-    XCTAssertEqual(step, 3, "Should be step 3")
-  }
-
   func testMap2() {
     var step = 0
 
@@ -152,7 +120,7 @@ class SideEffectOrderTests : XCTestCase {
     XCTAssertEqual(step, 3, "Should be step 3")
   }
 
-  func testMapError2() {
+  func testMapError() {
     var step = 0
 
     let source = PromiseSource<Int>()
@@ -184,6 +152,38 @@ class SideEffectOrderTests : XCTestCase {
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
     XCTAssertEqual(step, 3, "Should be step 3")
+  }
+
+  func testErrorMap() {
+    var step = 0
+
+    let source = PromiseSource<Int>()
+    let p = source.promise
+
+    let q: Promise<Int> = p
+      .map { value in
+        step += 1
+        XCTFail("Shouldn't happen")
+        return value
+      }
+
+    p.catch { error in
+      XCTAssertEqual(error.code, 42, "Error should be 42")
+
+      step += 1
+      XCTAssertEqual(step, 1, "Should be step 1")
+    }
+
+    q.catch { error in
+      XCTAssertEqual(error.code, 42, "Value should be 42")
+
+      step += 1
+      XCTAssertEqual(step, 2, "Should be step 2")
+    }
+
+    source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+
+    XCTAssertEqual(step, 2, "Should be step 1")
   }
 
   func testFlatMap() {

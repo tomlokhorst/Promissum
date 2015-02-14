@@ -70,6 +70,11 @@ public class Promise<T> {
           p.addResolvedHandler(thenHandler)
         })
       },
+      onCatchHandler: { p, catchHandler in
+        self.addErrorHandler({ _ in
+          p.addErrorHandler(catchHandler)
+        })
+      },
       warnUnresolvedDeinit: true)
 
     let cont: T -> Void = { val in
@@ -106,6 +111,7 @@ public class Promise<T> {
           p.addResolvedHandler(thenHandler)
         })
       },
+      onCatchHandler: nil,
       warnUnresolvedDeinit: true)
 
     let cont: NSError -> Void = { error in

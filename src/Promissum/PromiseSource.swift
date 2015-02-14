@@ -9,8 +9,8 @@
 import Foundation
 
 public class PromiseSource<T> {
-  typealias ResolveHandler = T -> Void
-  typealias ErrorHandler = NSError -> Void
+  public typealias ResolveHandler = T -> Void
+  public typealias ErrorHandler = NSError -> Void
 
   public let promise: Promise<T>!
   public var warnUnresolvedDeinit: Bool
@@ -19,13 +19,15 @@ public class PromiseSource<T> {
   private var errorHandlers: [ErrorHandler] = []
 
   private let onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?
+  private let onCatchHandler: ((Promise<T>, ErrorHandler) -> Void)?
 
   public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(onThenHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(onThenHandler: nil, onCatchHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  public init(onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?, warnUnresolvedDeinit: Bool) {
+  public init(onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?, onCatchHandler: ((Promise<T>, ErrorHandler) -> Void)?, warnUnresolvedDeinit: Bool) {
     self.onThenHandler = onThenHandler
+    self.onCatchHandler = onCatchHandler
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
     self.promise = Promise(source: self)
@@ -76,7 +78,12 @@ public class PromiseSource<T> {
   }
 
   internal func addErrorHandler(handler: ErrorHandler) {
-    errorHandlers.append(handler)
+    if let onCatchHandler = onCatchHandler {
+      onCatchHandler(promise, handler)
+    }
+    else {
+      errorHandlers.append(handler)
+    }
   }
 
   private func executeResolvedHandlers(value: T) {
