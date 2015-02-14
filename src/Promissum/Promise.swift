@@ -64,7 +64,13 @@ public class Promise<T> {
   }
 
   public func map<U>(transform: T -> U) -> Promise<U> {
-    let source = PromiseSource<U>()
+    let source = PromiseSource<U>(
+      onThenHandler: { p, thenHandler in
+        self.addResolvedHandler({ _ in
+          p.addResolvedHandler(thenHandler)
+        })
+      },
+      warnUnresolvedDeinit: true)
 
     let cont: T -> Void = { val in
       var transformed = transform(val)
@@ -94,7 +100,13 @@ public class Promise<T> {
   }
 
   public func mapError(transform: NSError -> T) -> Promise<T> {
-    let source = PromiseSource<T>()
+    let source = PromiseSource<T>(
+      onThenHandler: { p, thenHandler in
+        self.addErrorHandler({ _ in
+          p.addResolvedHandler(thenHandler)
+        })
+      },
+      warnUnresolvedDeinit: true)
 
     let cont: NSError -> Void = { error in
       var transformed = transform(error)

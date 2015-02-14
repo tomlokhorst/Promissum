@@ -18,7 +18,14 @@ public class PromiseSource<T> {
   private var resolvedHandlers: [ResolveHandler] = []
   private var errorHandlers: [ErrorHandler] = []
 
-  public init(warnUnresolvedDeinit: Bool = true) {
+  private let onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?
+
+  public convenience init(warnUnresolvedDeinit: Bool = true) {
+    self.init(onThenHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  }
+
+  public init(onThenHandler: ((Promise<T>, ResolveHandler) -> Void)?, warnUnresolvedDeinit: Bool) {
+    self.onThenHandler = onThenHandler
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
     self.promise = Promise(source: self)
@@ -60,7 +67,12 @@ public class PromiseSource<T> {
   }
 
   internal func addResolvedHander(handler: ResolveHandler) {
-    resolvedHandlers.append(handler)
+    if let onThenHandler = onThenHandler {
+      onThenHandler(promise, handler)
+    }
+    else {
+      resolvedHandlers.append(handler)
+    }
   }
 
   internal func addErrorHandler(handler: ErrorHandler) {
