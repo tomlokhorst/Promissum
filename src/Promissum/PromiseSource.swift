@@ -9,11 +9,14 @@
 import Foundation
 
 public class PromiseSource<T> {
+  typealias ResolveHandler = T -> Void
+  typealias ErrorHandler = NSError -> Void
+
   public let promise: Promise<T>!
   public var warnUnresolvedDeinit: Bool
 
-  internal var resolvedHandlers: [T -> Void] = []
-  internal var errorHandlers: [NSError -> Void] = []
+  private var resolvedHandlers: [ResolveHandler] = []
+  private var errorHandlers: [ErrorHandler] = []
 
   public init(warnUnresolvedDeinit: Bool = true) {
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
@@ -54,6 +57,14 @@ public class PromiseSource<T> {
     default:
       break
     }
+  }
+
+  internal func addResolvedHander(handler: ResolveHandler) {
+    resolvedHandlers.append(handler)
+  }
+
+  internal func addErrorHandler(handler: ErrorHandler) {
+    errorHandlers.append(handler)
   }
 
   private func executeResolvedHandlers(value: T) {

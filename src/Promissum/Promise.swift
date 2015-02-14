@@ -50,24 +50,24 @@ public class Promise<T> {
     return self
   }
 
-  public func catch(continuation: NSError -> Void) -> Promise<T> {
-    addErrorHandler(continuation)
+  public func catch(handler: NSError -> Void) -> Promise<T> {
+    addErrorHandler(handler)
 
     return self
   }
 
-  public func finally(continuation: () -> Void) -> Promise<T> {
-    addResolvedHandler({ _ in continuation() })
-    addErrorHandler({ _ in continuation() })
+  public func finally(handler: () -> Void) -> Promise<T> {
+    addResolvedHandler({ _ in handler() })
+    addErrorHandler({ _ in handler() })
 
     return self
   }
 
-  public func map<U>(continuation: T -> U) -> Promise<U> {
+  public func map<U>(transform: T -> U) -> Promise<U> {
     let source = PromiseSource<U>()
 
     let cont: T -> Void = { val in
-      var transformed = continuation(val)
+      var transformed = transform(val)
       source.resolve(transformed)
     }
 
@@ -77,11 +77,11 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func flatMap<U>(continuation: T -> Promise<U>) -> Promise<U> {
+  public func flatMap<U>(transform: T -> Promise<U>) -> Promise<U> {
     let source = PromiseSource<U>()
 
     let cont: T -> Void = { val in
-      var transformedPromise = continuation(val)
+      var transformedPromise = transform(val)
       transformedPromise
         .then(source.resolve)
         .catch(source.reject)
@@ -93,11 +93,11 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func mapError(continuation: NSError -> T) -> Promise<T> {
+  public func mapError(transform: NSError -> T) -> Promise<T> {
     let source = PromiseSource<T>()
 
     let cont: NSError -> Void = { error in
-      var transformed = continuation(error)
+      var transformed = transform(error)
       source.resolve(transformed)
     }
 
@@ -107,11 +107,11 @@ public class Promise<T> {
     return source.promise
   }
 
-  public func flatMapError(continuation: NSError -> Promise<T>) -> Promise<T> {
+  public func flatMapError(transform: NSError -> Promise<T>) -> Promise<T> {
     let source = PromiseSource<T>()
 
     let cont: NSError -> Void = { error in
-      var transformedPromise = continuation(error)
+      var transformedPromise = transform(error)
       transformedPromise
         .then(source.resolve)
         .catch(source.reject)
@@ -128,7 +128,7 @@ public class Promise<T> {
     switch state {
     case let State<T>.Unresolved(source):
       // Save handler for later
-      source.resolvedHandlers.append(handler)
+      source.addResolvedHander(handler)
 
     case State<T>.Resolved(let getter):
       // Value is already available, call handler immediately
@@ -145,7 +145,7 @@ public class Promise<T> {
     switch state {
     case let State<T>.Unresolved(source):
       // Save handler for later
-      source.errorHandlers.append(handler)
+      source.addErrorHandler(handler)
 
     case State<T>.Rejected(let error):
       // Error is already available, call handler immediately
