@@ -33,11 +33,6 @@ public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseU
   return source.promise
 }
 
-public class Box<T> {
-  public let unbox: T
-  public init(_ value: T) { self.unbox = value }
-}
-
 extension Reason: Printable {
   public var description: String {
     switch self {
