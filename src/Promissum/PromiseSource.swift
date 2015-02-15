@@ -8,6 +8,11 @@
 
 import Foundation
 
+// This Notifier is used to implement Promise.map
+public protocol PromiseNotifier {
+  func registerHandler(handler: () -> Void)
+}
+
 public class PromiseSource<T> {
   typealias ResultHandler = Result<T> -> Void
   public let promise: Promise<T>!
@@ -15,14 +20,14 @@ public class PromiseSource<T> {
 
   private var handlers: [Result<T> -> Void] = []
 
-  private let onAddHandler: ((() -> Void) -> Void)?
+  private let originalPromise: PromiseNotifier?
 
   public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(onAddHandler: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(originalPromise: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  public init(onAddHandler: ((() -> Void) -> Void)?, warnUnresolvedDeinit: Bool) {
-    self.onAddHandler = onAddHandler
+  public init(originalPromise: PromiseNotifier?, warnUnresolvedDeinit: Bool) {
+    self.originalPromise = originalPromise
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
     self.promise = Promise(source: self)
@@ -64,13 +69,10 @@ public class PromiseSource<T> {
   }
 
   internal func addHander(handler: Result<T> -> Void) {
-    if let onAddHandler = onAddHandler {
-      let executeAddHandler: () -> Void = {
+    if let originalPromise = originalPromise {
+      originalPromise.registerHandler({
         self.promise.addResultHandler(handler)
-        return
-      }
-
-      onAddHandler(executeAddHandler)
+      })
     }
     else {
       handlers.append(handler)

@@ -10,7 +10,7 @@ import Foundation
 
 public let PromissumErrorDomain = "com.nonstrict.Promissum"
 
-public class Promise<T> {
+public class Promise<T> : PromiseNotifier {
   internal(set) var state: State<T>
 
   internal init(source: PromiseSource<T>) {
@@ -61,11 +61,7 @@ public class Promise<T> {
   }
 
   public func map<U>(transform: T -> U) -> Promise<U> {
-    let source = PromiseSource<U>(
-      onAddHandler: { executeAddHandler in
-        self.addResultHandler { _ in executeAddHandler() }
-      },
-      warnUnresolvedDeinit: true)
+    let source = PromiseSource<U>(originalPromise: self, warnUnresolvedDeinit: true)
 
     let handler: Result<T> -> Void = { result in
       switch result {
@@ -103,11 +99,7 @@ public class Promise<T> {
   }
 
   public func mapError(transform: NSError -> T) -> Promise<T> {
-    let source = PromiseSource<T>(
-      onAddHandler: { executeAddHandler in
-        self.addResultHandler { _ in executeAddHandler() }
-      },
-      warnUnresolvedDeinit: true)
+    let source = PromiseSource<T>(originalPromise: self, warnUnresolvedDeinit: true)
 
     let handler: Result<T> -> Void = { result in
       switch result {
@@ -191,6 +183,10 @@ public class Promise<T> {
     addResultHandler({ _ in handler() })
 
     return self
+  }
+
+  public func registerHandler(handler: () -> Void) {
+    addResultHandler({ _ in handler() })
   }
 
   internal func addResultHandler(handler: Result<T> -> Void) {
