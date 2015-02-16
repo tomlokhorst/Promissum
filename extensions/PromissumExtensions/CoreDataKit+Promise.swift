@@ -32,7 +32,7 @@ extension CoreDataKit {
 
 extension CoreDataStack {
   public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
-    return rootContext.createChildContext().performBlockPromise(block)
+    return backgroundContext.performBlockPromise(block)
   }
 }
 
