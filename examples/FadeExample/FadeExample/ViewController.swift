@@ -85,6 +85,6 @@ func storeInCoreData(result: (name: String, description: String)) -> Promise<Pro
 
     return .SaveToPersistentStore
   }.flatMap { _ in
-    CoreDataKit.rootContext.find(project).toPromise()
+    CoreDataKit.backgroundContext.find(project).toPromise()
   }
 }
