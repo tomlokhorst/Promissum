@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
                     Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit, Alamofire and CoreDataKit, and contributions for extensions to other libraries are very welcome.
                    DESC
 
-  s.homepage     = "https://github.com/SooJuicy/Latch"
+  s.homepage     = "https://github.com/tomlokhorst/Promissum.git"
   s.license      = { :type => "MIT" }
   s.author             = { "Tom Lokhorst" => "tom@lokhorst.eu" }
   s.platform     = :ios, "8.0"
