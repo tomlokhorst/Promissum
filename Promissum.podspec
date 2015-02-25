@@ -29,11 +29,6 @@ Pod::Spec.new do |s|
     ss.dependency "Alamofire", "~> 1.1.0"
   end
 
-  s.subspec "CoreData" do |ss|
-    ss.source_files = "extensions/PromissumExtensions/CoreDataKit+Promise.swift"
-    ss.dependency "Promissum/Core"
-  end
-
   s.subspec "UIKit" do |ss|
     ss.source_files = "extensions/PromissumExtensions/UIKit+Promise.swift"
     ss.dependency "Promissum/Core"
