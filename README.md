@@ -10,7 +10,7 @@ Promissum really shines when used to combine asynchronous operations from differ
 Example
 -------
 
-This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
+This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
 
 In this example, JSON data is loaded from the Github API. It is then parsed, and stored into CoreData.
 If both those succeed the result is shown to the user, if either of those fail, a description of the error is shown to the user.
