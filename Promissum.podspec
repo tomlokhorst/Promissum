@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Promissum"
-  s.version      = "0.2.1"
+  s.version      = "0.2.2"
   s.license      = "MIT"
 
   s.summary      = "A promises library written in Swift featuring combinators like map, flatMap, whenAll, whenAny."
@@ -17,8 +17,10 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.social_media_url  = "https://twitter.com/tomlokhorst"
   s.homepage          = "https://github.com/tomlokhorst/Promissum"
 
+  s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = '10.10'
+
   s.source          = { :git => "https://github.com/tomlokhorst/Promissum.git", :tag => s.version }
-  s.platform        = :ios, "8.0"
   s.requires_arc    = true
   s.default_subspec = "Core"
 
@@ -39,6 +41,7 @@ Promissum really shines when used to combine asynchronous operations from differ
 #  end
 
   s.subspec "UIKit" do |ss|
+    ss.ios.deployment_target = '8.0'
     ss.source_files = "extensions/PromissumExtensions/UIKit+Promise.swift"
     ss.dependency "Promissum/Core"
   end
