@@ -25,6 +25,8 @@ class ViewController: UIViewController {
 
 
   override func viewDidLoad() {
+    super.viewDidLoad()
+
     // Details and erros are initially invisible
     detailsView.alpha = 0
     errorView.alpha = 0
