@@ -18,11 +18,11 @@ public class Promise<T> : PromiseNotifier {
   }
 
   public init(value: T) {
-    state = State<T>.Resolved(Box(value))
+    state = .Resolved(Box(value))
   }
 
   public init(error: NSError) {
-    state = State<T>.Rejected(error)
+    state = .Rejected(error)
   }
 
   public func value() -> T? {

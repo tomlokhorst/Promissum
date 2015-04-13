@@ -8,6 +8,11 @@
 
 import Foundation
 
+public class Box<T> {
+  public let unbox: T
+  public init(_ value: T) { self.unbox = value }
+}
+
 public enum State<T> {
   case Unresolved(PromiseSource<T>)
   case Resolved(Box<T>)

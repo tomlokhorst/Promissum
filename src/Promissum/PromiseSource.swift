@@ -15,7 +15,7 @@ public protocol PromiseNotifier {
 
 public class PromiseSource<T> {
   typealias ResultHandler = Result<T> -> Void
-  public let promise: Promise<T>!
+  public var promise: Promise<T>!
   public var warnUnresolvedDeinit: Bool
 
   private var handlers: [Result<T> -> Void] = []

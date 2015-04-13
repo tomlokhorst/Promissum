@@ -15,16 +15,16 @@ import Promissum
 extension Result {
   func toPromise() -> Promise<T> {
     switch self {
-    case let .Success(boxedObject):
-      return Promise<T>(value: boxedObject())
+    case let .Success(boxed):
+      return Promise(value: boxed.value)
 
     case let .Failure(error):
-      return Promise<T>(error: error)
+      return Promise(error: error)
     }
   }
 }
 
-extension CoreDataKit {
+extension CDK {
   public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
     return sharedStack!.performBlockOnBackgroundContextPromise(block)
   }
@@ -32,7 +32,7 @@ extension CoreDataKit {
 
 extension CoreDataStack {
   public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
-    return backgroundContext.performBlockPromise(block)
+    return rootContext.performBlockPromise(block)
   }
 }
 
@@ -43,8 +43,8 @@ extension NSManagedObjectContext {
     performBlock(block) { result in
       dispatch_async(dispatch_get_main_queue()) {
         switch result {
-        case let .Success(commitAction):
-          promiseSource.resolve(commitAction())
+        case let .Success(boxed):
+          promiseSource.resolve(boxed.value)
 
         case let .Failure(error):
           promiseSource.reject(error)

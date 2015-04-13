@@ -71,7 +71,7 @@ extension UIViewController {
   public func dismissViewControllerPromise(animated flag: Bool) -> Promise<Void> {
     let source = PromiseSource<Void>()
 
-    self.dismissViewControllerAnimated(flag, source.resolve)
+    self.dismissViewControllerAnimated(flag, completion: source.resolve)
 
     return source.promise
   }
@@ -92,7 +92,7 @@ let associationPolicy = objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC
 extension UIAlertView {
   var strongDelegate: AlertViewDelegate? {
     get {
-      return (objc_getAssociatedObject(self, &associatedObjectHandle) as AlertViewDelegate)
+      return (objc_getAssociatedObject(self, &associatedObjectHandle) as! AlertViewDelegate)
     }
     set {
       objc_setAssociatedObject(self, &associatedObjectHandle, newValue, associationPolicy)
@@ -162,7 +162,7 @@ extension UIAlertView {
 extension UIActionSheet {
   var strongDelegate: ActionSheetDelegate? {
     get {
-      return (objc_getAssociatedObject(self, &associatedObjectHandle) as ActionSheetDelegate)
+      return (objc_getAssociatedObject(self, &associatedObjectHandle) as! ActionSheetDelegate)
     }
     set {
       objc_setAssociatedObject(self, &associatedObjectHandle, newValue, associationPolicy)
