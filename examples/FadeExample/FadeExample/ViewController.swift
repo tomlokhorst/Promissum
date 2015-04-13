@@ -25,6 +25,8 @@ class ViewController: UIViewController {
 
 
   override func viewDidLoad() {
+    super.viewDidLoad()
+
     // Details and erros are initially invisible
     detailsView.alpha = 0
     errorView.alpha = 0
@@ -85,6 +87,6 @@ func storeInCoreData(result: (name: String, description: String)) -> Promise<Pro
 
     return .SaveToPersistentStore
   }.flatMap { _ in
-    CoreDataKit.rootContext.find(project).toPromise()
+    CoreDataKit.backgroundContext.find(project).toPromise()
   }
 }

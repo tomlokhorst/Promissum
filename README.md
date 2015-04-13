@@ -10,7 +10,7 @@ Promissum really shines when used to combine asynchronous operations from differ
 Example
 -------
 
-This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/master/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
+This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
 
 In this example, JSON data is loaded from the Github API. It is then parsed, and stored into CoreData.
 If both those succeed the result is shown to the user, if either of those fail, a description of the error is shown to the user.
@@ -39,10 +39,49 @@ If both those succeed the result is shown to the user, if either of those fail, 
 See [FadeExample/ViewController.swift](https://github.com/tomlokhorst/Promissum/blob/develop/examples/FadeExample/FadeExample/ViewController.swift) for an extended version of this example.
 
 
+Cancellation
+------------
+
+Promissum does not support cancellation, because cancellation does not work well with promises. Promises are future _values_, values can't be cancelled. If you do need cancellation (quite often useful), take a look at Tasks or Rx instead of promises. I don't have experience with any Swift Task/Rx libraries, so I can't recommend a specific one.
+
+Although, if you're looking at adding cancellation to a _PromiseSource_, you could use the [swift-cancellationtoken](https://github.com/tomlokhorst/swift-cancellationtoken) library I wrote. This is orthogonal to promises, however.
+
+
 Installation
 ------------
 
-Due to the lack of Swift suport in tools like [CocoaPods](http://cocoapods.org), installation of this library is a bit involved. There are five steps, which I've also demonstrated in a [screencast](https://www.youtube.com/watch?v=ow1ZE7pfBH8):
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
+
+CocoaPods 0.36 RC adds supports for Swift and embedded frameworks. You can install it with the following command:
+
+```bash
+$ gem install cocoapods --pre
+```
+
+To integrate Promissum into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
+pod 'Promissum', '~> 0.2.2'
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+(These installation instructions are based on the ones for Alamofire)
+
+
+### Using git submodules
+
+If, for some reason, using CocoaPods is not an option, Promissum can be added via a git submodule.
+There are five steps, which I've also demonstrated in a [screencast](https://www.youtube.com/watch?v=ow1ZE7pfBH8):
 
 1. Add Promissum as a submodule the terminal using the command: `git submodule add https://github.com/tomlokhorst/Promissum.git`
 2. Open the `Promissum/src` folder, and drag `Promissum.xcodeproj` into the file navigator of your app project.

@@ -1,0 +1,23 @@
+PODS:
+  - Alamofire (1.1.4)
+  - Promissum (0.2.2):
+    - Promissum/Core (= 0.2.2)
+  - Promissum/Alamofire (0.2.2):
+    - Alamofire (~> 1.1.0)
+    - Promissum/Core
+  - Promissum/Core (0.2.2)
+
+DEPENDENCIES:
+  - Alamofire (~> 1.1.4)
+  - Promissum (from `../../`)
+  - Promissum/Alamofire (from `../../`)
+
+EXTERNAL SOURCES:
+  Promissum:
+    :path: ../../
+
+SPEC CHECKSUMS:
+  Alamofire: 524225da382071ee3e6d0badd0ee4b4dc36740de
+  Promissum: f0e10d566a950d3ddd29b9ecc954fdf946db20fc
+
+COCOAPODS: 0.36.0.rc.1

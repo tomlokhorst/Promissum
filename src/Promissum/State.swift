@@ -14,7 +14,7 @@ public class Box<T> {
 }
 
 public enum State<T> {
-  case Unresolved
+  case Unresolved(PromiseSource<T>)
   case Resolved(Box<T>)
   case Rejected(NSError)
 }

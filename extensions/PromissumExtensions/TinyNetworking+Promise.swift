@@ -40,9 +40,9 @@ extension Reason: Printable {
       return "CouldNotParseJSON"
     case .NoData:
       return "NoData"
-    case let .NoSuccessStatusCode(x):
-      return "NoSuccessStatusCode(\(x.statusCode))"
-    case let .Other(error):
+    case .NoSuccessStatusCode(let statusCode):
+      return "NoSuccessStatusCode(\(statusCode))"
+    case .Other(let error):
       return "Other(\(error))"
     }
   }
