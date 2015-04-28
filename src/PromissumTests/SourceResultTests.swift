@@ -109,7 +109,7 @@ class SourceResultTests: XCTestCase {
     var value: Int?
 
     let source = PromiseSource<Int>()
-    let p = source.promise
+    let p: Promise<Int> = source.promise
       .flatMapResult { result in
         switch result {
         case .Value(let boxed):
@@ -133,7 +133,7 @@ class SourceResultTests: XCTestCase {
     var error: NSError?
 
     let source = PromiseSource<Int>()
-    let p = source.promise
+    let p: Promise<Int> = source.promise
       .flatMapResult { result in
         switch result {
         case .Value(let boxed):
@@ -157,7 +157,7 @@ class SourceResultTests: XCTestCase {
     var value: Int?
 
     let source = PromiseSource<Int>()
-    let p = source.promise
+    let p: Promise<Int> = source.promise
       .flatMapResult { result in
         switch result {
         case .Error(let error):
@@ -180,7 +180,7 @@ class SourceResultTests: XCTestCase {
     var error: NSError?
 
     let source = PromiseSource<Int>()
-    let p = source.promise
+    let p: Promise<Int> = source.promise
       .flatMapResult { result in
         switch result {
         case .Error(let error):

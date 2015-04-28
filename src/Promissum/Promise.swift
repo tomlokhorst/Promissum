@@ -156,8 +156,8 @@ public class Promise<T> : PromiseNotifier {
     return source.promise
   }
 
-  public func flatMapResult(transform: Result<T> -> Promise<T>) -> Promise<T> {
-    let source = PromiseSource<T>()
+  public func flatMapResult<U>(transform: Result<T> -> Promise<U>) -> Promise<U> {
+    let source = PromiseSource<U>()
 
     let handler: Result<T> -> Void = { result in
       let transformedPromise = transform(result)
