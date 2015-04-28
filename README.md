@@ -15,26 +15,28 @@ This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst
 In this example, JSON data is loaded from the Github API. It is then parsed, and stored into CoreData.
 If both those succeed the result is shown to the user, if either of those fail, a description of the error is shown to the user.
 
-    let url = "https://api.github.com/repos/tomlokhorst/Promissum"
-    Alamofire.request(.GET, url).responseJSONPromise()
-      .map(parseJson)
-      .flatMap(storeInCoreData)
-      .then { project in
+```swift
+let url = "https://api.github.com/repos/tomlokhorst/Promissum"
+Alamofire.request(.GET, url).responseJSONPromise()
+  .map(parseJson)
+  .flatMap(storeInCoreData)
+  .then { project in
 
-        // Show project name and description
-        self.nameLabel.text = project.name
-        self.descriptionLabel.text = project.descr
+    // Show project name and description
+    self.nameLabel.text = project.name
+    self.descriptionLabel.text = project.descr
 
-        UIView.animateWithDuration(0.5) {
-          self.detailsView.alpha = 1
-        }
-      }
-      .catch { e in
+    UIView.animateWithDuration(0.5) {
+      self.detailsView.alpha = 1
+    }
+  }
+  .catch { e in
 
-        // Either an Alamofire error or a CoreData error occured
-        self.errorLabel.text = e.localizedDescription
-        self.errorView.alpha = 1
-      }
+    // Either an Alamofire error or a CoreData error occured
+    self.errorLabel.text = e.localizedDescription
+    self.errorView.alpha = 1
+  }
+```
 
 See [FadeExample/ViewController.swift](https://github.com/tomlokhorst/Promissum/blob/develop/examples/FadeExample/FadeExample/ViewController.swift) for an extended version of this example.
 
