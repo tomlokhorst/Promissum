@@ -15,9 +15,9 @@ import Promissum
 class SourceResultTests: XCTestCase {
 
   func testResult() {
-    var result: Result<Int>?
+    var result: Result<Int, NSError>?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     result = p.result()
@@ -28,9 +28,9 @@ class SourceResultTests: XCTestCase {
   }
 
   func testResultValue() {
-    var result: Result<Int>?
+    var result: Result<Int, NSError>?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finallyResult { r in
@@ -43,9 +43,9 @@ class SourceResultTests: XCTestCase {
   }
 
   func testResultError() {
-    var result: Result<Int>?
+    var result: Result<Int, NSError>?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finallyResult { r in
@@ -60,14 +60,15 @@ class SourceResultTests: XCTestCase {
   func testResultMapError() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .mapResult { result in
         switch result {
-        case .Error(let error):
-          return error.code + 1
+        case .Error(let boxed):
+          let error = boxed.unbox
+          return .Value(Box(error.code + 1))
         case .Value:
-          return -1
+          return .Value(Box(-1))
         }
     }
 
@@ -84,15 +85,15 @@ class SourceResultTests: XCTestCase {
   func testResultMapValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .mapResult { result in
         switch result {
         case .Value(let boxed):
           let value = boxed.unbox
-          return value + 1
+          return .Value(Box(value + 1))
         case .Error:
-          return -1
+          return .Value(Box(-1))
         }
     }
 
@@ -108,8 +109,8 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapValueValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
         case .Value(let boxed):
@@ -132,8 +133,8 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapValueError() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
         case .Value(let boxed):
@@ -156,11 +157,12 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapErrorValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Error(let error):
+        case .Error(let boxed):
+          let error = boxed.unbox
           return Promise(value: error.code + 1)
         case .Value:
           return Promise(value: -1)
@@ -179,11 +181,12 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapErrorError() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Error(let error):
+        case .Error(let boxed):
+          let error = boxed.unbox
           return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
         case .Value:
           return Promise(value: -1)

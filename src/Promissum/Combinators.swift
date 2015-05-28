@@ -8,8 +8,8 @@
 
 import Foundation
 
-public func flatten<T>(promise: Promise<Promise<T>>) -> Promise<T> {
-  let source = PromiseSource<T>()
+public func flatten<Value, Error>(promise: Promise<Promise<Value, Error>, Error>) -> Promise<Value, Error> {
+  let source = PromiseSource<Value, Error>()
 
   promise
     .catch(source.reject)
@@ -21,12 +21,12 @@ public func flatten<T>(promise: Promise<Promise<T>>) -> Promise<T> {
   return source.promise
 }
 
-public func whenBoth<A, B>(promiseA: Promise<A>, promiseB: Promise<B>) -> Promise<(A, B)> {
+public func whenBoth<A, B, Error>(promiseA: Promise<A, Error>, promiseB: Promise<B, Error>) -> Promise<(A, B), Error> {
   return promiseA.flatMap { valueA in promiseB.map { valueB in (valueA, valueB) } }
 }
 
-public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
-  let source = PromiseSource<[T]>()
+public func whenAll<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<[Value], Error> {
+  let source = PromiseSource<[Value], Error>()
   var results = promises.map { $0.value() }
   var remaining = promises.count
 
@@ -55,18 +55,13 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
   return source.promise
 }
 
-public func whenEither<T>(promise1: Promise<T>, promise2: Promise<T>) -> Promise<T> {
+public func whenEither<Value, Error>(promise1: Promise<Value, Error>, promise2: Promise<Value, Error>) -> Promise<Value, Error> {
   return whenAny([promise1, promise2])
 }
 
-public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
-  let source = PromiseSource<T>()
+public func whenAny<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<Value, Error> {
+  let source = PromiseSource<Value, Error>()
   var remaining = promises.count
-
-  if remaining == 0 {
-    let userInfo = [ NSLocalizedDescriptionKey: "whenAny: empty array of promises provided" ]
-    source.reject(NSError(domain: PromissumErrorDomain, code: 0, userInfo: userInfo))
-  }
 
   for promise in promises {
 
@@ -88,8 +83,8 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
   return source.promise
 }
 
-public func whenAllFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
-  let source = PromiseSource<Void>()
+public func whenAllFinalized<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
+  let source = PromiseSource<Void, NoError>()
   var remaining = promises.count
 
   if remaining == 0 {
@@ -111,14 +106,9 @@ public func whenAllFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
   return source.promise
 }
 
-public func whenAnyFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
-  let source = PromiseSource<Void>()
+public func whenAnyFinalized<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
+  let source = PromiseSource<Void, NoError>()
   var remaining = promises.count
-
-  if remaining == 0 {
-    let userInfo = [ NSLocalizedDescriptionKey: "whenAnyFinalized: empty array of promises provided" ]
-    source.reject(NSError(domain: PromissumErrorDomain, code: 0, userInfo: userInfo))
-  }
 
   for promise in promises {
 
@@ -132,7 +122,7 @@ public func whenAnyFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
 }
 
 extension Promise {
-  public func void() -> Promise<Void> {
+  public func void() -> Promise<Void, Error> {
     return self.map { _ in }
   }
 }

@@ -13,7 +13,7 @@ import enum CoreDataKit.Result
 import Promissum
 
 extension Result {
-  func toPromise() -> Promise<T> {
+  func toPromise() -> Promise<T, NSError> {
     switch self {
     case let .Success(boxed):
       return Promise(value: boxed.value)
@@ -25,20 +25,20 @@ extension Result {
 }
 
 extension CDK {
-  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
+  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
     return sharedStack!.performBlockOnBackgroundContextPromise(block)
   }
 }
 
 extension CoreDataStack {
-  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
+  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
     return rootContext.performBlockPromise(block)
   }
 }
 
 extension NSManagedObjectContext {
-  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction> {
-    let promiseSource = PromiseSource<CommitAction>()
+  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
+    let promiseSource = PromiseSource<CommitAction, NSError>()
 
     performBlock(block) { result in
       dispatch_async(dispatch_get_main_queue()) {

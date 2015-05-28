@@ -15,7 +15,7 @@ class InitialErrorTests: XCTestCase {
   func testError() {
     var error: NSError?
 
-    let p = Promise<Int>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+    let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
     error = p.error()
 
@@ -25,7 +25,7 @@ class InitialErrorTests: XCTestCase {
   func testErrorVoid() {
     var error: NSError?
 
-    let p = Promise<Int>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+    let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
     p.catch { e in
       error = e
@@ -37,10 +37,10 @@ class InitialErrorTests: XCTestCase {
   func testErrorMap() {
     var value: Int?
 
-    let p = Promise<Int>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+    let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
       .mapError { $0.code + 1 }
 
-    p.then { x in
+    p.catch { x in
       value = x
     }
 
@@ -50,7 +50,7 @@ class InitialErrorTests: XCTestCase {
   func testErrorFlatMap() {
     var value: Int?
 
-    let p = Promise<Int>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+    let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
       .flatMapError { Promise(value: $0.code + 1) }
 
     p.then { x in
@@ -63,7 +63,7 @@ class InitialErrorTests: XCTestCase {
   func testErrorFlatMap2() {
     var error: NSError?
 
-    let p = Promise<Int>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+    let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
       .flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil)) }
 
     p.catch { e in
@@ -76,7 +76,7 @@ class InitialErrorTests: XCTestCase {
   func testFinally() {
     var finally: Bool = false
 
-    let p = Promise<Int>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
+    let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
     p.finally {
       finally = true

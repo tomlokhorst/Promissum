@@ -32,13 +32,7 @@ class TinyNetworkingPromiseTests: XCTestCase {
         }
       }
       .catch { e in
-        if e.domain == TinyNetworkingPromiseErrorDomain {
-          if let reason = e.userInfo?[TinyNetworkingPromiseReasonKey] as? Box<Reason> {
-            println(reason.unbox)
-            return
-          }
-        }
-        println(e)
+        println(e.reason)
       }
 
     // Wait for 1 second for the request to finish

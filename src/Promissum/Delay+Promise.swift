@@ -14,8 +14,8 @@ public func delay(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_g
   dispatch_after(when, queue, block)
 }
 
-public func delayPromise<T>(seconds: NSTimeInterval, value: T, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<T> {
-  let source = PromiseSource<T>()
+public func delayPromise<Value, Error>(seconds: NSTimeInterval, value: Value, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Value, Error> {
+  let source = PromiseSource<Value, Error>()
 
   delay(seconds, queue: queue) {
     source.resolve(value)
@@ -24,8 +24,8 @@ public func delayPromise<T>(seconds: NSTimeInterval, value: T, queue: dispatch_q
   return source.promise
 }
 
-public func delayErrorPromise<T>(seconds: NSTimeInterval, error: NSError, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<T> {
-  let source = PromiseSource<T>()
+public func delayErrorPromise<Value, Error>(seconds: NSTimeInterval, error: Error, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Value, Error> {
+  let source = PromiseSource<Value, Error>()
 
   delay(seconds, queue: queue) {
     source.reject(error)
@@ -34,14 +34,14 @@ public func delayErrorPromise<T>(seconds: NSTimeInterval, error: NSError, queue:
   return source.promise
 }
 
-public func delayPromise(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Void> {
+public func delayPromise<Error>(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Void, Error> {
   return delayPromise(seconds, (), queue: queue)
 }
 
-public func delay<T>(seconds: NSTimeInterval)(value: T) -> Promise<T> {
+public func delay<Value, Error>(seconds: NSTimeInterval)(value: Value) -> Promise<Value, Error> {
   return delayPromise(seconds).map { value }
 }
 
-public func delay<T>(seconds: NSTimeInterval)(error: NSError) -> Promise<T> {
+public func delay<Value, Error>(seconds: NSTimeInterval)(error: Error) -> Promise<Value, Error> {
   return delayPromise(seconds).flatMap { Promise(error: error) }
 }

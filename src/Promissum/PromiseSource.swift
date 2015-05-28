@@ -13,12 +13,12 @@ public protocol PromiseNotifier {
   func registerHandler(handler: () -> Void)
 }
 
-public class PromiseSource<T> {
-  typealias ResultHandler = Result<T> -> Void
-  public var promise: Promise<T>!
+public class PromiseSource<Value, Error> {
+  typealias ResultHandler = Result<Value, Error> -> Void
+  public var promise: Promise<Value, Error>!
   public var warnUnresolvedDeinit: Bool
 
-  private var handlers: [Result<T> -> Void] = []
+  private var handlers: [Result<Value, Error> -> Void] = []
 
   private let originalPromise: PromiseNotifier?
 
@@ -44,11 +44,11 @@ public class PromiseSource<T> {
     }
   }
 
-  public func resolve(value: T) {
+  public func resolve(value: Value) {
 
     switch promise.state {
-    case State<T>.Unresolved:
-      promise.state = State<T>.Resolved(Box(value))
+    case State<Value, Error>.Unresolved:
+      promise.state = State<Value, Error>.Resolved(Box(value))
 
       executeResultHandlers(.Value(Box(value)))
     default:
@@ -56,19 +56,19 @@ public class PromiseSource<T> {
     }
   }
 
-  public func reject(error: NSError) {
+  public func reject(error: Error) {
 
     switch promise.state {
-    case State<T>.Unresolved:
-      promise.state = State<T>.Rejected(error)
+    case State<Value, Error>.Unresolved:
+      promise.state = State<Value, Error>.Rejected(Box(error))
 
-      executeResultHandlers(.Error(error))
+      executeResultHandlers(.Error(Box(error)))
     default:
       break
     }
   }
 
-  internal func addHander(handler: Result<T> -> Void) {
+  internal func addHander(handler: Result<Value, Error> -> Void) {
     if let originalPromise = originalPromise {
       originalPromise.registerHandler({
         self.promise.addResultHandler(handler)
@@ -79,7 +79,7 @@ public class PromiseSource<T> {
     }
   }
 
-  private func executeResultHandlers(result: Result<T>) {
+  private func executeResultHandlers(result: Result<Value, Error>) {
 
     // Call all previously scheduled handlers
     callHandlers(result, handlers)

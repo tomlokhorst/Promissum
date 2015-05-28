@@ -15,7 +15,7 @@ class SourceErrorTests: XCTestCase {
   func testError() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     error = p.error()
@@ -28,7 +28,7 @@ class SourceErrorTests: XCTestCase {
   func testErrorVoid() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.catch { e in
@@ -43,11 +43,11 @@ class SourceErrorTests: XCTestCase {
   func testErrorMap() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .mapError { $0.code + 1 }
 
-    p.then { x in
+    p.catch { x in
       value = x
     }
 
@@ -59,7 +59,7 @@ class SourceErrorTests: XCTestCase {
   func testErrorFlatMapValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .flatMapError { Promise(value: $0.code + 1) }
 
@@ -75,7 +75,7 @@ class SourceErrorTests: XCTestCase {
   func testErrorFlatMapError() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil)) }
 
@@ -91,7 +91,7 @@ class SourceErrorTests: XCTestCase {
   func testFinally() {
     var finally: Bool = false
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finally {

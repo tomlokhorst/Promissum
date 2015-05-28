@@ -15,7 +15,7 @@ class MultipleErrorTests: XCTestCase {
   func testValueVoid() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.catch { _ in
@@ -33,14 +33,14 @@ class MultipleErrorTests: XCTestCase {
   func testValueMap() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.catch { _ in
       calls += 1
     }
     p.mapError { $0.code + 1 }
-      .then { _ in
+      .catch { _ in
         calls += 1
       }
 
@@ -52,7 +52,7 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.catch { _ in
@@ -71,7 +71,7 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap2() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.catch { _ in
@@ -90,9 +90,9 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap3() {
     var calls = 0
 
-    let source1 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
-    let source2 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int, NSError>()
     let p2 = source2.promise
 
     p1.catch { _ in
@@ -112,9 +112,9 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap4() {
     var calls = 0
 
-    let source1 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
-    let source2 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int, NSError>()
     let p2 = source2.promise
 
     p1.catch { _ in
@@ -134,7 +134,7 @@ class MultipleErrorTests: XCTestCase {
   func testFinally() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finally {

@@ -8,23 +8,24 @@
 
 import Foundation
 
-public enum Result<T> {
-  case Value(Box<T>)
-  case Error(NSError)
+public enum Result<TValue, TError> {
+  case Value(Box<TValue>)
+  case Error(Box<TError>)
 
-  public func value() -> T? {
+  public func value() -> TValue? {
     switch self {
     case .Value(let boxed):
-      let val = boxed.unbox
-      return val
+      let value = boxed.unbox
+      return value
     case .Error:
       return nil
     }
   }
 
-  public func error() -> NSError? {
+  public func error() -> TError? {
     switch self {
-    case .Error(let error):
+    case .Error(let boxed):
+      let error = boxed.unbox
       return error
     case .Value:
       return nil
@@ -37,9 +38,10 @@ extension Result: Printable {
   public var description: String {
     switch self {
     case .Value(let boxed):
-      let val = boxed.unbox
-      return "Value(\(val))"
-    case .Error(let error):
+      let value = boxed.unbox
+      return "Value(\(value))"
+    case .Error(let boxed):
+      let error = boxed.unbox
       return "Error(\(error))"
     }
   }

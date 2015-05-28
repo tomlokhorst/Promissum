@@ -13,10 +13,12 @@ public class Box<T> {
   public init(_ value: T) { self.unbox = value }
 }
 
-public enum State<T> {
-  case Unresolved(PromiseSource<T>)
-  case Resolved(Box<T>)
-  case Rejected(NSError)
+public enum NoError { }
+
+public enum State<Value, Error> {
+  case Unresolved(PromiseSource<Value, Error>)
+  case Resolved(Box<Value>)
+  case Rejected(Box<Error>)
 }
 
 extension State: Printable {
@@ -26,9 +28,10 @@ extension State: Printable {
     case .Unresolved:
       return "Unresolved"
     case .Resolved(let boxed):
-      let val = boxed.unbox
-      return "Resolved(\(val))"
-    case .Rejected(let error):
+      let value = boxed.unbox
+      return "Resolved(\(value))"
+    case .Rejected(let boxed):
+      let error = boxed.unbox
       return "Rejected(\(error))"
     }
   }
