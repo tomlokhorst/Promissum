@@ -14,7 +14,6 @@
 		E26288401A5F38A30087390A /* tiny-networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E262883F1A5F38A30087390A /* tiny-networking.swift */; };
 		E26288421A5F38DF0087390A /* TinyNetworking+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */; };
 		E26288471A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */; };
-		E28B567D1A5C926E00F2D6B0 /* CoreDataKit.framework in Embeded Frameworks */ = {isa = PBXBuildFile; fileRef = E28B567A1A5C926200F2D6B0 /* CoreDataKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */; };
 		EC06AA6C18AAD5C26DEBD5DC /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6CC1C6B4D883A36C4F959D /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -27,20 +26,6 @@
 			remoteGlobalIDString = E2406AED1A5BBB8D000E5C78;
 			remoteInfo = PromissumExtensions;
 		};
-		E28B56791A5C926200F2D6B0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E28B56741A5C926200F2D6B0 /* CoreDataKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D5D7C6BC1958B8CF0048B576;
-			remoteInfo = CoreDataKit;
-		};
-		E28B567B1A5C926200F2D6B0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E28B56741A5C926200F2D6B0 /* CoreDataKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D5D7C6C71958B8CF0048B576;
-			remoteInfo = CoreDataKitTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,7 +35,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E28B567D1A5C926E00F2D6B0 /* CoreDataKit.framework in Embeded Frameworks */,
 			);
 			name = "Embeded Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +55,6 @@
 		E262883F1A5F38A30087390A /* tiny-networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "tiny-networking.swift"; path = "External/tiny-networking.swift"; sourceTree = "<group>"; };
 		E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TinyNetworking+Promise.swift"; sourceTree = "<group>"; };
 		E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinyNetworkingPromiseTests.swift; sourceTree = "<group>"; };
-		E28B56741A5C926200F2D6B0 /* CoreDataKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CoreDataKit.xcodeproj; path = CoreDataKit/CoreDataKit.xcodeproj; sourceTree = "<group>"; };
 		E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreDataKit+Promise.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,7 +98,6 @@
 		E2406AE41A5BBB8D000E5C78 = {
 			isa = PBXGroup;
 			children = (
-				E28B56741A5C926200F2D6B0 /* CoreDataKit.xcodeproj */,
 				E2406AF01A5BBB8D000E5C78 /* PromissumExtensions */,
 				E2406AFD1A5BBB8D000E5C78 /* PromissumExtensionsTests */,
 				E2406AEF1A5BBB8D000E5C78 /* Products */,
@@ -178,15 +160,6 @@
 				E262883F1A5F38A30087390A /* tiny-networking.swift */,
 			);
 			name = External;
-			sourceTree = "<group>";
-		};
-		E28B56751A5C926200F2D6B0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E28B567A1A5C926200F2D6B0 /* CoreDataKit.framework */,
-				E28B567C1A5C926200F2D6B0 /* CoreDataKitTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,12 +241,6 @@
 			mainGroup = E2406AE41A5BBB8D000E5C78;
 			productRefGroup = E2406AEF1A5BBB8D000E5C78 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E28B56751A5C926200F2D6B0 /* Products */;
-					ProjectRef = E28B56741A5C926200F2D6B0 /* CoreDataKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				E2406AED1A5BBB8D000E5C78 /* PromissumExtensions */,
@@ -281,23 +248,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		E28B567A1A5C926200F2D6B0 /* CoreDataKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CoreDataKit.framework;
-			remoteRef = E28B56791A5C926200F2D6B0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E28B567C1A5C926200F2D6B0 /* CoreDataKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = CoreDataKitTests.xctest;
-			remoteRef = E28B567B1A5C926200F2D6B0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E2406AEC1A5BBB8D000E5C78 /* Resources */ = {

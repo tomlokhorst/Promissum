@@ -12,8 +12,8 @@ import CoreDataKit
 import enum CoreDataKit.Result
 import Promissum
 
-extension Result {
-  func toPromise() -> Promise<T> {
+extension CoreDataKit.Result {
+  var promise: Promise<T> {
     switch self {
     case let .Success(boxed):
       return Promise(value: boxed.value)
@@ -32,7 +32,7 @@ extension CDK {
 
 extension CoreDataStack {
   public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
-    return rootContext.performBlockPromise(block)
+    return backgroundContext.performBlockPromise(block)
   }
 }
 

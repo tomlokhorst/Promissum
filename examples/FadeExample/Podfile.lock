@@ -1,16 +1,22 @@
 PODS:
   - Alamofire (1.2.2)
-  - Promissum (0.2.3):
-    - Promissum/Core (= 0.2.3)
-  - Promissum/Alamofire (0.2.3):
+  - CoreDataKit (0.5.1)
+  - Promissum (0.2.4):
+    - Promissum/Core (= 0.2.4)
+  - Promissum/Alamofire (0.2.4):
     - Alamofire (~> 1.2)
     - Promissum/Core
-  - Promissum/Core (0.2.3)
+  - Promissum/Core (0.2.4)
+  - Promissum/CoreDataKit (0.2.4):
+    - CoreDataKit (~> 0.5)
+    - Promissum/Core
 
 DEPENDENCIES:
   - Alamofire
+  - CoreDataKit
   - Promissum (from `../../`)
   - Promissum/Alamofire (from `../../`)
+  - Promissum/CoreDataKit (from `../../`)
 
 EXTERNAL SOURCES:
   Promissum:
@@ -18,6 +24,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 11a6022f5089887d92ffb5a3014c97a0a915ab98
-  Promissum: fd3893bd70496798b707b89f33d28f3991f636e7
+  CoreDataKit: 3007b1108fcf9c9fd0d69e42479fa5c1cc59aefa
+  Promissum: 47a13ce9f4e8f209003a9fab9485a3e10922f651
 
-COCOAPODS: 0.37.1
+COCOAPODS: 0.37.2

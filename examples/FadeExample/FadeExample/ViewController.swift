@@ -87,6 +87,6 @@ func storeInCoreData(result: (name: String, description: String)) -> Promise<Pro
 
     return .SaveToPersistentStore
   }.flatMap { _ in
-    CDK.backgroundContext.find(project).toPromise()
+    CDK.backgroundContext.find(project).promise
   }
 }
