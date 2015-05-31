@@ -94,6 +94,18 @@ There are five steps, which I've also demonstrated in a [screencast](https://www
 (These installation instructions are based on the ones for Alamofire)
 
 
+Releases
+--------
+
+ - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
+ - 0.2.3 - 2015-04-13 - Swift 1.2 support
+ - 0.2.2 - 2015-03-01 - Mac OS X support
+ - 0.2.1 - 2015-02-16 - Update for new CoreDataKit version
+ - **0.2.0** - 2015-02-15 - Side-effects happen in a better order. Regression tests added.
+ - 0.1.1 - 2015-05-31 - `whenAnyFinalized` combinator added
+ - **0.1.0** - 2015-01-27 - Initial public release
+ - 0.0.0 - 2014-10-12 - Initial privat version for project at [Q42](http://q42.com)
+
 Licence & Credits
 -----------------
 
