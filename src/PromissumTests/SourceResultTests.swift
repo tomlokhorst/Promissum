@@ -141,7 +141,7 @@ class SourceResultTests: XCTestCase {
         }
     }
 
-    p.`catch` { e in
+    p.trap { e in
       error = e
     }
 
@@ -187,7 +187,7 @@ class SourceResultTests: XCTestCase {
         }
     }
 
-    p.`catch` { e in
+    p.trap { e in
       error = e
     }
 

@@ -12,9 +12,9 @@ public func flatten<T>(promise: Promise<Promise<T>>) -> Promise<T> {
   let source = PromiseSource<T>()
 
   promise
-    .`catch`(source.reject)
+    .trap(source.reject)
     .then { p in
-      p.`catch`(source.reject).then(source.resolve)
+      p.trap(source.reject).then(source.resolve)
       return
     }
 
@@ -47,7 +47,7 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
     }
 
     promise
-      .`catch` { error in
+      .trap { error in
         source.reject(error)
     }
   }
@@ -76,7 +76,7 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
       }
 
     promise
-      .`catch` { error in
+      .trap { error in
         remaining = remaining - 1
 
         if remaining == 0 {

@@ -87,7 +87,7 @@ public class Promise<T> : PromiseNotifier {
         let transformedPromise = transform(value)
         transformedPromise
           .then(source.resolve)
-          .`catch`(source.reject)
+          .trap(source.reject)
       case .Error(let error):
         source.reject(error)
       }
@@ -127,7 +127,7 @@ public class Promise<T> : PromiseNotifier {
         let transformedPromise = transform(error)
         transformedPromise
           .then(source.resolve)
-          .`catch`(source.reject)
+          .trap(source.reject)
       }
     }
 
@@ -136,7 +136,7 @@ public class Promise<T> : PromiseNotifier {
     return source.promise
   }
 
-  public func `catch`(handler: NSError -> Void) -> Promise<T> {
+  public func trap(handler: NSError -> Void) -> Promise<T> {
 
     addErrorHandler(handler)
 
@@ -163,7 +163,7 @@ public class Promise<T> : PromiseNotifier {
       let transformedPromise = transform(result)
       transformedPromise
         .then(source.resolve)
-        .`catch`(source.reject)
+        .trap(source.reject)
     }
 
     addResultHandler(handler)
