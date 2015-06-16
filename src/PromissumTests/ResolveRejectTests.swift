@@ -21,7 +21,7 @@ class ResolveRejectTests: XCTestCase {
     p.then { _ in
       state = "resolved"
     }
-    p.catch { _ in
+    p.`catch` { _ in
       state = "rejected"
     }
 
@@ -40,7 +40,7 @@ class ResolveRejectTests: XCTestCase {
     p.then { _ in
       state = "resolved"
     }
-    p.catch { _ in
+    p.`catch` { _ in
       state = "rejected"
     }
 

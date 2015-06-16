@@ -87,7 +87,7 @@ public class Promise<T> : PromiseNotifier {
         let transformedPromise = transform(boxed.unbox)
         transformedPromise
           .then(source.resolve)
-          .catch(source.reject)
+          .`catch`(source.reject)
       case .Error(let error):
         source.reject(error)
       }
@@ -127,7 +127,7 @@ public class Promise<T> : PromiseNotifier {
         let transformedPromise = transform(error)
         transformedPromise
           .then(source.resolve)
-          .catch(source.reject)
+          .`catch`(source.reject)
       }
     }
 
@@ -136,7 +136,7 @@ public class Promise<T> : PromiseNotifier {
     return source.promise
   }
 
-  public func catch(handler: NSError -> Void) -> Promise<T> {
+  public func `catch`(handler: NSError -> Void) -> Promise<T> {
 
     addErrorHandler(handler)
 
@@ -163,7 +163,7 @@ public class Promise<T> : PromiseNotifier {
       let transformedPromise = transform(result)
       transformedPromise
         .then(source.resolve)
-        .catch(source.reject)
+        .`catch`(source.reject)
     }
 
     addResultHandler(handler)
@@ -249,7 +249,7 @@ public class Promise<T> : PromiseNotifier {
       }
       source.addHander(resultHandler)
 
-    case State<T>.Resolved(let boxed):
+    case State<T>.Resolved:
       break
 
     case State<T>.Rejected(let error):

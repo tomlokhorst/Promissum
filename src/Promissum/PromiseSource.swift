@@ -37,7 +37,7 @@ public class PromiseSource<T> {
     if warnUnresolvedDeinit {
       switch promise.state {
       case .Unresolved:
-        println("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
+        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
       default:
         break
       }
@@ -82,7 +82,7 @@ public class PromiseSource<T> {
   private func executeResultHandlers(result: Result<T>) {
 
     // Call all previously scheduled handlers
-    callHandlers(result, handlers)
+    callHandlers(result, handlers: handlers)
 
     // Cleanup
     handlers = []

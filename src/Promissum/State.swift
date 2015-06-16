@@ -19,7 +19,7 @@ public enum State<T> {
   case Rejected(NSError)
 }
 
-extension State: Printable {
+extension State: CustomStringConvertible {
 
   public var description: String {
     switch self {

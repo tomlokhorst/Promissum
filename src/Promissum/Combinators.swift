@@ -12,9 +12,9 @@ public func flatten<T>(promise: Promise<Promise<T>>) -> Promise<T> {
   let source = PromiseSource<T>()
 
   promise
-    .catch(source.reject)
+    .`catch`(source.reject)
     .then { p in
-      p.catch(source.reject).then(source.resolve)
+      p.`catch`(source.reject).then(source.resolve)
       return
     }
 
@@ -34,7 +34,7 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
     source.resolve([])
   }
   
-  for (ix, promise) in enumerate(promises) {
+  for (ix, promise) in promises.enumerate() {
 
     promise
       .then { value in
@@ -47,7 +47,7 @@ public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
     }
 
     promise
-      .catch { error in
+      .`catch` { error in
         source.reject(error)
     }
   }
@@ -76,7 +76,7 @@ public func whenAny<T>(promises: [Promise<T>]) -> Promise<T> {
       }
 
     promise
-      .catch { error in
+      .`catch` { error in
         remaining = remaining - 1
 
         if remaining == 0 {
@@ -113,9 +113,8 @@ public func whenAllFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
 
 public func whenAnyFinalized<T>(promises: [Promise<T>]) -> Promise<Void> {
   let source = PromiseSource<Void>()
-  var remaining = promises.count
 
-  if remaining == 0 {
+  if promises.isEmpty {
     let userInfo = [ NSLocalizedDescriptionKey: "whenAnyFinalized: empty array of promises provided" ]
     source.reject(NSError(domain: PromissumErrorDomain, code: 0, userInfo: userInfo))
   }

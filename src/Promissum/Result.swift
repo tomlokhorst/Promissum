@@ -32,7 +32,7 @@ public enum Result<T> {
   }
 }
 
-extension Result: Printable {
+extension Result: CustomStringConvertible {
 
   public var description: String {
     switch self {

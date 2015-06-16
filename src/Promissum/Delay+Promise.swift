@@ -35,7 +35,7 @@ public func delayErrorPromise<T>(seconds: NSTimeInterval, error: NSError, queue:
 }
 
 public func delayPromise(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Void> {
-  return delayPromise(seconds, (), queue: queue)
+  return delayPromise(seconds, value: (), queue: queue)
 }
 
 public func delay<T>(seconds: NSTimeInterval)(_ value: T) -> Promise<T> {

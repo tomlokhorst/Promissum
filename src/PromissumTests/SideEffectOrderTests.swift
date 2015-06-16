@@ -40,11 +40,11 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     p
-      .catch { _ in
+      .`catch` { _ in
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
       }
-      .catch { _ in
+      .`catch` { _ in
         step += 1
         XCTAssertEqual(step, 2, "Should be step 2")
       }
@@ -135,7 +135,7 @@ class SideEffectOrderTests : XCTestCase {
         return error.code + 1
       }
 
-    p.catch { error in
+    p.`catch` { error in
       XCTAssertEqual(error.code, 42, "Error should be 42")
 
       step += 1
@@ -167,14 +167,14 @@ class SideEffectOrderTests : XCTestCase {
         return value
       }
 
-    p.catch { error in
+    p.`catch` { error in
       XCTAssertEqual(error.code, 42, "Error should be 42")
 
       step += 1
       XCTAssertEqual(step, 1, "Should be step 1")
     }
 
-    q.catch { error in
+    q.`catch` { error in
       XCTAssertEqual(error.code, 42, "Value should be 42")
 
       step += 1
@@ -225,7 +225,7 @@ class SideEffectOrderTests : XCTestCase {
     let p = source.promise
 
     let q: Promise<Int> = p
-      .catch { error in
+      .`catch` { error in
         XCTAssertEqual(error.code, 42, "Value should be 42")
 
         step += 1
@@ -238,7 +238,7 @@ class SideEffectOrderTests : XCTestCase {
         XCTAssertEqual(step, 2, "Should be step 2")
         return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
       }
-      .catch { error in
+      .`catch` { error in
         XCTAssertEqual(error.code, 43, "Value should be 43")
 
         step += 1
