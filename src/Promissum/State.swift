@@ -8,14 +8,9 @@
 
 import Foundation
 
-public class Box<T> {
-  public let unbox: T
-  public init(_ value: T) { self.unbox = value }
-}
-
 public enum State<T> {
   case Unresolved(PromiseSource<T>)
-  case Resolved(Box<T>)
+  case Resolved(T)
   case Rejected(NSError)
 }
 
@@ -25,9 +20,8 @@ extension State: CustomStringConvertible {
     switch self {
     case .Unresolved:
       return "Unresolved"
-    case .Resolved(let boxed):
-      let val = boxed.unbox
-      return "Resolved(\(val))"
+    case .Resolved(let value):
+      return "Resolved(\(value))"
     case .Rejected(let error):
       return "Rejected(\(error))"
     }

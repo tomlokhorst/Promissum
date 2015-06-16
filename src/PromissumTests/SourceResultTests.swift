@@ -88,8 +88,7 @@ class SourceResultTests: XCTestCase {
     let p = source.promise
       .mapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return value + 1
         case .Error:
           return -1
@@ -112,8 +111,7 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return Promise(value: value + 1)
         case .Error:
           return Promise(value: -1)
@@ -136,8 +134,7 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return Promise(error: NSError(domain: PromissumErrorDomain, code: value + 1, userInfo: nil))
         case .Error:
           return Promise(value: -1)

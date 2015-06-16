@@ -18,7 +18,7 @@ public class Promise<T> : PromiseNotifier {
   }
 
   public init(value: T) {
-    state = .Resolved(Box(value))
+    state = .Resolved(value)
   }
 
   public init(error: NSError) {
@@ -27,8 +27,8 @@ public class Promise<T> : PromiseNotifier {
 
   public func value() -> T? {
     switch state {
-    case State<T>.Resolved(let boxed):
-      return boxed.unbox
+    case State<T>.Resolved(let value):
+      return value
     default:
       return nil
     }
@@ -65,8 +65,8 @@ public class Promise<T> : PromiseNotifier {
 
     let handler: Result<T> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        let transformed = transform(boxed.unbox)
+      case .Value(let value):
+        let transformed = transform(value)
         source.resolve(transformed)
       case .Error(let error):
         source.reject(error)
@@ -83,8 +83,8 @@ public class Promise<T> : PromiseNotifier {
 
     let handler: Result<T> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        let transformedPromise = transform(boxed.unbox)
+      case .Value(let value):
+        let transformedPromise = transform(value)
         transformedPromise
           .then(source.resolve)
           .`catch`(source.reject)
@@ -103,8 +103,8 @@ public class Promise<T> : PromiseNotifier {
 
     let handler: Result<T> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        source.resolve(boxed.unbox)
+      case .Value(let value):
+        source.resolve(value)
       case .Error(let error):
         let transformed = transform(error)
         source.resolve(transformed)
@@ -121,8 +121,8 @@ public class Promise<T> : PromiseNotifier {
 
     let handler: Result<T> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        source.resolve(boxed.unbox)
+      case .Value(let value):
+        source.resolve(value)
       case .Error(let error):
         let transformedPromise = transform(error)
         transformedPromise
@@ -216,17 +216,17 @@ public class Promise<T> : PromiseNotifier {
       // Save handler for later
       let resultHandler: Result<T> -> Void = { result in
         switch result {
-        case .Value(let boxed):
-          handler(boxed.unbox)
+        case .Value(let value):
+          handler(value)
         case .Error:
           break
         }
       }
       source.addHander(resultHandler)
 
-    case State<T>.Resolved(let boxed):
+    case State<T>.Resolved(let value):
       // Value is already available, call handler immediately
-      handler(boxed.unbox)
+      handler(value)
 
     case State<T>.Rejected:
       break

@@ -9,14 +9,13 @@
 import Foundation
 
 public enum Result<T> {
-  case Value(Box<T>)
+  case Value(T)
   case Error(NSError)
 
   public func value() -> T? {
     switch self {
-    case .Value(let boxed):
-      let val = boxed.unbox
-      return val
+    case .Value(let value):
+      return value
     case .Error:
       return nil
     }
@@ -36,9 +35,8 @@ extension Result: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .Value(let boxed):
-      let val = boxed.unbox
-      return "Value(\(val))"
+    case .Value(let value):
+      return "Value(\(value))"
     case .Error(let error):
       return "Error(\(error))"
     }

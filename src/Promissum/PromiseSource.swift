@@ -48,9 +48,9 @@ public class PromiseSource<T> {
 
     switch promise.state {
     case State<T>.Unresolved:
-      promise.state = State<T>.Resolved(Box(value))
+      promise.state = State<T>.Resolved(value)
 
-      executeResultHandlers(.Value(Box(value)))
+      executeResultHandlers(.Value(value))
     default:
       break
     }
