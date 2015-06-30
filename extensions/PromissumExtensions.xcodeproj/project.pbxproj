@@ -16,6 +16,7 @@
 		E26288471A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */; };
 		E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */; };
 		EC06AA6C18AAD5C26DEBD5DC /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6CC1C6B4D883A36C4F959D /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F4047E204C56122B791F2CEB /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6CC1C6B4D883A36C4F959D /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2406AFA1A5BBB8D000E5C78 /* PromissumExtensions.framework in Frameworks */,
+				F4047E204C56122B791F2CEB /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,9 +202,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2406B071A5BBB8D000E5C78 /* Build configuration list for PBXNativeTarget "PromissumExtensionsTests" */;
 			buildPhases = (
+				0E83D9668BACE7E613AA5231 /* Check Pods Manifest.lock */,
 				E2406AF51A5BBB8D000E5C78 /* Sources */,
 				E2406AF61A5BBB8D000E5C78 /* Frameworks */,
 				E2406AF71A5BBB8D000E5C78 /* Resources */,
+				3DEF76A323F0482C2462F248 /* Embed Pods Frameworks */,
+				E93AA634DECF00B732EF8E29 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -267,6 +272,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0E83D9668BACE7E613AA5231 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		3DEF76A323F0482C2462F248 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		57821C843325B02D25E24730 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,6 +330,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E93AA634DECF00B732EF8E29 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -454,6 +504,7 @@
 		};
 		E2406B081A5BBB8D000E5C78 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD862433C1160DF8DA29F6A3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -471,6 +522,7 @@
 		};
 		E2406B091A5BBB8D000E5C78 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5EB348054543B08B297FEBDC /* Pods.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",

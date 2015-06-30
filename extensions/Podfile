@@ -2,11 +2,9 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
+link_with "PromissumExtensions", "PromissumExtensionsTests"
+
 pod 'Alamofire'
 pod 'CoreDataKit'
 pod 'Promissum', :path => '../'
 
-target :PromissumExtensionsTests do
-  # This Pods library links with a target in another project.
-  xcodeproj 'PromissumExtensions'
-end
