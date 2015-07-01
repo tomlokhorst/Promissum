@@ -9,33 +9,41 @@
 import Foundation
 
 // This Notifier is used to implement Promise.map
-public protocol PromiseNotifier {
+protocol OriginalSource {
   func registerHandler(handler: () -> Void)
 }
 
-public class PromiseSource<T> {
+public class PromiseSource<T> : OriginalSource {
   typealias ResultHandler = Result<T> -> Void
-  public var promise: Promise<T>!
+  public var state: State<T>
   public var warnUnresolvedDeinit: Bool
 
   private var handlers: [Result<T> -> Void] = []
 
-  private let originalPromise: PromiseNotifier?
+  private let originalSource: OriginalSource?
 
   public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(originalPromise: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(state: .Unresolved, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  public init(originalPromise: PromiseNotifier?, warnUnresolvedDeinit: Bool) {
-    self.originalPromise = originalPromise
+  public convenience init(value: T, warnUnresolvedDeinit: Bool = true) {
+    self.init(state: .Resolved(Box(value)), originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  }
+
+  public convenience init(error: NSError, warnUnresolvedDeinit: Bool = true) {
+    self.init(state: .Rejected(error), originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  }
+
+  internal init(state: State<T>, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
+    self.originalSource = originalSource
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
-    self.promise = Promise(source: self)
+    self.state = state
   }
 
   deinit {
     if warnUnresolvedDeinit {
-      switch promise.state {
+      switch state {
       case .Unresolved:
         println("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
       default:
@@ -44,11 +52,15 @@ public class PromiseSource<T> {
     }
   }
 
+  public var promise: Promise<T> {
+    return Promise(source: self)
+  }
+
   public func resolve(value: T) {
 
-    switch promise.state {
-    case State<T>.Unresolved:
-      promise.state = State<T>.Resolved(Box(value))
+    switch state {
+    case .Unresolved:
+      state = State<T>.Resolved(Box(value))
 
       executeResultHandlers(.Value(Box(value)))
     default:
@@ -58,9 +70,9 @@ public class PromiseSource<T> {
 
   public func reject(error: NSError) {
 
-    switch promise.state {
-    case State<T>.Unresolved:
-      promise.state = State<T>.Rejected(error)
+    switch state {
+    case .Unresolved:
+      state = State<T>.Rejected(error)
 
       executeResultHandlers(.Error(error))
     default:
@@ -68,11 +80,33 @@ public class PromiseSource<T> {
     }
   }
 
+  internal func registerHandler(handler: () -> Void) {
+    addOrCallResultHandler({ _ in handler() })
+  }
+
+  internal func addOrCallResultHandler(handler: Result<T> -> Void) {
+
+    switch state {
+    case State<T>.Unresolved(let source):
+      // Save handler for later
+      addHander(handler)
+
+    case State<T>.Resolved(let boxed):
+      // Value is already available, call handler immediately
+      callHandlers(Result.Value(boxed), [handler])
+
+    case State<T>.Rejected(let error):
+      // Error is already available, call handler immediately
+      callHandlers(Result.Error(error), [handler])
+    }
+  }
+
   internal func addHander(handler: Result<T> -> Void) {
-    if let originalPromise = originalPromise {
-      originalPromise.registerHandler({
-        self.promise.addResultHandler(handler)
-      })
+
+    if let originalSource = originalSource {
+      originalSource.registerHandler {
+        self.addOrCallResultHandler(handler)
+      }
     }
     else {
       handlers.append(handler)
