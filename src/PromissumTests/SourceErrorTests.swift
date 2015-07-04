@@ -18,7 +18,7 @@ class SourceErrorTests: XCTestCase {
     let source = PromiseSource<Int>()
     let p = source.promise
 
-    error = p.error()
+    error = p.error
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 

@@ -13,6 +13,8 @@ public let PromissumErrorDomain = "com.nonstrict.Promissum"
 public struct Promise<T> {
   private let source: PromiseSource<T>
 
+  // MARK: Initializers
+
   public init(value: T) {
     self.init(source: PromiseSource(value: value))
   }
@@ -25,7 +27,9 @@ public struct Promise<T> {
     self.source = source
   }
 
-  public func value() -> T? {
+  // MARK: Computed properties
+
+  public var value: T? {
     switch source.state {
     case .Resolved(let boxed):
       return boxed.unbox
@@ -34,7 +38,7 @@ public struct Promise<T> {
     }
   }
 
-  public func error() -> NSError? {
+  public var error: NSError? {
     switch source.state {
     case .Rejected(let error):
       return error
@@ -43,7 +47,7 @@ public struct Promise<T> {
     }
   }
 
-  public func result() -> Result<T>? {
+  public var result: Result<T>? {
     switch source.state {
     case .Resolved(let boxed):
       return .Value(boxed)
@@ -53,6 +57,8 @@ public struct Promise<T> {
       return nil
     }
   }
+
+  // MARK: Attach handlers
 
   public func then(handler: T -> Void) -> Promise<T> {
 
@@ -104,6 +110,9 @@ public struct Promise<T> {
     return self
   }
 
+
+  // MARK: - Value combinators
+
   public func map<U>(transform: T -> U) -> Promise<U> {
     let resultSource = PromiseSource<U>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
 
@@ -142,6 +151,9 @@ public struct Promise<T> {
     return resultSource.promise
   }
 
+
+  // MARK: Error combinators
+
   public func mapError(transform: NSError -> T) -> Promise<T> {
     let resultSource = PromiseSource<T>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
 
@@ -179,6 +191,9 @@ public struct Promise<T> {
 
     return resultSource.promise
   }
+
+
+  // MARK: Result combinators
 
   public func mapResult(transform: Result<T> -> T) -> Promise<T> {
     let resultSource = PromiseSource<T>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)

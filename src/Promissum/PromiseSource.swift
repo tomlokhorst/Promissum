@@ -22,6 +22,8 @@ public class PromiseSource<T> : OriginalSource {
 
   private let originalSource: OriginalSource?
 
+  // MARK: Initializers & deinit
+
   public convenience init(warnUnresolvedDeinit: Bool = true) {
     self.init(state: .Unresolved, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
@@ -52,9 +54,15 @@ public class PromiseSource<T> : OriginalSource {
     }
   }
 
+
+  // MARK: Computed properties
+
   public var promise: Promise<T> {
     return Promise(source: self)
   }
+
+
+  // MARK: Resolve / reject
 
   public func resolve(value: T) {
 
@@ -80,6 +88,17 @@ public class PromiseSource<T> : OriginalSource {
     }
   }
 
+  private func executeResultHandlers(result: Result<T>) {
+
+    // Call all previously scheduled handlers
+    callHandlers(result, handlers)
+
+    // Cleanup
+    handlers = []
+  }
+
+  // MARK: Adding result handlers
+
   internal func registerHandler(handler: () -> Void) {
     addOrCallResultHandler({ _ in handler() })
   }
@@ -88,8 +107,29 @@ public class PromiseSource<T> : OriginalSource {
 
     switch state {
     case State<T>.Unresolved(let source):
-      // Save handler for later
-      addHander(handler)
+      // Register with original source
+      // Only call handlers after original completes
+      if let originalSource = originalSource {
+        originalSource.registerHandler {
+
+          switch self.state {
+          case State<T>.Resolved(let boxed):
+            // Value is already available, call handler immediately
+            callHandlers(Result.Value(boxed), [handler])
+
+          case State<T>.Rejected(let error):
+            // Error is already available, call handler immediately
+            callHandlers(Result.Error(error), [handler])
+
+          case State<T>.Unresolved(let source):
+            assertionFailure("callback should only be called if state is resolved or rejected")
+          }
+        }
+      }
+      else {
+        // Save handler for later
+        handlers.append(handler)
+      }
 
     case State<T>.Resolved(let boxed):
       // Value is already available, call handler immediately
@@ -99,27 +139,6 @@ public class PromiseSource<T> : OriginalSource {
       // Error is already available, call handler immediately
       callHandlers(Result.Error(error), [handler])
     }
-  }
-
-  internal func addHander(handler: Result<T> -> Void) {
-
-    if let originalSource = originalSource {
-      originalSource.registerHandler {
-        self.addOrCallResultHandler(handler)
-      }
-    }
-    else {
-      handlers.append(handler)
-    }
-  }
-
-  private func executeResultHandlers(result: Result<T>) {
-
-    // Call all previously scheduled handlers
-    callHandlers(result, handlers)
-
-    // Cleanup
-    handlers = []
   }
 }
 
