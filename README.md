@@ -7,6 +7,8 @@ It has useful combinators for working with promises like; `whenAll` for doing so
 
 Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit, Alamofire and CoreDataKit, and contributions for extensions to other libraries are very welcome.
 
+This library has an extensive set of regression test, and has been used for months in several high profile production apps at [Q42](http://q42.com/swift).
+
 Example
 -------
 
