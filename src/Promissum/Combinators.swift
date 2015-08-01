@@ -27,7 +27,7 @@ public func whenBoth<A, B>(promiseA: Promise<A>, promiseB: Promise<B>) -> Promis
 
 public func whenAll<T>(promises: [Promise<T>]) -> Promise<[T]> {
   let source = PromiseSource<[T]>()
-  var results = promises.map { $0.value() }
+  var results = promises.map { $0.value }
   var remaining = promises.count
 
   if remaining == 0 {

@@ -12,7 +12,7 @@ public enum Result<T> {
   case Value(T)
   case Error(NSError)
 
-  public func value() -> T? {
+  public var value: T? {
     switch self {
     case .Value(let value):
       return value
@@ -21,7 +21,7 @@ public enum Result<T> {
     }
   }
 
-  public func error() -> NSError? {
+  public var error: NSError? {
     switch self {
     case .Error(let error):
       return error
