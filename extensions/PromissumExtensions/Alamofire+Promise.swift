@@ -14,6 +14,7 @@ public let AlamofirePromiseErrorDomain = "com.nonstrict.promissum.alamofire"
 
 public let AlamofirePromiseRequestKey = "request"
 public let AlamofirePromiseResponseKey = "response"
+public let AlamofirePromiseValueKey = "value"
 public let AlamofirePromiseDataKey = "data"
 public let AlamofirePromiseErrorKey = "error"
 
@@ -46,57 +47,55 @@ extension Request {
   public func responseJSONPromise() -> Promise<AnyObject> {
     let source = PromiseSource<AnyObject>()
 
-    self.responseJSON { (request, response, data, error) in
-
+    self.responseJSON { (request, response, result) -> Void in
       if let resp = response {
         if resp.statusCode == 404 {
-          source.reject(self.makeError(.HttpNotFound, description: "HTTP 404 Not Found", request: request, response: response, data: data, error: error))
+          source.reject(self.makeError(.HttpNotFound, description: "HTTP 404 Not Found", request: request, response: response, result: result))
           return
         }
 
         if resp.statusCode != 200 {
-          source.reject(self.makeError(.HttpError, description: "HTTP statusCode: \(resp.statusCode)", request: request, response: response, data: data, error: error))
+          source.reject(self.makeError(.HttpError, description: "HTTP statusCode: \(resp.statusCode)", request: request, response: response, result: result))
           return
         }
       }
 
-      if let err = error {
-        source.reject(err)
-        return
-      }
+      switch result {
+      case let .Success(value):
+        source.resolve(value)
 
-      if response == nil {
-        source.reject(self.makeError(.NoResponseAvailable, description: "No response available", request: request, response: response, data: data, error: error))
-        return
+      case let .Failure(_, error):
+        source.reject(error)
       }
-
-      if let json : AnyObject = data {
-        source.resolve(json)
-        return
-      }
-
-      let error = self.makeError(.UnknownError, description: "Unknown error", request: request, response: response, data: data, error: error)
-      source.reject(error)
     }
 
     return source.promise
   }
 
-  private func makeError(code: AlamofirePromiseErrorCode, description: String, request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) -> NSError {
+  private func makeError(code: AlamofirePromiseErrorCode, description: String, request: NSURLRequest?, response: NSHTTPURLResponse?, result: Alamofire.Result<AnyObject>) -> NSError {
 
     var userInfo: [NSObject: AnyObject] = [
-      NSLocalizedDescriptionKey: description,
-      AlamofirePromiseRequestKey: request
+      NSLocalizedDescriptionKey: description
     ]
 
-    if response != nil {
-      userInfo[AlamofirePromiseResponseKey] = response!
+    if let request = request {
+      userInfo[AlamofirePromiseRequestKey] = request
     }
-    if data != nil {
-      userInfo[AlamofirePromiseDataKey] = data!
+
+    if let response = response {
+      userInfo[AlamofirePromiseResponseKey] = response
     }
-    if error != nil {
+
+    switch result {
+    case let .Success(value):
+      userInfo[AlamofirePromiseValueKey] = value
+
+    case let .Failure(data, error):
       userInfo[AlamofirePromiseErrorKey] = error
+
+      if let data = data {
+        userInfo[AlamofirePromiseDataKey] = data
+      }
     }
 
     return NSError(domain: AlamofirePromiseErrorDomain, code: code.rawValue, userInfo: userInfo)

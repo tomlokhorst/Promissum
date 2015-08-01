@@ -14,6 +14,11 @@ public let TinyNetworkingPromiseErrorDomain = "com.nonstrict.promissum.tiny-netw
 public let TinyNetworkingPromiseReasonKey = "reason"
 public let TinyNetworkingPromiseDataKey = "data"
 
+public class Box<T> {
+  public let unbox: T
+  public init(_ value: T) { self.unbox = value }
+}
+
 public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseURL: NSURL, resource: Resource<A>) -> Promise<A> {
   let source = PromiseSource<A>()
 
@@ -28,12 +33,12 @@ public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseU
     source.reject(NSError(domain: TinyNetworkingPromiseErrorDomain, code: -1, userInfo: userInfo))
   }
 
-  apiRequest(modifyRequest, baseURL, resource, onFailure, source.resolve)
+  apiRequest(modifyRequest, baseURL: baseURL, resource: resource, failure: onFailure, completion: source.resolve)
 
   return source.promise
 }
 
-extension Reason: Printable {
+extension Reason: CustomStringConvertible {
   public var description: String {
     switch self {
     case .CouldNotParseJSON:

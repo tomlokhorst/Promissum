@@ -24,21 +24,21 @@ class TinyNetworkingPromiseTests: XCTestCase {
       headers: [:],
       parse: decodeJSON)
 
-    apiRequestPromise({ _ in }, baseURL, repoResource)
+    apiRequestPromise({ _ in }, baseURL: baseURL, resource: repoResource)
       .then { json in
         let name_ = json["name"] as? String
         if name_ == "Promissum" {
           expectation.fulfill()
         }
       }
-      .catch { e in
+      .trap { e in
         if e.domain == TinyNetworkingPromiseErrorDomain {
-          if let reason = e.userInfo?[TinyNetworkingPromiseReasonKey] as? Box<Reason> {
-            println(reason.unbox)
+          if let reason = e.userInfo[TinyNetworkingPromiseReasonKey] as? Box<Reason> {
+            print(reason.unbox)
             return
           }
         }
-        println(e)
+        print(e)
       }
 
     // Wait for 1 second for the request to finish
