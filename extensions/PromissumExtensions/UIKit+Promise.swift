@@ -161,7 +161,7 @@ extension UIAlertView {
 extension UIActionSheet {
   var strongDelegate: ActionSheetDelegate? {
     get {
-      return (objc_getAssociatedObject(self, &associatedObjectHandle) as! ActionSheetDelegate)
+      return (objc_getAssociatedObject(self, &associatedObjectHandle) as? ActionSheetDelegate)
     }
     set {
       objc_setAssociatedObject(self, &associatedObjectHandle, newValue, associationPolicy)
@@ -197,8 +197,6 @@ extension UIActionSheet {
       originalDelegate?.actionSheet?(actionSheet, clickedButtonAtIndex: buttonIndex)
 
       source.resolve(buttonIndex)
-
-      self.actionSheet.strongDelegate = nil
     }
 
     func actionSheetCancel(actionSheet: UIActionSheet) {
@@ -219,6 +217,7 @@ extension UIActionSheet {
 
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.actionSheet?(actionSheet, didDismissWithButtonIndex: buttonIndex)
+      self.actionSheet.strongDelegate = nil
     }
   }
 }
