@@ -10,14 +10,6 @@ import Foundation
 import Alamofire
 import Promissum
 
-public let AlamofirePromiseErrorDomain = "com.nonstrict.promissum.alamofire"
-
-public let AlamofirePromiseRequestKey = "request"
-public let AlamofirePromiseResponseKey = "response"
-public let AlamofirePromiseDataKey = "data"
-public let AlamofirePromiseErrorKey = "error"
-
-public typealias AlamofireCompletion = (NSHTTPURLResponse?, AnyObject?, NSError?)
 
 public enum AlamofirePromiseError {
   case NoResponseAvailable
@@ -26,14 +18,6 @@ public enum AlamofirePromiseError {
   case HttpNotFound(data: AnyObject?)
   case HttpError(status: Int, data: AnyObject?)
   case UnknownError(error: NSError)
-}
-
-public enum AlamofirePromiseErrorCode : Int {
-  case UnknownError = 1
-  case HttpNotFound
-  case HttpError
-  case JsonDecodeError
-  case NoResponseAvailable
 }
 
 extension Request {
