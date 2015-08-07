@@ -22,10 +22,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Alamofire:
-    :commit: 88ca2a248ee0142064e2c760ea9f15279c7489df
+    :commit: 1f2f39114412ed9bda242b0199db56c1296f8159
     :git: https://github.com/Alamofire/Alamofire.git
   CoreDataKit:
-    :commit: 8b4fa7f1e18165a25f2606801ab65b569c84a005
+    :commit: ad30c499ec330440ea8afc186a698eb5c6462345
     :git: https://github.com/tomlokhorst/CoreDataKit.git
 
 SPEC CHECKSUMS:
