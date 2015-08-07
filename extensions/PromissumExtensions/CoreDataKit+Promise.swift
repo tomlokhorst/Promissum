@@ -9,20 +9,8 @@
 import Foundation
 import CoreData
 import CoreDataKit
-import enum CoreDataKit.Result
 import Promissum
 
-extension CoreDataKit.Result {
-  var promise: Promise<T, NSError> {
-    switch self {
-    case let .Success(boxed):
-      return Promise(value: boxed.value)
-
-    case let .Failure(error):
-      return Promise(error: error)
-    }
-  }
-}
 
 extension CDK {
   public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
@@ -42,12 +30,15 @@ extension NSManagedObjectContext {
 
     performBlock(block) { result in
       dispatch_async(dispatch_get_main_queue()) {
-        switch result {
-        case let .Success(boxed):
-          promiseSource.resolve(boxed.value)
-
-        case let .Failure(error):
+        do {
+          let action = try result()
+          promiseSource.resolve(action)
+        }
+        catch let error as NSError {
           promiseSource.reject(error)
+        }
+        catch {
+          fatalError("Should never happen")
         }
       }
     }
