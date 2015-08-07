@@ -64,11 +64,10 @@ class SourceResultTests: XCTestCase {
     let p = source.promise
       .mapResult { result in
         switch result {
-        case .Error(let boxed):
-          let error = boxed.unbox
-          return .Value(Box(error.code + 1))
+        case .Error(let error):
+          return .Value(error.code + 1)
         case .Value:
-          return .Value(Box(-1))
+          return .Value(-1)
         }
     }
 
@@ -89,11 +88,10 @@ class SourceResultTests: XCTestCase {
     let p = source.promise
       .mapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
-          return .Value(Box(value + 1))
+        case .Value(let value):
+          return .Value(value + 1)
         case .Error:
-          return .Value(Box(-1))
+          return .Value(-1)
         }
     }
 
@@ -113,8 +111,7 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return Promise(value: value + 1)
         case .Error:
           return Promise(value: -1)
@@ -137,15 +134,14 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return Promise(error: NSError(domain: PromissumErrorDomain, code: value + 1, userInfo: nil))
         case .Error:
           return Promise(value: -1)
         }
     }
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 
@@ -161,8 +157,7 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Error(let boxed):
-          let error = boxed.unbox
+        case .Error(let error):
           return Promise(value: error.code + 1)
         case .Value:
           return Promise(value: -1)
@@ -185,15 +180,14 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Error(let boxed):
-          let error = boxed.unbox
+        case .Error(let error):
           return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
         case .Value:
           return Promise(value: -1)
         }
     }
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 

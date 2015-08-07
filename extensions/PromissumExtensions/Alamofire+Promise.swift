@@ -12,12 +12,10 @@ import Promissum
 
 
 public enum AlamofirePromiseError {
-  case NoResponseAvailable
-  case NoDataAvailable
   case JsonDecodeError
-  case HttpNotFound(data: AnyObject?)
-  case HttpError(status: Int, data: AnyObject?)
-  case UnknownError(error: NSError)
+  case HttpNotFound(result: Alamofire.Result<AnyObject>)
+  case HttpError(status: Int, result: Alamofire.Result<AnyObject>?)
+  case UnknownError(error: NSError, data: NSData?)
 }
 
 extension Request {
@@ -38,36 +36,26 @@ extension Request {
   public func responseJSONPromise() -> Promise<AnyObject, AlamofirePromiseError> {
     let source = PromiseSource<AnyObject, AlamofirePromiseError>()
 
-    self.responseJSON { (request, response, data, error) in
-
+    self.responseJSON { (request, response, result) -> Void in
       if let resp = response {
         if resp.statusCode == 404 {
-          source.reject(AlamofirePromiseError.HttpNotFound(data: data))
+          source.reject(AlamofirePromiseError.HttpNotFound(result: result))
           return
         }
 
         if resp.statusCode < 200 || resp.statusCode > 299 {
-          source.reject(AlamofirePromiseError.HttpError(status: resp.statusCode, data: data))
+          source.reject(AlamofirePromiseError.HttpError(status: resp.statusCode, result: result))
           return
         }
       }
 
-      if let err = error {
-        source.reject(AlamofirePromiseError.UnknownError(error: err))
-        return
-      }
+      switch result {
+      case let .Success(value):
+        source.resolve(value)
 
-      if response == nil {
-        source.reject(AlamofirePromiseError.NoResponseAvailable)
-        return
+      case let .Failure(data, error):
+        source.reject(AlamofirePromiseError.UnknownError(error: error, data: data))
       }
-
-      if let json : AnyObject = data {
-        source.resolve(json)
-        return
-      }
-
-      source.reject(AlamofirePromiseError.NoDataAvailable)
     }
 
     return source.promise

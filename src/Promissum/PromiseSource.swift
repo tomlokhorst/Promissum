@@ -29,11 +29,11 @@ public class PromiseSource<Value, Error> : OriginalSource {
   }
 
   public convenience init(value: Value, warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Resolved(Box(value)), originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(state: .Resolved(value), originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
   public convenience init(error: Error, warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Rejected(Box(error)), originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(state: .Rejected(error), originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
   internal init(state: State<Value, Error>, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
@@ -47,7 +47,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
     if warnUnresolvedDeinit {
       switch state {
       case .Unresolved:
-        println("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
+        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
       default:
         break
       }
@@ -68,9 +68,9 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
     switch state {
     case .Unresolved:
-      state = .Resolved(Box(value))
+      state = .Resolved(value)
 
-      executeResultHandlers(.Value(Box(value)))
+      executeResultHandlers(.Value(value))
     default:
       break
     }
@@ -80,9 +80,9 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
     switch state {
     case .Unresolved:
-      state = .Rejected(Box(error))
+      state = .Rejected(error)
 
-      executeResultHandlers(.Error(Box(error)))
+      executeResultHandlers(.Error(error))
     default:
       break
     }
@@ -91,7 +91,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
   private func executeResultHandlers(result: Result<Value, Error>) {
 
     // Call all previously scheduled handlers
-    callHandlers(result, handlers)
+    callHandlers(result, handlers: handlers)
 
     // Cleanup
     handlers = []
@@ -106,22 +106,22 @@ public class PromiseSource<Value, Error> : OriginalSource {
   internal func addOrCallResultHandler(handler: Result<Value, Error> -> Void) {
 
     switch state {
-    case .Unresolved(let source):
+    case .Unresolved:
       // Register with original source
       // Only call handlers after original completes
       if let originalSource = originalSource {
         originalSource.registerHandler {
 
           switch self.state {
-          case .Resolved(let boxed):
+          case .Resolved(let value):
             // Value is already available, call handler immediately
-            callHandlers(Result.Value(boxed), [handler])
+            callHandlers(Result.Value(value), handlers: [handler])
 
-          case .Rejected(let boxed):
+          case .Rejected(let error):
             // Error is already available, call handler immediately
-            callHandlers(Result.Error(boxed), [handler])
+            callHandlers(Result.Error(error), handlers: [handler])
 
-          case .Unresolved(let source):
+          case .Unresolved:
             assertionFailure("callback should only be called if state is resolved or rejected")
           }
         }
@@ -131,13 +131,13 @@ public class PromiseSource<Value, Error> : OriginalSource {
         handlers.append(handler)
       }
 
-    case .Resolved(let boxed):
+    case .Resolved(let value):
       // Value is already available, call handler immediately
-      callHandlers(Result.Value(boxed), [handler])
+      callHandlers(Result.Value(value), handlers: [handler])
 
-    case .Rejected(let boxed):
+    case .Rejected(let error):
       // Error is already available, call handler immediately
-      callHandlers(Result.Error(boxed), [handler])
+      callHandlers(Result.Error(error), handlers: [handler])
     }
   }
 }

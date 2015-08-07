@@ -8,30 +8,23 @@
 
 import Foundation
 
-public class Box<T> {
-  public let unbox: T
-  public init(_ value: T) { self.unbox = value }
-}
-
-public enum NoError { }
+public enum NoError {}
 
 public enum State<Value, Error> {
   case Unresolved
-  case Resolved(Box<Value>)
-  case Rejected(Box<Error>)
+  case Resolved(Value)
+  case Rejected(Error)
 }
 
-extension State: Printable {
+extension State: CustomStringConvertible {
 
   public var description: String {
     switch self {
     case .Unresolved:
       return "Unresolved"
-    case .Resolved(let boxed):
-      let value = boxed.unbox
+    case .Resolved(let value):
       return "Resolved(\(value))"
-    case .Rejected(let boxed):
-      let error = boxed.unbox
+    case .Rejected(let error):
       return "Rejected(\(error))"
     }
   }

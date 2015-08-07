@@ -10,7 +10,7 @@ import Promissum
 import UIKit
 
 extension UIView {
-  public class func animatePromise(# duration: NSTimeInterval, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func animatePromise(duration duration: NSTimeInterval, animations: () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.animateWithDuration(duration, animations: animations, completion: source.resolve)
@@ -18,7 +18,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func animatePromise(# duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func animatePromise(duration duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.animateWithDuration(duration, delay: delay, options: options, animations: animations, completion: source.resolve)
@@ -26,7 +26,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func transitionPromise(# view: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func transitionPromise(view view: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.transitionWithView(view, duration: duration, options: options, animations: animations, completion: source.resolve)
@@ -34,7 +34,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func transitionPromise(# fromView: UIView, toView: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
+  public class func transitionPromise(fromView fromView: UIView, toView: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.transitionFromView(fromView, toView: toView, duration: duration, options: options, completion: source.resolve)
@@ -42,7 +42,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func performSystemAnimationPromise(animation: UISystemAnimation, onViews views: [AnyObject], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
+  public class func performSystemAnimationPromise(animation: UISystemAnimation, onViews views: [UIView], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.performSystemAnimation(animation, onViews: views, options: options, animations: parallelAnimations, completion: source.resolve)
@@ -50,7 +50,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func animateKeyframesPromise(# duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewKeyframeAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func animateKeyframesPromise(duration duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewKeyframeAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.animateKeyframesWithDuration(duration, delay: delay, options: options, animations: animations, completion: source.resolve)
@@ -76,7 +76,7 @@ extension UIViewController {
     return source.promise
   }
 
-  public func transitionPromise(# fromViewController: UIViewController, toViewController: UIViewController, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
+  public func transitionPromise(fromView fromViewController: UIViewController, toViewController: UIViewController, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.transitionFromViewController(fromViewController, toViewController: toViewController, duration: duration, options: options, animations: animations, completion: source.resolve)
@@ -86,7 +86,7 @@ extension UIViewController {
 }
 
 var associatedObjectHandle: UInt8 = 0
-let associationPolicy = objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+let associationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
 
 // UIAlertView is deprecated per iOS 8, however this extension is here for convenience
 extension UIAlertView {
@@ -158,6 +158,7 @@ extension UIAlertView {
 }
 
 // UIActionSheet is deprecated per iOS 8, however this extension is here for convenience
+@available(iOS, deprecated=8.3, message="'UIActionSheet' was deprecated in iOS 8.3: UIActionSheet is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleActionSheet instead")
 extension UIActionSheet {
   var strongDelegate: ActionSheetDelegate? {
     get {

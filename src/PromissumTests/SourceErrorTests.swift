@@ -31,7 +31,7 @@ class SourceErrorTests: XCTestCase {
     let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 
@@ -47,7 +47,7 @@ class SourceErrorTests: XCTestCase {
     let p = source.promise
       .mapError { $0.code + 1 }
 
-    p.catch { x in
+    p.trap { x in
       value = x
     }
 
@@ -79,7 +79,7 @@ class SourceErrorTests: XCTestCase {
     let p = source.promise
       .flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil)) }
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 

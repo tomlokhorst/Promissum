@@ -33,8 +33,8 @@ public class Promise<Value, Error> {
 
   public var value: Value? {
     switch source.state {
-    case .Resolved(let boxed):
-      return boxed.unbox
+    case .Resolved(let value):
+      return value
     default:
       return nil
     }
@@ -42,8 +42,8 @@ public class Promise<Value, Error> {
 
   public var error: Error? {
     switch source.state {
-    case .Rejected(let boxed):
-      return boxed.unbox
+    case .Rejected(let error):
+      return error
     default:
       return nil
     }
@@ -67,8 +67,8 @@ public class Promise<Value, Error> {
 
     let resultHandler: Result<Value, Error> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        handler(boxed.unbox)
+      case .Value(let value):
+        handler(value)
       case .Error:
         break
       }
@@ -79,14 +79,14 @@ public class Promise<Value, Error> {
     return self
   }
 
-  public func catch(handler: Error -> Void) -> Promise<Value, Error> {
+  public func trap(handler: Error -> Void) -> Promise<Value, Error> {
 
     let resultHandler: Result<Value, Error> -> Void = { result in
       switch result {
       case .Value:
         break
-      case .Error(let boxed):
-        handler(boxed.unbox)
+      case .Error(let error):
+        handler(error)
       }
     }
 
@@ -121,11 +121,11 @@ public class Promise<Value, Error> {
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        let transformed = transform(boxed.unbox)
+      case .Value(let value):
+        let transformed = transform(value)
         resultSource.resolve(transformed)
-      case .Error(let boxed):
-        resultSource.reject(boxed.unbox)
+      case .Error(let error):
+        resultSource.reject(error)
       }
     }
 
@@ -139,13 +139,13 @@ public class Promise<Value, Error> {
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        let transformedPromise = transform(boxed.unbox)
+      case .Value(let value):
+        let transformedPromise = transform(value)
         transformedPromise
           .then(resultSource.resolve)
-          .catch(resultSource.reject)
-      case .Error(let boxed):
-        resultSource.reject(boxed.unbox)
+          .trap(resultSource.reject)
+      case .Error(let error):
+        resultSource.reject(error)
       }
     }
 
@@ -162,10 +162,10 @@ public class Promise<Value, Error> {
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        resultSource.resolve(boxed.unbox)
-      case .Error(let boxed):
-        let transformed = transform(boxed.unbox)
+      case .Value(let value):
+        resultSource.resolve(value)
+      case .Error(let error):
+        let transformed = transform(error)
         resultSource.reject(transformed)
       }
     }
@@ -180,13 +180,13 @@ public class Promise<Value, Error> {
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
-      case .Value(let boxed):
-        resultSource.resolve(boxed.unbox)
-      case .Error(let boxed):
-        let transformedPromise = transform(boxed.unbox)
+      case .Value(let value):
+        resultSource.resolve(value)
+      case .Error(let error):
+        let transformedPromise = transform(error)
         transformedPromise
           .then(resultSource.resolve)
-          .catch(resultSource.reject)
+          .trap(resultSource.reject)
       }
     }
 
@@ -195,7 +195,6 @@ public class Promise<Value, Error> {
     return resultSource.promise
   }
 
-
   // MARK: Result combinators
 
   public func mapResult(transform: Result<Value, Error> -> Result<Value, Error>) -> Promise<Value, Error> {
@@ -203,10 +202,10 @@ public class Promise<Value, Error> {
 
     let handler: Result<Value, Error> -> Void = { result in
       switch transform(result) {
-      case .Value(let boxed):
-        resultSource.resolve(boxed.unbox)
-      case .Error(let boxed):
-        resultSource.reject(boxed.unbox)
+      case .Value(let value):
+        resultSource.resolve(value)
+      case .Error(let error):
+        resultSource.reject(error)
       }
     }
 
@@ -222,7 +221,7 @@ public class Promise<Value, Error> {
       let transformedPromise = transform(result)
       transformedPromise
         .then(resultSource.resolve)
-        .catch(resultSource.reject)
+        .trap(resultSource.reject)
     }
 
     source.addOrCallResultHandler(handler)

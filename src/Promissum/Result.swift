@@ -9,13 +9,12 @@
 import Foundation
 
 public enum Result<TValue, TError> {
-  case Value(Box<TValue>)
-  case Error(Box<TError>)
+  case Value(TValue)
+  case Error(TError)
 
   public var value: TValue? {
     switch self {
-    case .Value(let boxed):
-      let value = boxed.unbox
+    case .Value(let value):
       return value
     case .Error:
       return nil
@@ -24,8 +23,7 @@ public enum Result<TValue, TError> {
 
   public var error: TError? {
     switch self {
-    case .Error(let boxed):
-      let error = boxed.unbox
+    case .Error(let error):
       return error
     case .Value:
       return nil
@@ -33,15 +31,13 @@ public enum Result<TValue, TError> {
   }
 }
 
-extension Result: Printable {
+extension Result: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .Value(let boxed):
-      let value = boxed.unbox
+    case .Value(let value):
       return "Value(\(value))"
-    case .Error(let boxed):
-      let error = boxed.unbox
+    case .Error(let error):
       return "Error(\(error))"
     }
   }

@@ -27,7 +27,7 @@ class InitialErrorTests: XCTestCase {
 
     let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 
@@ -40,7 +40,7 @@ class InitialErrorTests: XCTestCase {
     let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
       .mapError { $0.code + 1 }
 
-    p.catch { x in
+    p.trap { x in
       value = x
     }
 
@@ -66,7 +66,7 @@ class InitialErrorTests: XCTestCase {
     let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
       .flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil)) }
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 

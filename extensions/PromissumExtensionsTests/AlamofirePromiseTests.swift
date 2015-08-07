@@ -21,13 +21,14 @@ class AlamofirePromiseTests: XCTestCase {
 
     Alamofire.request(.GET, url).responseJSONPromise()
       .then { json in
-        let name_ = json["name"] as? String
-        if name_ == "Promissum" {
+        if let dict = json as? [String: AnyObject],
+          let name = dict["name"] as? String
+          where name == "Promissum" {
           expectation.fulfill()
         }
       }
-      .catch { e in
-        println(e)
+      .trap { e in
+        print(e)
       }
 
     // Wait for 1 second for the download to be cancelled

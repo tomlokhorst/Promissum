@@ -12,9 +12,9 @@ public func flatten<Value, Error>(promise: Promise<Promise<Value, Error>, Error>
   let source = PromiseSource<Value, Error>()
 
   promise
-    .catch(source.reject)
+    .trap(source.reject)
     .then { p in
-      p.catch(source.reject).then(source.resolve)
+      p.trap(source.reject).then(source.resolve)
       return
     }
 
@@ -34,7 +34,7 @@ public func whenAll<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<
     source.resolve([])
   }
   
-  for (ix, promise) in enumerate(promises) {
+  for (ix, promise) in promises.enumerate() {
 
     promise
       .then { value in
@@ -47,7 +47,7 @@ public func whenAll<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<
       }
 
     promise
-      .catch { error in
+      .trap { error in
         source.reject(error)
       }
   }
@@ -71,7 +71,7 @@ public func whenAny<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<
       }
 
     promise
-      .catch { error in
+      .trap { error in
         remaining = remaining - 1
 
         if remaining == 0 {
@@ -108,7 +108,6 @@ public func whenAllFinalized<Value, Error>(promises: [Promise<Value, Error>]) ->
 
 public func whenAnyFinalized<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
   let source = PromiseSource<Void, NoError>()
-  var remaining = promises.count
 
   for promise in promises {
 

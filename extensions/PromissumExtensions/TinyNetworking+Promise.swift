@@ -14,12 +14,12 @@ public typealias TinyNetworkingError = (reason: Reason, data: NSData?)
 public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseURL: NSURL, resource: Resource<A>) -> Promise<A, TinyNetworkingError> {
   let source = PromiseSource<A, TinyNetworkingError>()
 
-  apiRequest(modifyRequest, baseURL, resource, source.reject, source.resolve)
+  apiRequest(modifyRequest, baseURL: baseURL, resource: resource, failure: source.reject, completion: source.resolve)
 
   return source.promise
 }
 
-extension Reason: Printable {
+extension Reason: CustomStringConvertible {
   public var description: String {
     switch self {
     case .CouldNotParseJSON:
