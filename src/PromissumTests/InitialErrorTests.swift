@@ -17,7 +17,7 @@ class InitialErrorTests: XCTestCase {
 
     let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    error = p.error()
+    error = p.error
 
     XCTAssert(error?.code == 42, "Error should be set")
   }

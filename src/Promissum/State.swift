@@ -16,7 +16,7 @@ public class Box<T> {
 public enum NoError { }
 
 public enum State<Value, Error> {
-  case Unresolved(PromiseSource<Value, Error>)
+  case Unresolved
   case Resolved(Box<Value>)
   case Rejected(Box<Error>)
 }

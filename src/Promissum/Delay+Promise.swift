@@ -38,10 +38,10 @@ public func delayPromise<Error>(seconds: NSTimeInterval, queue: dispatch_queue_t
   return delayPromise(seconds, (), queue: queue)
 }
 
-public func delay<Value, Error>(seconds: NSTimeInterval)(value: Value) -> Promise<Value, Error> {
+public func delay<Value, Error>(seconds: NSTimeInterval)(_ value: Value) -> Promise<Value, Error> {
   return delayPromise(seconds).map { value }
 }
 
-public func delay<Value, Error>(seconds: NSTimeInterval)(error: Error) -> Promise<Value, Error> {
+public func delay<Value, Error>(seconds: NSTimeInterval)(_ error: Error) -> Promise<Value, Error> {
   return delayPromise(seconds).flatMap { Promise(error: error) }
 }

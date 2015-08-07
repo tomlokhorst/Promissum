@@ -63,8 +63,8 @@ class ViewController: NSViewController {
 
 func parseJson(json: AnyObject) -> (name: String, description: String) {
 
-  let name = json["name"] as String
-  let description = json["description"] as String
+  let name = json["name"] as! String
+  let description = json["description"] as! String
 
   return (name, description)
 }

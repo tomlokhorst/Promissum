@@ -18,7 +18,7 @@ class SourceValueTests: XCTestCase {
     let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    value = p.value()
+    value = p.value
 
     source.resolve(42)
 

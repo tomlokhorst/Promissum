@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // Initialize CoreData stack
     if let persistentStoreCoordinator = NSPersistentStoreCoordinator(automigrating: true, deleteOnMismatch: true) {
-      CoreDataKit.sharedStack = CoreDataStack(persistentStoreCoordinator: persistentStoreCoordinator)
+      CDK.sharedStack = CoreDataStack(persistentStoreCoordinator: persistentStoreCoordinator)
     }
 
     return true

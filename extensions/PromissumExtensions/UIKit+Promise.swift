@@ -92,7 +92,7 @@ let associationPolicy = objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC
 extension UIAlertView {
   var strongDelegate: AlertViewDelegate? {
     get {
-      return (objc_getAssociatedObject(self, &associatedObjectHandle) as! AlertViewDelegate)
+      return (objc_getAssociatedObject(self, &associatedObjectHandle) as? AlertViewDelegate)
     }
     set {
       objc_setAssociatedObject(self, &associatedObjectHandle, newValue, associationPolicy)
@@ -128,8 +128,6 @@ extension UIAlertView {
       originalDelegate?.alertView?(alertView, clickedButtonAtIndex: buttonIndex)
 
       source.resolve(buttonIndex)
-
-      self.alertView.strongDelegate = nil
     }
 
     func alertViewCancel(alertView: UIAlertView) {
@@ -150,6 +148,7 @@ extension UIAlertView {
 
     func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.alertView?(alertView, didDismissWithButtonIndex: buttonIndex)
+      self.alertView.strongDelegate = nil
     }
 
     func alertViewShouldEnableFirstOtherButton(alertView: UIAlertView) -> Bool {
@@ -162,7 +161,7 @@ extension UIAlertView {
 extension UIActionSheet {
   var strongDelegate: ActionSheetDelegate? {
     get {
-      return (objc_getAssociatedObject(self, &associatedObjectHandle) as! ActionSheetDelegate)
+      return (objc_getAssociatedObject(self, &associatedObjectHandle) as? ActionSheetDelegate)
     }
     set {
       objc_setAssociatedObject(self, &associatedObjectHandle, newValue, associationPolicy)
@@ -198,8 +197,6 @@ extension UIActionSheet {
       originalDelegate?.actionSheet?(actionSheet, clickedButtonAtIndex: buttonIndex)
 
       source.resolve(buttonIndex)
-
-      self.actionSheet.strongDelegate = nil
     }
 
     func actionSheetCancel(actionSheet: UIActionSheet) {
@@ -220,6 +217,7 @@ extension UIActionSheet {
 
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.actionSheet?(actionSheet, didDismissWithButtonIndex: buttonIndex)
+      self.actionSheet.strongDelegate = nil
     }
   }
 }

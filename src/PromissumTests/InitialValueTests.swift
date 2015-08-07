@@ -17,7 +17,7 @@ class InitialValueTests: XCTestCase {
 
     let p: Promise<Int, NSError> = Promise(value: 42)
 
-    value = p.value()
+    value = p.value
 
     XCTAssert(value == 42, "Value should be set")
   }

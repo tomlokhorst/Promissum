@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Promissum"
-  s.version      = "0.2.3"
+  s.version      = "0.2.4"
   s.license      = "MIT"
 
   s.summary      = "A promises library written in Swift featuring combinators like map, flatMap, whenAll, whenAny."
@@ -34,12 +34,12 @@ Promissum really shines when used to combine asynchronous operations from differ
     ss.dependency "Alamofire", "~> 1.2"
   end
 
-#  s.subspec "CoreDataKit" do |ss|
-#    ss.ios.deployment_target = '8.0'
-#    ss.source_files = "extensions/PromissumExtensions/CoreDataKit+Promise.swift"
-#    ss.dependency "Promissum/Core"
-#    ss.dependency "CoreDataKit", "~> 0.5.1"
-#  end
+  s.subspec "CoreDataKit" do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.source_files = "extensions/PromissumExtensions/CoreDataKit+Promise.swift"
+    ss.dependency "Promissum/Core"
+    ss.dependency "CoreDataKit", "~> 0.5"
+  end
 
   s.subspec "UIKit" do |ss|
     ss.ios.deployment_target = '8.0'

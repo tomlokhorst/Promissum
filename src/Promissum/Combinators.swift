@@ -27,7 +27,7 @@ public func whenBoth<A, B, Error>(promiseA: Promise<A, Error>, promiseB: Promise
 
 public func whenAll<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<[Value], Error> {
   let source = PromiseSource<[Value], Error>()
-  var results = promises.map { $0.value() }
+  var results = promises.map { $0.value }
   var remaining = promises.count
 
   if remaining == 0 {
@@ -44,12 +44,12 @@ public func whenAll<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<
         if remaining == 0 {
           source.resolve(results.map { $0! })
         }
-    }
+      }
 
     promise
       .catch { error in
         source.reject(error)
-    }
+      }
   }
 
   return source.promise

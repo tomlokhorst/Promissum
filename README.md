@@ -7,6 +7,8 @@ It has useful combinators for working with promises like; `whenAll` for doing so
 
 Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit, Alamofire and CoreDataKit, and contributions for extensions to other libraries are very welcome.
 
+This library has an extensive set of regression tests, and has been used for months in several high profile production apps at [Q42](http://q42.com/swift).
+
 Example
 -------
 
@@ -55,11 +57,10 @@ Installation
 ### CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
-
-CocoaPods 0.36 RC adds supports for Swift and embedded frameworks. You can install it with the following command:
+You can install it with the following command:
 
 ```bash
-$ gem install cocoapods --pre
+$ gem install cocoapods
 ```
 
 To integrate Promissum into your Xcode project using CocoaPods, specify it in your `Podfile`:
@@ -68,7 +69,7 @@ To integrate Promissum into your Xcode project using CocoaPods, specify it in yo
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'Promissum', '~> 0.2.2'
+pod 'Promissum', '~> 0.2.4'
 ```
 
 Then, run the following command:
@@ -77,22 +78,18 @@ Then, run the following command:
 $ pod install
 ```
 
-(These installation instructions are based on the ones for Alamofire)
 
+Releases
+--------
 
-### Using git submodules
-
-If, for some reason, using CocoaPods is not an option, Promissum can be added via a git submodule.
-There are five steps, which I've also demonstrated in a [screencast](https://www.youtube.com/watch?v=ow1ZE7pfBH8):
-
-1. Add Promissum as a submodule the terminal using the command: `git submodule add https://github.com/tomlokhorst/Promissum.git`
-2. Open the `Promissum/src` folder, and drag `Promissum.xcodeproj` into the file navigator of your app project.
-3. In Xcode, navigate to the target configuration window by clicking on the blue project icon, and selecting the application target under the "Targets" heading in the sidebar.
-4. In the tab bar at the top of that window, open the "Build Phases" panel.
-5. Click on the + button at the top left of the panel and select "New Copy Files Phase". Rename this new phase to "Copy Frameworks", set the "Destination" to "Frameworks", and add `Promissum.framework`.
-
-(These installation instructions are based on the ones for Alamofire)
-
+ - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
+ - 0.2.3 - 2015-04-13 - Swift 1.2 support
+ - 0.2.2 - 2015-03-01 - Mac OS X support
+ - 0.2.1 - 2015-02-16 - Update for new CoreDataKit version
+ - **0.2.0** - 2015-02-15 - Side-effects happen in a better order. Regression tests added.
+ - 0.1.1 - 2015-05-31 - `whenAnyFinalized` combinator added
+ - **0.1.0** - 2015-01-27 - Initial public release
+ - 0.0.0 - 2014-10-12 - Initial privat version for project at [Q42](http://q42.com)
 
 Licence & Credits
 -----------------

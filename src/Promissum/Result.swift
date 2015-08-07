@@ -12,7 +12,7 @@ public enum Result<TValue, TError> {
   case Value(Box<TValue>)
   case Error(Box<TError>)
 
-  public func value() -> TValue? {
+  public var value: TValue? {
     switch self {
     case .Value(let boxed):
       let value = boxed.unbox
@@ -22,7 +22,7 @@ public enum Result<TValue, TError> {
     }
   }
 
-  public func error() -> TError? {
+  public var error: TError? {
     switch self {
     case .Error(let boxed):
       let error = boxed.unbox

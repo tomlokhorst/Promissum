@@ -70,8 +70,8 @@ class ViewController: UIViewController {
 
 func parseJson(json: AnyObject) -> (name: String, description: String) {
 
-  let name = json["name"] as String
-  let description = json["description"] as String
+  let name = json["name"] as! String
+  let description = json["description"] as! String
 
   return (name, description)
 }
@@ -80,13 +80,13 @@ func storeInCoreData(result: (name: String, description: String)) -> Promise<Pro
 
   var project: Project!
 
-  return CoreDataKit.performBlockOnBackgroundContextPromise { context in
+  return CDK.performBlockOnBackgroundContextPromise { context in
     project = context.create(Project.self).value()
     project.name = result.name
     project.descr = result.description
 
     return .SaveToPersistentStore
   }.flatMap { _ in
-    CoreDataKit.backgroundContext.find(project).toPromise()
+    CDK.backgroundContext.find(project).promise
   }
 }

@@ -10,255 +10,223 @@ import Foundation
 
 public let PromissumErrorDomain = "com.nonstrict.Promissum"
 
-public class Promise<Value, Error> : PromiseNotifier {
-  internal(set) var state: State<Value, Error>
+public class Promise<Value, Error> {
+  private let source: PromiseSource<Value, Error>
+
+
+  // MARK: Initializers
+
+  public convenience init(value: Value) {
+    self.init(source: PromiseSource(value: value))
+  }
+
+  public convenience init(error: Error) {
+    self.init(source: PromiseSource(error: error))
+  }
 
   internal init(source: PromiseSource<Value, Error>) {
-    self.state = State.Unresolved(source)
+    self.source = source
   }
 
-  public init(value: Value) {
-    state = .Resolved(Box(value))
-  }
 
-  public init(error: Error) {
-    state = .Rejected(Box(error))
-  }
+  // MARK: Computed properties
 
-  public func value() -> Value? {
-    switch state {
-    case State<Value, Error>.Resolved(let boxed):
+  public var value: Value? {
+    switch source.state {
+    case .Resolved(let boxed):
       return boxed.unbox
     default:
       return nil
     }
   }
 
-  public func error() -> Error? {
-    switch state {
-    case State<Value, Error>.Rejected(let boxed):
+  public var error: Error? {
+    switch source.state {
+    case .Rejected(let boxed):
       return boxed.unbox
     default:
       return nil
     }
   }
 
-  public func result() -> Result<Value, Error>? {
-    switch state {
-    case State<Value, Error>.Resolved(let boxed):
+  public var result: Result<Value, Error>? {
+    switch source.state {
+    case .Resolved(let boxed):
       return .Value(boxed)
-    case State<Value, Error>.Rejected(let boxed):
+    case .Rejected(let boxed):
       return .Error(boxed)
     default:
       return nil
     }
   }
 
+
+  // MARK: Attach handlers
+
   public func then(handler: Value -> Void) -> Promise<Value, Error> {
-    addResolveHandler(handler)
+
+    let resultHandler: Result<Value, Error> -> Void = { result in
+      switch result {
+      case .Value(let boxed):
+        handler(boxed.unbox)
+      case .Error:
+        break
+      }
+    }
+
+    source.addOrCallResultHandler(resultHandler)
 
     return self
-  }
-
-  public func map<NewValue>(transform: Value -> NewValue) -> Promise<NewValue, Error> {
-    let source = PromiseSource<NewValue, Error>(originalPromise: self, warnUnresolvedDeinit: true)
-
-    let handler: Result<Value, Error> -> Void = { result in
-      switch result {
-      case .Value(let boxed):
-        let transformed = transform(boxed.unbox)
-        source.resolve(transformed)
-      case .Error(let boxed):
-        source.reject(boxed.unbox)
-      }
-    }
-
-    addResultHandler(handler)
-
-    return source.promise
-  }
-
-  public func flatMap<NewValue>(transform: Value -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
-    let source = PromiseSource<NewValue, Error>()
-
-    let handler: Result<Value, Error> -> Void = { result in
-      switch result {
-      case .Value(let boxed):
-        let transformedPromise = transform(boxed.unbox)
-        transformedPromise
-          .then(source.resolve)
-          .catch(source.reject)
-      case .Error(let boxed):
-        source.reject(boxed.unbox)
-      }
-    }
-
-    addResultHandler(handler)
-
-    return source.promise
-  }
-
-  public func mapError<NewError>(transform: Error -> NewError) -> Promise<Value, NewError> {
-    let source = PromiseSource<Value, NewError>(originalPromise: self, warnUnresolvedDeinit: true)
-
-    let handler: Result<Value, Error> -> Void = { result in
-      switch result {
-      case .Value(let boxed):
-        source.resolve(boxed.unbox)
-      case .Error(let boxed):
-        let transformed = transform(boxed.unbox)
-        source.reject(transformed)
-      }
-    }
-
-    addResultHandler(handler)
-
-    return source.promise
-  }
-
-  public func flatMapError(transform: Error -> Promise<Value, Error>) -> Promise<Value, Error> {
-    let source = PromiseSource<Value, Error>()
-
-    let handler: Result<Value, Error> -> Void = { result in
-      switch result {
-      case .Value(let boxed):
-        source.resolve(boxed.unbox)
-      case .Error(let boxed):
-        let transformedPromise = transform(boxed.unbox)
-        transformedPromise
-          .then(source.resolve)
-          .catch(source.reject)
-      }
-    }
-
-    addResultHandler(handler)
-
-    return source.promise
   }
 
   public func catch(handler: Error -> Void) -> Promise<Value, Error> {
 
-    addErrorHandler(handler)
-
-    return self
-  }
-
-  public func mapResult(transform: Result<Value, Error> -> Result<Value, Error>) -> Promise<Value, Error> {
-    let source = PromiseSource<Value, Error>()
-
-    let handler: Result<Value, Error> -> Void = { result in
-      switch transform(result) {
-      case .Value(let boxed):
-        source.resolve(boxed.unbox)
+    let resultHandler: Result<Value, Error> -> Void = { result in
+      switch result {
+      case .Value:
+        break
       case .Error(let boxed):
-        source.reject(boxed.unbox)
+        handler(boxed.unbox)
       }
     }
 
-    addResultHandler(handler)
-
-    return source.promise
-  }
-
-  public func flatMapResult<NewValue, NewError>(transform: Result<Value, Error> -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
-    let source = PromiseSource<NewValue, NewError>()
-
-    let handler: Result<Value, Error> -> Void = { result in
-      let transformedPromise = transform(result)
-      transformedPromise
-        .then(source.resolve)
-        .catch(source.reject)
-    }
-
-    addResultHandler(handler)
-
-    return source.promise
-  }
-
-  public func finallyResult(handler: Result<Value, Error> -> Void) -> Promise<Value, Error> {
-
-    addResultHandler(handler)
+    source.addOrCallResultHandler(resultHandler)
 
     return self
   }
 
   public func finally(handler: () -> Void) -> Promise<Value, Error> {
 
-    addResultHandler({ _ in handler() })
+    let resultHandler: Result<Value, Error> -> Void = { _ in
+      handler()
+    }
+
+    source.addOrCallResultHandler(resultHandler)
 
     return self
   }
 
-  public func registerHandler(handler: () -> Void) {
-    addResultHandler({ _ in handler() })
+  public func finallyResult(handler: Result<Value, Error> -> Void) -> Promise<Value, Error> {
+
+    source.addOrCallResultHandler(handler)
+
+    return self
   }
 
-  internal func addResultHandler(handler: Result<Value, Error> -> Void) {
 
-    switch state {
-    case State<Value, Error>.Unresolved(let source):
-      // Save handler for later
-      source.addHander(handler)
+  // MARK: - Value combinators
 
-    case State<Value, Error>.Resolved(let boxed):
-      // Value is already available, call handler immediately
-      handler(Result.Value(boxed))
+  public func map<NewValue>(transform: Value -> NewValue) -> Promise<NewValue, Error> {
+    let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
 
-    case State<Value, Error>.Rejected(let boxed):
-      // Error is already available, call handler immediately
-      handler(Result.Error(boxed))
-
-    }
-  }
-
-  // Convinience functions
-
-  private func addResolveHandler(handler: Value -> Void) {
-
-    switch state {
-    case State<Value, Error>.Unresolved(let source):
-      // Save handler for later
-      let resultHandler: Result<Value, Error> -> Void = { result in
-        switch result {
-        case .Value(let boxed):
-          handler(boxed.unbox)
-        case .Error:
-          break
-        }
+    let handler: Result<Value, Error> -> Void = { result in
+      switch result {
+      case .Value(let boxed):
+        let transformed = transform(boxed.unbox)
+        resultSource.resolve(transformed)
+      case .Error(let boxed):
+        resultSource.reject(boxed.unbox)
       }
-      source.addHander(resultHandler)
-
-    case State<Value, Error>.Resolved(let boxed):
-      // Value is already available, call handler immediately
-      handler(boxed.unbox)
-
-    case State<Value, Error>.Rejected:
-      break
-
     }
+
+    source.addOrCallResultHandler(handler)
+
+    return resultSource.promise
   }
 
-  private func addErrorHandler(handler: Error -> Void) {
+  public func flatMap<NewValue>(transform: Value -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
+    let resultSource = PromiseSource<NewValue, Error>()
 
-    switch state {
-    case State<Value, Error>.Unresolved(let source):
-      // Save handler for later
-      let resultHandler: Result<Value, Error> -> Void = { result in
-        switch result {
-        case .Value:
-          break
-        case .Error(let boxed):
-          handler(boxed.unbox)
-        }
+    let handler: Result<Value, Error> -> Void = { result in
+      switch result {
+      case .Value(let boxed):
+        let transformedPromise = transform(boxed.unbox)
+        transformedPromise
+          .then(resultSource.resolve)
+          .catch(resultSource.reject)
+      case .Error(let boxed):
+        resultSource.reject(boxed.unbox)
       }
-      source.addHander(resultHandler)
-
-    case State<Value, Error>.Resolved(let boxed):
-      break
-
-    case State<Value, Error>.Rejected(let boxed):
-      // Error is already available, call handler immediately
-      handler(boxed.unbox)
     }
+
+    source.addOrCallResultHandler(handler)
+
+    return resultSource.promise
+  }
+
+
+  // MARK: Error combinators
+
+  public func mapError<NewError>(transform: Error -> NewError) -> Promise<Value, NewError> {
+    let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
+
+    let handler: Result<Value, Error> -> Void = { result in
+      switch result {
+      case .Value(let boxed):
+        resultSource.resolve(boxed.unbox)
+      case .Error(let boxed):
+        let transformed = transform(boxed.unbox)
+        resultSource.reject(transformed)
+      }
+    }
+
+    source.addOrCallResultHandler(handler)
+
+    return resultSource.promise
+  }
+
+  public func flatMapError(transform: Error -> Promise<Value, Error>) -> Promise<Value, Error> {
+    let resultSource = PromiseSource<Value, Error>()
+
+    let handler: Result<Value, Error> -> Void = { result in
+      switch result {
+      case .Value(let boxed):
+        resultSource.resolve(boxed.unbox)
+      case .Error(let boxed):
+        let transformedPromise = transform(boxed.unbox)
+        transformedPromise
+          .then(resultSource.resolve)
+          .catch(resultSource.reject)
+      }
+    }
+
+    source.addOrCallResultHandler(handler)
+
+    return resultSource.promise
+  }
+
+
+  // MARK: Result combinators
+
+  public func mapResult(transform: Result<Value, Error> -> Result<Value, Error>) -> Promise<Value, Error> {
+    let resultSource = PromiseSource<Value, Error>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
+
+    let handler: Result<Value, Error> -> Void = { result in
+      switch transform(result) {
+      case .Value(let boxed):
+        resultSource.resolve(boxed.unbox)
+      case .Error(let boxed):
+        resultSource.reject(boxed.unbox)
+      }
+    }
+
+    source.addOrCallResultHandler(handler)
+
+    return resultSource.promise
+  }
+
+  public func flatMapResult<NewValue, NewError>(transform: Result<Value, Error> -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
+    let resultSource = PromiseSource<NewValue, NewError>()
+
+    let handler: Result<Value, Error> -> Void = { result in
+      let transformedPromise = transform(result)
+      transformedPromise
+        .then(resultSource.resolve)
+        .catch(resultSource.reject)
+    }
+
+    source.addOrCallResultHandler(handler)
+
+    return resultSource.promise
   }
 }
