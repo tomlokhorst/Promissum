@@ -5,6 +5,6 @@ use_frameworks!
 link_with "PromissumExtensions", "PromissumExtensionsTests"
 
 pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :branch => 'swift-2.0'
-pod 'CoreDataKit', '~> 0.7.0'
+pod 'CoreDataKit', :git => 'https://github.com/tomlokhorst/CoreDataKit', :branch => 'feature/custom-error-type'
 pod 'Promissum', :path => '../'
 

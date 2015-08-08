@@ -13,20 +13,20 @@ import Promissum
 
 
 extension CDK {
-  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
+  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     return sharedStack!.performBlockOnBackgroundContextPromise(block)
   }
 }
 
 extension CoreDataStack {
-  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
+  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     return backgroundContext.performBlockPromise(block)
   }
 }
 
 extension NSManagedObjectContext {
-  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction, NSError> {
-    let promiseSource = PromiseSource<CommitAction, NSError>()
+  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    let promiseSource = PromiseSource<CommitAction, CoreDataKitError>()
 
     performBlock(block) { result in
       dispatch_async(dispatch_get_main_queue()) {
@@ -34,11 +34,11 @@ extension NSManagedObjectContext {
           let action = try result()
           promiseSource.resolve(action)
         }
-        catch let error as NSError {
-          promiseSource.reject(error)
+        catch let error as CoreDataKitError {
+            promiseSource.reject(error)
         }
-        catch {
-          fatalError("Should never happen")
+        catch let error {
+          promiseSource.reject(CoreDataKitError.UnknownError(description: "\(error)"))
         }
       }
     }
