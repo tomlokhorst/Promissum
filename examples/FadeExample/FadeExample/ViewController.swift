@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     }.void()
 
     // When both fade out and JSON loading complete, continue on
-    whenBoth(jsonPromise, fadeoutPromise)
+    whenBoth(jsonPromise, promiseB: fadeoutPromise)
       .map { json, _ in parseJson(json) }
       .flatMap(storeInCoreData)
       .flatMap(delay(0.5))
@@ -61,10 +61,11 @@ class ViewController: UIViewController {
           self.detailsView.alpha = 1
         }
       }
-      .catch { e in
+      .trap { e in
         self.errorLabel.text = e.localizedDescription
         self.errorView.alpha = 1
       }
+
   }
 }
 
@@ -81,12 +82,23 @@ func storeInCoreData(result: (name: String, description: String)) -> Promise<Pro
   var project: Project!
 
   return CDK.performBlockOnBackgroundContextPromise { context in
-    project = context.create(Project.self).value()
-    project.name = result.name
-    project.descr = result.description
+    do {
+      project = try context.create(Project.self)
+      project.name = result.name
+      project.descr = result.description
 
-    return .SaveToPersistentStore
+      return .SaveToPersistentStore
+    }
+    catch {
+      fatalError("Shouldn't happen")
+    }
   }.flatMap { _ in
-    CDK.backgroundContext.find(project).promise
+    do {
+      let p = try CDK.backgroundContext.find(Project.self, managedObjectID: project.objectID)
+      return Promise(value: p)
+    }
+    catch {
+      fatalError("Shouldn't happen")
+    }
   }
 }

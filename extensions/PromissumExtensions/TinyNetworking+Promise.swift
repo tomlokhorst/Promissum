@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Promissum
 
 public let TinyNetworkingPromiseErrorDomain = "com.nonstrict.promissum.tiny-networking"
 

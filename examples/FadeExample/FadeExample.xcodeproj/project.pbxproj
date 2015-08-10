@@ -13,9 +13,6 @@
 		E2F97BE01A729D9B00B9BDD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BDE1A729D9B00B9BDD7 /* Main.storyboard */; };
 		E2F97BE21A729D9B00B9BDD7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BE11A729D9B00B9BDD7 /* Images.xcassets */; };
 		E2F97BE51A729D9B00B9BDD7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BE31A729D9B00B9BDD7 /* LaunchScreen.xib */; };
-		E2F97C301A72ACEC00B9BDD7 /* Alamofire+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C2E1A72ACEC00B9BDD7 /* Alamofire+Promise.swift */; };
-		E2F97C311A72ACEC00B9BDD7 /* CoreDataKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C2F1A72ACEC00B9BDD7 /* CoreDataKit+Promise.swift */; };
-		E2F97C451A72B61800B9BDD7 /* UIKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C441A72B61800B9BDD7 /* UIKit+Promise.swift */; };
 		E2F97C4E1A75488A00B9BDD7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4C1A75488A00B9BDD7 /* Model.xcdatamodeld */; };
 		E2F97C501A75490600B9BDD7 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4F1A75490600B9BDD7 /* Project.swift */; };
 /* End PBXBuildFile section */
@@ -162,6 +159,7 @@
 		E2F97BCD1A729D9A00B9BDD7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Tom Lokhorst";
 				TargetAttributes = {
@@ -254,10 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2F97C451A72B61800B9BDD7 /* UIKit+Promise.swift in Sources */,
 				E2F97BDD1A729D9B00B9BDD7 /* ViewController.swift in Sources */,
-				E2F97C311A72ACEC00B9BDD7 /* CoreDataKit+Promise.swift in Sources */,
-				E2F97C301A72ACEC00B9BDD7 /* Alamofire+Promise.swift in Sources */,
 				E2F97BDB1A729D9B00B9BDD7 /* AppDelegate.swift in Sources */,
 				E2F97C501A75490600B9BDD7 /* Project.swift in Sources */,
 				E2F97C4E1A75488A00B9BDD7 /* Model.xcdatamodeld in Sources */,

@@ -8,7 +8,6 @@
 
 import Foundation
 import Alamofire
-import Promissum
 
 public let AlamofirePromiseErrorDomain = "com.nonstrict.promissum.alamofire"
 
