@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Tom Lokhorst. All rights reserved.
 //
 
-import Promissum
 import UIKit
 
 extension UIView {

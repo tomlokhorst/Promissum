@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Promissum
 
 public typealias TinyNetworkingError = (reason: Reason, data: NSData?)
 

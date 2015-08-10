@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 import CoreDataKit
-import Promissum
 
 
 extension CDK {

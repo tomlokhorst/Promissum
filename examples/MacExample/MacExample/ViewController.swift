@@ -42,7 +42,7 @@ class ViewController: NSViewController {
     }
 
     // When both fade out and JSON loading complete, continue on
-    whenBoth(jsonPromise, fadeoutPromise)
+    whenBoth(jsonPromise, promiseB: fadeoutPromise)
       .map { json, _ in parseJson(json) }
       .flatMap(delay(0.5))
       .then { project in
@@ -54,7 +54,7 @@ class ViewController: NSViewController {
           self.detailsView.animator().alphaValue = 1
         }
       }
-      .catch { e in
+      .trap { e in
         self.errorField.stringValue = e.localizedDescription
         self.errorField.alphaValue = 1
     }
