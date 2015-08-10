@@ -58,7 +58,7 @@ class MultipleErrorTests: XCTestCase {
     p.catch { _ in
       calls += 1
     }
-    p.flatMapError { Promise(value: $0.code + 1) }
+    p.flatMapError { Promise<Int, String>(value: $0.code + 1) }
       .then { _ in
         calls += 1
       }
@@ -77,7 +77,7 @@ class MultipleErrorTests: XCTestCase {
     p.catch { _ in
       calls += 1
     }
-    p.flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil))  }
+    p.flatMapError { Promise<Int, String>(error: "\($0.code + 1)")  }
       .catch { _ in
         calls += 1
       }

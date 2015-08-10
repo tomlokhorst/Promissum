@@ -175,8 +175,8 @@ public class Promise<Value, Error> {
     return resultSource.promise
   }
 
-  public func flatMapError(transform: Error -> Promise<Value, Error>) -> Promise<Value, Error> {
-    let resultSource = PromiseSource<Value, Error>()
+  public func flatMapError<NewError>(transform: Error -> Promise<Value, NewError>) -> Promise<Value, NewError> {
+    let resultSource = PromiseSource<Value, NewError>()
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {

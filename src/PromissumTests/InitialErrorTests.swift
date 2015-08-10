@@ -51,7 +51,7 @@ class InitialErrorTests: XCTestCase {
     var value: Int?
 
     let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
-      .flatMapError { Promise(value: $0.code + 1) }
+      .flatMapError { Promise<Int, String>(value: $0.code + 1) }
 
     p.then { x in
       value = x
