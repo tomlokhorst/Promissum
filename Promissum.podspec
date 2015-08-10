@@ -31,14 +31,14 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.subspec "Alamofire" do |ss|
     ss.source_files = "extensions/PromissumExtensions/Alamofire+Promise.swift"
     ss.dependency "Promissum/Core"
-    ss.dependency "Alamofire", "~> 1.2"
+    ss.dependency "Alamofire", "~> 1.3"
   end
 
   s.subspec "CoreDataKit" do |ss|
     ss.ios.deployment_target = '8.0'
     ss.source_files = "extensions/PromissumExtensions/CoreDataKit+Promise.swift"
     ss.dependency "Promissum/Core"
-    ss.dependency "CoreDataKit", "~> 0.5"
+    ss.dependency "CoreDataKit", "~> 0.7"
   end
 
   s.subspec "UIKit" do |ss|
