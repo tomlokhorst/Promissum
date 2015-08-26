@@ -4,14 +4,14 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift-2.0`)
-  - CoreDataKit (from `https://github.com/tomlokhorst/CoreDataKit`, branch `feature/custom-error-type`)
+  - CoreDataKit (from `https://github.com/tomlokhorst/CoreDataKit`, branch `feature/fixes`)
 
 EXTERNAL SOURCES:
   Alamofire:
     :branch: swift-2.0
     :git: https://github.com/Alamofire/Alamofire.git
   CoreDataKit:
-    :branch: feature/custom-error-type
+    :branch: feature/fixes
     :git: https://github.com/tomlokhorst/CoreDataKit
 
 CHECKOUT OPTIONS:
@@ -19,7 +19,7 @@ CHECKOUT OPTIONS:
     :commit: 0fd77fec2a33e237ab99069c36410eb7101126c6
     :git: https://github.com/Alamofire/Alamofire.git
   CoreDataKit:
-    :commit: 347c276bcdaeb26d958ce8cc514fe5b66b673832
+    :commit: 7b48d18504fdceff2e31e5969e93ce01badb1d62
     :git: https://github.com/tomlokhorst/CoreDataKit
 
 SPEC CHECKSUMS:

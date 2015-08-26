@@ -3,6 +3,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :branch => 'swift-2.0'
+pod 'CoreDataKit', :git => 'https://github.com/tomlokhorst/CoreDataKit', :branch => 'feature/fixes'
 pod 'Promissum', :path => '../../'
 pod 'Promissum/Alamofire', :path => '../../'
 pod 'Promissum/CoreDataKit', :path => '../../'

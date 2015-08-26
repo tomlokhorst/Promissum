@@ -8,13 +8,14 @@ PODS:
     - Promissum/Core
   - Promissum/Core (0.2.4)
   - Promissum/CoreDataKit (0.2.4):
-    - CoreDataKit (~> 0.7)
+    - CoreDataKit
     - Promissum/Core
   - Promissum/UIKit (0.2.4):
     - Promissum/Core
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift-2.0`)
+  - CoreDataKit (from `https://github.com/tomlokhorst/CoreDataKit`, branch `feature/fixes`)
   - Promissum (from `../../`)
   - Promissum/Alamofire (from `../../`)
   - Promissum/CoreDataKit (from `../../`)
@@ -24,6 +25,9 @@ EXTERNAL SOURCES:
   Alamofire:
     :branch: swift-2.0
     :git: https://github.com/Alamofire/Alamofire.git
+  CoreDataKit:
+    :branch: feature/fixes
+    :git: https://github.com/tomlokhorst/CoreDataKit
   Promissum:
     :path: ../../
 
@@ -31,10 +35,13 @@ CHECKOUT OPTIONS:
   Alamofire:
     :commit: 0fd77fec2a33e237ab99069c36410eb7101126c6
     :git: https://github.com/Alamofire/Alamofire.git
+  CoreDataKit:
+    :commit: 7b48d18504fdceff2e31e5969e93ce01badb1d62
+    :git: https://github.com/tomlokhorst/CoreDataKit
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
   CoreDataKit: a7f97808cf0ad543748fb40db38b9f7702c40277
-  Promissum: bfda2ded9e7559dafac057d759aee0f13150cf23
+  Promissum: 4d972777312edac5031eb6c1d97bd23d49b1e3b6
 
 COCOAPODS: 0.38.2
