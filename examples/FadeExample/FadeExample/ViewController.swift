@@ -41,12 +41,16 @@ class ViewController: UIViewController {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let jsonPromise = Alamofire.request(.GET, url).responseJSONPromise()
+    let jsonPromise = Alamofire.request(.GET, url)
+      .responseJSONPromise()
+      .mapErrorType()
 
     // Fade out the "load" button
     let fadeoutPromise = UIView.animatePromise(duration: 0.5) {
-      self.loadButton.alpha = 0
-    }.void()
+        self.loadButton.alpha = 0
+      }
+      .void()
+      .mapErrorType()
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, promiseB: fadeoutPromise)
@@ -61,8 +65,8 @@ class ViewController: UIViewController {
           self.detailsView.alpha = 1
         }
       }
-      .trap { e in
-        self.errorLabel.text = e.localizedDescription
+      .trap { error in
+        self.errorLabel.text = "\(error)"
         self.errorView.alpha = 1
       }
 
@@ -77,28 +81,29 @@ func parseJson(json: AnyObject) -> (name: String, description: String) {
   return (name, description)
 }
 
-func storeInCoreData(result: (name: String, description: String)) -> Promise<Project> {
+func storeInCoreData(result: (name: String, description: String)) -> Promise<Project, ErrorType> {
 
   var project: Project!
 
   return CDK.performBlockOnBackgroundContextPromise { context in
-    do {
-      project = try context.create(Project.self)
-      project.name = result.name
-      project.descr = result.description
+      do {
+        project = try context.create(Project.self)
+        project.name = result.name
+        project.descr = result.description
 
-      return .SaveToPersistentStore
+        return .SaveToPersistentStore
+      }
+      catch {
+        fatalError("Shouldn't happen")
+      }
     }
-    catch {
-      fatalError("Shouldn't happen")
+    .map { _ -> Project in
+      do {
+        return try CDK.backgroundContext.find(Project.self, managedObjectID: project.objectID)
+      }
+      catch {
+        fatalError("Shouldn't happen")
+      }
     }
-  }.flatMap { _ in
-    do {
-      let p = try CDK.backgroundContext.find(Project.self, managedObjectID: project.objectID)
-      return Promise(value: p)
-    }
-    catch {
-      fatalError("Shouldn't happen")
-    }
-  }
+    .mapErrorType()
 }

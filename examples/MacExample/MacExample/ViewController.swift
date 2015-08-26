@@ -32,14 +32,17 @@ class ViewController: NSViewController {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let jsonPromise = Alamofire.request(.GET, url).responseJSONPromise()
+    let jsonPromise = Alamofire.request(.GET, url)
+      .responseJSONPromise()
+      .mapErrorType()
 
     // Fade out the "load" button
     self.loadButton.enabled = false
     let fadeoutPromise = NSAnimationContext.runAnimationGroupPromise { context in
-      context.duration = 0.5
-      self.loadButton.animator().alphaValue = 0
-    }
+        context.duration = 0.5
+        self.loadButton.animator().alphaValue = 0
+      }
+      .mapErrorType()
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, promiseB: fadeoutPromise)
@@ -54,10 +57,10 @@ class ViewController: NSViewController {
           self.detailsView.animator().alphaValue = 1
         }
       }
-      .trap { e in
-        self.errorField.stringValue = e.localizedDescription
+      .trap { error in
+        self.errorField.stringValue = "\(error)"
         self.errorField.alphaValue = 1
-    }
+      }
   }
 }
 
