@@ -14,6 +14,12 @@
 		E26288401A5F38A30087390A /* tiny-networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E262883F1A5F38A30087390A /* tiny-networking.swift */; };
 		E26288421A5F38DF0087390A /* TinyNetworking+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */; };
 		E26288471A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */; };
+		E2857EF51B8DC09E00A9B97C /* Combinators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EEE1B8DC09E00A9B97C /* Combinators.swift */; settings = {ASSET_TAGS = (); }; };
+		E2857EF61B8DC09E00A9B97C /* Delay+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */; settings = {ASSET_TAGS = (); }; };
+		E2857EF81B8DC09E00A9B97C /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF11B8DC09E00A9B97C /* Promise.swift */; settings = {ASSET_TAGS = (); }; };
+		E2857EF91B8DC09E00A9B97C /* PromiseSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */; settings = {ASSET_TAGS = (); }; };
+		E2857EFA1B8DC09E00A9B97C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF31B8DC09E00A9B97C /* Result.swift */; settings = {ASSET_TAGS = (); }; };
+		E2857EFB1B8DC09E00A9B97C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF41B8DC09E00A9B97C /* State.swift */; settings = {ASSET_TAGS = (); }; };
 		E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */; };
 		EC06AA6C18AAD5C26DEBD5DC /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6CC1C6B4D883A36C4F959D /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F4047E204C56122B791F2CEB /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6CC1C6B4D883A36C4F959D /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -56,6 +62,12 @@
 		E262883F1A5F38A30087390A /* tiny-networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "tiny-networking.swift"; path = "External/tiny-networking.swift"; sourceTree = "<group>"; };
 		E26288411A5F38DF0087390A /* TinyNetworking+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TinyNetworking+Promise.swift"; sourceTree = "<group>"; };
 		E26288461A5FBCAA0087390A /* TinyNetworkingPromiseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinyNetworkingPromiseTests.swift; sourceTree = "<group>"; };
+		E2857EEE1B8DC09E00A9B97C /* Combinators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Combinators.swift; sourceTree = "<group>"; };
+		E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Delay+Promise.swift"; sourceTree = "<group>"; };
+		E2857EF11B8DC09E00A9B97C /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
+		E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseSource.swift; sourceTree = "<group>"; };
+		E2857EF31B8DC09E00A9B97C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		E2857EF41B8DC09E00A9B97C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreDataKit+Promise.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +112,7 @@
 		E2406AE41A5BBB8D000E5C78 = {
 			isa = PBXGroup;
 			children = (
+				E2857EED1B8DC09E00A9B97C /* Promissum */,
 				E2406AF01A5BBB8D000E5C78 /* PromissumExtensions */,
 				E2406AFD1A5BBB8D000E5C78 /* PromissumExtensionsTests */,
 				E2406AEF1A5BBB8D000E5C78 /* Products */,
@@ -162,6 +175,20 @@
 				E262883F1A5F38A30087390A /* tiny-networking.swift */,
 			);
 			name = External;
+			sourceTree = "<group>";
+		};
+		E2857EED1B8DC09E00A9B97C /* Promissum */ = {
+			isa = PBXGroup;
+			children = (
+				E2857EEE1B8DC09E00A9B97C /* Combinators.swift */,
+				E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */,
+				E2857EF11B8DC09E00A9B97C /* Promise.swift */,
+				E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */,
+				E2857EF31B8DC09E00A9B97C /* Result.swift */,
+				E2857EF41B8DC09E00A9B97C /* State.swift */,
+			);
+			name = Promissum;
+			path = ../src/Promissum;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,8 +385,14 @@
 				E2218CD21A642966009FE208 /* UIKit+Promise.swift in Sources */,
 				E2406B1F1A5BBD6E000E5C78 /* Alamofire+Promise.swift in Sources */,
 				E26288421A5F38DF0087390A /* TinyNetworking+Promise.swift in Sources */,
+				E2857EFB1B8DC09E00A9B97C /* State.swift in Sources */,
+				E2857EF91B8DC09E00A9B97C /* PromiseSource.swift in Sources */,
+				E2857EF61B8DC09E00A9B97C /* Delay+Promise.swift in Sources */,
+				E2857EF51B8DC09E00A9B97C /* Combinators.swift in Sources */,
+				E2857EFA1B8DC09E00A9B97C /* Result.swift in Sources */,
 				E26288401A5F38A30087390A /* tiny-networking.swift in Sources */,
 				E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */,
+				E2857EF81B8DC09E00A9B97C /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,7 +514,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_MODULE_NAME = Promissum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -502,7 +534,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_MODULE_NAME = Promissum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

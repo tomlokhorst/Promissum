@@ -6,5 +6,5 @@ link_with "PromissumExtensions", "PromissumExtensionsTests"
 
 pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :branch => 'swift-2.0'
 pod 'CoreDataKit', :git => 'https://github.com/tomlokhorst/CoreDataKit', :branch => 'feature/custom-error-type'
-pod 'Promissum', :path => '../'
+# pod 'Promissum', :path => '../' # All Promissum source files are manually included in project
 

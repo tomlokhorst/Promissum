@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-import Promissum
+//import Promissum
 import PromissumExtensions
 
 class TinyNetworkingPromiseTests: XCTestCase {

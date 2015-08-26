@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 import Alamofire
-import Promissum
+//import Promissum
 import PromissumExtensions
 
 class AlamofirePromiseTests: XCTestCase {

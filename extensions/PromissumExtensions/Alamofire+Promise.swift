@@ -14,7 +14,7 @@ public enum AlamofirePromiseError {
   case JsonDecodeError
   case HttpNotFound(result: Alamofire.Result<AnyObject>)
   case HttpError(status: Int, result: Alamofire.Result<AnyObject>?)
-  case UnknownError(error: NSError, data: NSData?)
+  case UnknownError(error: ErrorType, data: NSData?)
 }
 
 extension Request {

@@ -1,14 +1,10 @@
 PODS:
-  - Alamofire (1.3.0)
-  - CoreDataKit (0.6.1)
-  - Promissum (0.2.4):
-    - Promissum/Core (= 0.2.4)
-  - Promissum/Core (0.2.4)
+  - Alamofire (2.0.0-beta.3)
+  - CoreDataKit (0.7.0)
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift-2.0`)
   - CoreDataKit (from `https://github.com/tomlokhorst/CoreDataKit`, branch `feature/custom-error-type`)
-  - Promissum (from `../`)
 
 EXTERNAL SOURCES:
   Alamofire:
@@ -17,20 +13,17 @@ EXTERNAL SOURCES:
   CoreDataKit:
     :branch: feature/custom-error-type
     :git: https://github.com/tomlokhorst/CoreDataKit
-  Promissum:
-    :path: ../
 
 CHECKOUT OPTIONS:
   Alamofire:
-    :commit: 1f2f39114412ed9bda242b0199db56c1296f8159
+    :commit: 0fd77fec2a33e237ab99069c36410eb7101126c6
     :git: https://github.com/Alamofire/Alamofire.git
   CoreDataKit:
-    :commit: 8694001be9dfbce5eb82e7a231a52e14d61eb3ae
+    :commit: 347c276bcdaeb26d958ce8cc514fe5b66b673832
     :git: https://github.com/tomlokhorst/CoreDataKit
 
 SPEC CHECKSUMS:
-  Alamofire: e57db85401895fda01783b3b9bda5b32d9f347ff
-  CoreDataKit: 53b886eb7de3279082c88ff440c445f89796e8c5
-  Promissum: 17bf96fb317b1274380aabb960f0c44c023cc4f0
+  Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
+  CoreDataKit: a7f97808cf0ad543748fb40db38b9f7702c40277
 
 COCOAPODS: 0.38.2
