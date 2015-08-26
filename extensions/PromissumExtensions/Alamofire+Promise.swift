@@ -64,7 +64,7 @@ extension Request {
         source.resolve(value)
 
       case let .Failure(_, error):
-        source.reject(error)
+        source.reject(error as NSError)
       }
     }
 
@@ -90,7 +90,7 @@ extension Request {
       userInfo[AlamofirePromiseValueKey] = value
 
     case let .Failure(data, error):
-      userInfo[AlamofirePromiseErrorKey] = error
+      userInfo[AlamofirePromiseErrorKey] = error as NSError
 
       if let data = data {
         userInfo[AlamofirePromiseDataKey] = data
