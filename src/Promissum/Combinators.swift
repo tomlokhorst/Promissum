@@ -125,3 +125,9 @@ extension Promise {
     return self.map { _ in }
   }
 }
+
+extension Promise where Error : ErrorType {
+  public func mapErrorType() -> Promise<Value, ErrorType> {
+    return self.mapError { $0 }
+  }
+}

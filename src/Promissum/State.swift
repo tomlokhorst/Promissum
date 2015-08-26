@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum NoError {}
+public enum NoError : ErrorType {}
 
 public enum State<Value, Error> {
   case Unresolved

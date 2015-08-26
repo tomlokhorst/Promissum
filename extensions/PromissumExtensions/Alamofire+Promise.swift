@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 
-public enum AlamofirePromiseError {
+public enum AlamofirePromiseError : ErrorType {
   case JsonDecodeError
   case HttpNotFound(result: Alamofire.Result<AnyObject>)
   case HttpError(status: Int, result: Alamofire.Result<AnyObject>?)
