@@ -1,31 +1,23 @@
 PODS:
-  - Alamofire (2.0.0-beta.3)
-  - Promissum (0.2.4):
-    - Promissum/Core (= 0.2.4)
-  - Promissum/Alamofire (0.2.4):
-    - Alamofire
+  - Alamofire (2.0.0-beta.4)
+  - Promissum (0.3.0.beta.1):
+    - Promissum/Core (= 0.3.0.beta.1)
+  - Promissum/Alamofire (0.3.0.beta.1):
+    - Alamofire (~> 2.0.0.beta)
     - Promissum/Core
-  - Promissum/Core (0.2.4)
+  - Promissum/Core (0.3.0.beta.1)
 
 DEPENDENCIES:
-  - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift-2.0`)
+  - Alamofire (~> 2.0.0.beta.4)
   - Promissum (from `../../`)
   - Promissum/Alamofire (from `../../`)
 
 EXTERNAL SOURCES:
-  Alamofire:
-    :branch: swift-2.0
-    :git: https://github.com/Alamofire/Alamofire.git
   Promissum:
     :path: ../../
 
-CHECKOUT OPTIONS:
-  Alamofire:
-    :commit: 0fd77fec2a33e237ab99069c36410eb7101126c6
-    :git: https://github.com/Alamofire/Alamofire.git
-
 SPEC CHECKSUMS:
-  Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
-  Promissum: bfda2ded9e7559dafac057d759aee0f13150cf23
+  Alamofire: 20df1a4740a69d7cf6caf7fd06b8a8fc782f1ebd
+  Promissum: 8f400a30b1c8796a1578514469e6b7cf87ab7ec1
 
 COCOAPODS: 0.38.2

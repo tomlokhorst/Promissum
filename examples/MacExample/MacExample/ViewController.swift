@@ -45,9 +45,9 @@ class ViewController: NSViewController {
       .mapErrorType()
 
     // When both fade out and JSON loading complete, continue on
-    whenBoth(jsonPromise, promiseB: fadeoutPromise)
+    whenBoth(jsonPromise, fadeoutPromise)
       .map { json, _ in parseJson(json) }
-      .flatMap(delay(0.5))
+      .delay(0.5)
       .then { project in
         self.nameField.stringValue = project.name
         self.descriptionField.stringValue = project.description

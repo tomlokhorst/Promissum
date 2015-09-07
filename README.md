@@ -108,7 +108,7 @@ To integrate Promissum into your Xcode project using CocoaPods, specify it in yo
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'Promissum', '~> 0.3.0'
+pod 'Promissum', '~> 0.3.0.beta.1'
 ```
 
 Then, run the following command:

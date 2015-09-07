@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (2.0.0-beta.3)
+  - Alamofire (2.0.0-beta.4)
   - CoreDataKit (0.8.0)
 
 DEPENDENCIES:
@@ -16,14 +16,14 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Alamofire:
-    :commit: 0fd77fec2a33e237ab99069c36410eb7101126c6
+    :commit: 1108ae4461baa99d9c4898c213ec3e2e2956fab3
     :git: https://github.com/Alamofire/Alamofire.git
   CoreDataKit:
-    :commit: 199aa2593552cf164ff0658de7867339ae474d76
+    :commit: 7f141378c9a9467dbf876dc1db57259c1e88706c
     :git: https://github.com/tomlokhorst/CoreDataKit
 
 SPEC CHECKSUMS:
-  Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
+  Alamofire: 20df1a4740a69d7cf6caf7fd06b8a8fc782f1ebd
   CoreDataKit: a44e3ce0b0dd8500ea8cf72e17b5318b9ca87aff
 
 COCOAPODS: 0.38.2
