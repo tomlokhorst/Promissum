@@ -15,9 +15,9 @@ import Promissum
 class SourceResultTests: XCTestCase {
 
   func testResult() {
-    var result: Result<Int>?
+    var result: Result<Int, NSError>?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     result = p.result
@@ -28,9 +28,9 @@ class SourceResultTests: XCTestCase {
   }
 
   func testResultValue() {
-    var result: Result<Int>?
+    var result: Result<Int, NSError>?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finallyResult { r in
@@ -43,9 +43,9 @@ class SourceResultTests: XCTestCase {
   }
 
   func testResultError() {
-    var result: Result<Int>?
+    var result: Result<Int, NSError>?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finallyResult { r in
@@ -60,14 +60,14 @@ class SourceResultTests: XCTestCase {
   func testResultMapError() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .mapResult { result in
         switch result {
         case .Error(let error):
-          return error.code + 1
+          return .Value(error.code + 1)
         case .Value:
-          return -1
+          return .Value(-1)
         }
     }
 
@@ -84,15 +84,14 @@ class SourceResultTests: XCTestCase {
   func testResultMapValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .mapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
-          return value + 1
+        case .Value(let value):
+          return .Value(value + 1)
         case .Error:
-          return -1
+          return .Value(-1)
         }
     }
 
@@ -108,12 +107,11 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapValueValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return Promise(value: value + 1)
         case .Error:
           return Promise(value: -1)
@@ -132,19 +130,18 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapValueError() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let boxed):
-          let value = boxed.unbox
+        case .Value(let value):
           return Promise(error: NSError(domain: PromissumErrorDomain, code: value + 1, userInfo: nil))
         case .Error:
           return Promise(value: -1)
         }
     }
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 
@@ -156,8 +153,8 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapErrorValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
         case .Error(let error):
@@ -179,8 +176,8 @@ class SourceResultTests: XCTestCase {
   func testResultFlatMapErrorError() {
     var error: NSError?
 
-    let source = PromiseSource<Int>()
-    let p: Promise<Int> = source.promise
+    let source = PromiseSource<Int, NSError>()
+    let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
         case .Error(let error):
@@ -190,7 +187,7 @@ class SourceResultTests: XCTestCase {
         }
     }
 
-    p.catch { e in
+    p.trap { e in
       error = e
     }
 

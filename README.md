@@ -7,7 +7,8 @@ It has useful combinators for working with promises like; `whenAll` for doing so
 
 Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit, Alamofire and CoreDataKit, and contributions for extensions to other libraries are very welcome.
 
-This library has an extensive set of regression tests, and has been used for months in several high profile production apps at [Q42](http://q42.com/swift).
+This library has an extensive set of regression tests, documentation, and has been used for months in several high profile production apps at [Q42](http://q42.com/swift).
+
 
 Example
 -------
@@ -51,6 +52,44 @@ Promissum does not support cancellation, because cancellation does not work well
 Although, if you're looking at adding cancellation to a _PromiseSource_, you could use the [swift-cancellationtoken](https://github.com/tomlokhorst/swift-cancellationtoken) library I wrote. This is orthogonal to promises, however.
 
 
+Combinators
+-----------
+
+Listed below are some of the methods and functions provided this library. More documentation is available inline.
+
+### Instance methods on Promise
+
+* `.map(transform: Value -> NewValue)`  
+  Returns a Promise containing the result of mapping a function over the promise value.
+
+* `.flatMap(transform: Value -> Promise<NewValue, Error>)`  
+  Returns the flattened result of mapping a function over the promise value.
+
+* `.mapError(transform: Error -> NewError)`  
+  Returns a Promise containing the result of mapping a function over the promise error.
+
+* `.flatMapError(transform: Error -> Promise<Value, NewError>)`  
+  Returns the flattened result of mapping a function over the promise error.
+
+
+### Functions for dealing with Promises
+
+* `flatten(promise: Promise<Promise<Value, Error>, Error>)`  
+  Flattens a nested Promise of Promise into a single Promise.
+
+* `whenBoth(promiseA: Promise<A, Error>, _ promiseB: Promise<B, Error>)`  
+  Creates a Promise that resolves when both arguments to `whenBoth` resolve.
+
+* `whenAll(promises: [Promise<Value, Error>])`  
+  Creates a Promise that resolves when all provided Promises resolve.
+
+* `whenEither(promise1: Promise<Value, Error>, _ promise2: Promise<Value, Error>)`  
+  Creates a Promise that resolves when either argument to resolves.
+
+* `whenAny(promises: [Promise<Value, Error>])`  
+  Creates a Promise that resolves when any of the argument Promises resolves.
+
+
 Installation
 ------------
 
@@ -69,7 +108,7 @@ To integrate Promissum into your Xcode project using CocoaPods, specify it in yo
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'Promissum', '~> 0.2.4'
+pod 'Promissum', '~> 0.3.0.beta.1'
 ```
 
 Then, run the following command:
@@ -82,6 +121,7 @@ $ pod install
 Releases
 --------
 
+ - **0.3.0** - 2015-xx-xx - Swift 2.0 support, added custom error types
  - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
  - 0.2.3 - 2015-04-13 - Swift 1.2 support
  - 0.2.2 - 2015-03-01 - Mac OS X support
@@ -90,6 +130,7 @@ Releases
  - 0.1.1 - 2015-05-31 - `whenAnyFinalized` combinator added
  - **0.1.0** - 2015-01-27 - Initial public release
  - 0.0.0 - 2014-10-12 - Initial privat version for project at [Q42](http://q42.com)
+
 
 Licence & Credits
 -----------------

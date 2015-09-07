@@ -15,7 +15,7 @@ class SideEffectOrderTests : XCTestCase {
   func testThen() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p
@@ -36,15 +36,15 @@ class SideEffectOrderTests : XCTestCase {
   func testCatch() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p
-      .catch { _ in
+      .trap { _ in
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
       }
-      .catch { _ in
+      .trap { _ in
         step += 1
         XCTAssertEqual(step, 2, "Should be step 2")
       }
@@ -57,10 +57,10 @@ class SideEffectOrderTests : XCTestCase {
   func testMap() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    let q: Promise<Int> = p
+    let q: Promise<Int, NSError> = p
       .then { value in
         XCTAssertEqual(value, 42, "Value should be 42")
 
@@ -89,10 +89,10 @@ class SideEffectOrderTests : XCTestCase {
   func testMap2() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    let q: Promise<Int> = p
+    let q: Promise<Int, NSError> = p
       .map { value in
         XCTAssertEqual(value, 42, "Value should be 42")
 
@@ -123,27 +123,27 @@ class SideEffectOrderTests : XCTestCase {
   func testMapError() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    let q: Promise<Int> = p
+    let q: Promise<Int, NSError> = p
       .mapError { error in
         XCTAssertEqual(error.code, 42, "Error should be 42")
 
         step += 1
         XCTAssertEqual(step, 1, "Should be step 1")
-        return error.code + 1
+        return NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil)
       }
 
-    p.catch { error in
+    p.trap { error in
       XCTAssertEqual(error.code, 42, "Error should be 42")
 
       step += 1
       XCTAssertEqual(step, 2, "Should be step 2")
     }
 
-    q.then { value in
-      XCTAssertEqual(value, 43, "Value should be 43")
+    q.trap { error in
+      XCTAssertEqual(error.code, 43, "Value should be 43")
 
       step += 1
       XCTAssertEqual(step, 3, "Should be step 3")
@@ -157,24 +157,24 @@ class SideEffectOrderTests : XCTestCase {
   func testErrorMap() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    let q: Promise<Int> = p
+    let q: Promise<Int, NSError> = p
       .map { value in
         step += 1
         XCTFail("Shouldn't happen")
         return value
       }
 
-    p.catch { error in
+    p.trap { error in
       XCTAssertEqual(error.code, 42, "Error should be 42")
 
       step += 1
       XCTAssertEqual(step, 1, "Should be step 1")
     }
 
-    q.catch { error in
+    q.trap { error in
       XCTAssertEqual(error.code, 42, "Value should be 42")
 
       step += 1
@@ -189,10 +189,10 @@ class SideEffectOrderTests : XCTestCase {
   func testFlatMap() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    let q: Promise<Int> = p
+    let q: Promise<Int, NSError> = p
       .then { value in
         XCTAssertEqual(value, 42, "Value should be 42")
 
@@ -221,11 +221,11 @@ class SideEffectOrderTests : XCTestCase {
   func testFlatMapError() {
     var step = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    let q: Promise<Int> = p
-      .catch { error in
+    let q: Promise<Int, NSError> = p
+      .trap { error in
         XCTAssertEqual(error.code, 42, "Value should be 42")
 
         step += 1
@@ -238,7 +238,7 @@ class SideEffectOrderTests : XCTestCase {
         XCTAssertEqual(step, 2, "Should be step 2")
         return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
       }
-      .catch { error in
+      .trap { error in
         XCTAssertEqual(error.code, 43, "Value should be 43")
 
         step += 1

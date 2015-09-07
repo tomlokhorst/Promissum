@@ -15,7 +15,7 @@ class MultipleValueTests: XCTestCase {
   func testValueVoid() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { _ in
@@ -33,7 +33,7 @@ class MultipleValueTests: XCTestCase {
   func testValueMap() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { _ in
@@ -52,7 +52,7 @@ class MultipleValueTests: XCTestCase {
   func testValueFlatMap() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { _ in
@@ -71,7 +71,7 @@ class MultipleValueTests: XCTestCase {
   func testFinally() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finally {

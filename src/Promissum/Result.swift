@@ -8,21 +8,23 @@
 
 import Foundation
 
-public enum Result<T> {
-  case Value(Box<T>)
-  case Error(NSError)
+/// The Result type is used for Promises that are Resolved or Rejected.
+public enum Result<TValue, TError> {
+  case Value(TValue)
+  case Error(TError)
 
-  public var value: T? {
+  /// Optional value, set when Result is Value.
+  public var value: TValue? {
     switch self {
-    case .Value(let boxed):
-      let val = boxed.unbox
-      return val
+    case .Value(let value):
+      return value
     case .Error:
       return nil
     }
   }
 
-  public var error: NSError? {
+  /// Optional error, set when Result is Error.
+  public var error: TError? {
     switch self {
     case .Error(let error):
       return error
@@ -32,13 +34,12 @@ public enum Result<T> {
   }
 }
 
-extension Result: Printable {
+extension Result: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .Value(let boxed):
-      let val = boxed.unbox
-      return "Value(\(val))"
+    case .Value(let value):
+      return "Value(\(value))"
     case .Error(let error):
       return "Error(\(error))"
     }

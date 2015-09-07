@@ -15,13 +15,13 @@ class ResolveRejectTests: XCTestCase {
   func testResolveReject() {
     var state = ""
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { _ in
       state = "resolved"
     }
-    p.catch { _ in
+    p.trap { _ in
       state = "rejected"
     }
 
@@ -34,13 +34,13 @@ class ResolveRejectTests: XCTestCase {
   func testRejectResolve() {
     var state = ""
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { _ in
       state = "resolved"
     }
-    p.catch { _ in
+    p.trap { _ in
       state = "rejected"
     }
 
@@ -53,7 +53,7 @@ class ResolveRejectTests: XCTestCase {
   func testResolveFinally() {
     var state = ""
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { _ in
@@ -71,7 +71,7 @@ class ResolveRejectTests: XCTestCase {
   func testFinallyResolve() {
     var state = ""
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finally {

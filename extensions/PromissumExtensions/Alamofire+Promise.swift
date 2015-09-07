@@ -8,26 +8,18 @@
 
 import Foundation
 import Alamofire
-import Promissum
 
-public let AlamofirePromiseErrorDomain = "com.nonstrict.promissum.alamofire"
 
-public let AlamofirePromiseRequestKey = "request"
-public let AlamofirePromiseResponseKey = "response"
-public let AlamofirePromiseDataKey = "data"
-public let AlamofirePromiseErrorKey = "error"
-
-public enum AlamofirePromiseErrorCode : Int {
-  case UnknownError = 1
-  case HttpNotFound
-  case HttpError
+public enum AlamofirePromiseError : ErrorType {
   case JsonDecodeError
-  case NoResponseAvailable
+  case HttpNotFound(result: Alamofire.Result<AnyObject>)
+  case HttpError(status: Int, result: Alamofire.Result<AnyObject>?)
+  case UnknownError(error: ErrorType, data: NSData?)
 }
 
 extension Request {
 
-  public func responseDecodePromise<T>(decoder: AnyObject -> T?) -> Promise<T> {
+  public func responseDecodePromise<T>(decoder: AnyObject -> T?) -> Promise<T, AlamofirePromiseError> {
 
     return self.responseJSONPromise()
       .flatMap { json in
@@ -35,70 +27,36 @@ extension Request {
           return Promise(value: value)
         }
         else {
-          let userInfo = [
-            NSLocalizedDescriptionKey: "JSON could not be decoded."
-          ]
-          return Promise(error: NSError(domain: AlamofirePromiseErrorDomain, code: AlamofirePromiseErrorCode.JsonDecodeError.rawValue, userInfo: userInfo))
+          return Promise(error: AlamofirePromiseError.JsonDecodeError)
         }
       }
   }
 
-  public func responseJSONPromise() -> Promise<AnyObject> {
-    let source = PromiseSource<AnyObject>()
+  public func responseJSONPromise() -> Promise<AnyObject, AlamofirePromiseError> {
+    let source = PromiseSource<AnyObject, AlamofirePromiseError>()
 
-    self.responseJSON { (request, response, data, error) in
-
+    self.responseJSON { (request, response, result) -> Void in
       if let resp = response {
         if resp.statusCode == 404 {
-          source.reject(self.makeError(.HttpNotFound, description: "HTTP 404 Not Found", request: request, response: response, data: data, error: error))
+          source.reject(AlamofirePromiseError.HttpNotFound(result: result))
           return
         }
 
-        if resp.statusCode != 200 {
-          source.reject(self.makeError(.HttpError, description: "HTTP statusCode: \(resp.statusCode)", request: request, response: response, data: data, error: error))
+        if resp.statusCode < 200 || resp.statusCode > 299 {
+          source.reject(AlamofirePromiseError.HttpError(status: resp.statusCode, result: result))
           return
         }
       }
 
-      if let err = error {
-        source.reject(err)
-        return
-      }
+      switch result {
+      case let .Success(value):
+        source.resolve(value)
 
-      if response == nil {
-        source.reject(self.makeError(.NoResponseAvailable, description: "No response available", request: request, response: response, data: data, error: error))
-        return
+      case let .Failure(data, error):
+        source.reject(AlamofirePromiseError.UnknownError(error: error, data: data))
       }
-
-      if let json : AnyObject = data {
-        source.resolve(json)
-        return
-      }
-
-      let error = self.makeError(.UnknownError, description: "Unknown error", request: request, response: response, data: data, error: error)
-      source.reject(error)
     }
 
     return source.promise
-  }
-
-  private func makeError(code: AlamofirePromiseErrorCode, description: String, request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) -> NSError {
-
-    var userInfo: [NSObject: AnyObject] = [
-      NSLocalizedDescriptionKey: description,
-      AlamofirePromiseRequestKey: request
-    ]
-
-    if response != nil {
-      userInfo[AlamofirePromiseResponseKey] = response!
-    }
-    if data != nil {
-      userInfo[AlamofirePromiseDataKey] = data!
-    }
-    if error != nil {
-      userInfo[AlamofirePromiseErrorKey] = error
-    }
-
-    return NSError(domain: AlamofirePromiseErrorDomain, code: code.rawValue, userInfo: userInfo)
   }
 }

@@ -9,45 +9,35 @@
 import Foundation
 import CoreData
 import CoreDataKit
-import enum CoreDataKit.Result
-import Promissum
 
-extension CoreDataKit.Result {
-  var promise: Promise<T> {
-    switch self {
-    case let .Success(boxed):
-      return Promise(value: boxed.value)
-
-    case let .Failure(error):
-      return Promise(error: error)
-    }
-  }
-}
 
 extension CDK {
-  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
+  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     return sharedStack!.performBlockOnBackgroundContextPromise(block)
   }
 }
 
 extension CoreDataStack {
-  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction> {
+  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     return backgroundContext.performBlockPromise(block)
   }
 }
 
 extension NSManagedObjectContext {
-  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction> {
-    let promiseSource = PromiseSource<CommitAction>()
+  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    let promiseSource = PromiseSource<CommitAction, CoreDataKitError>()
 
     performBlock(block) { result in
       dispatch_async(dispatch_get_main_queue()) {
-        switch result {
-        case let .Success(boxed):
-          promiseSource.resolve(boxed.value)
-
-        case let .Failure(error):
-          promiseSource.reject(error)
+        do {
+          let action = try result()
+          promiseSource.resolve(action)
+        }
+        catch let error as CoreDataKitError {
+            promiseSource.reject(error)
+        }
+        catch let error {
+          promiseSource.reject(CoreDataKitError.UnknownError(description: "\(error)"))
         }
       }
     }

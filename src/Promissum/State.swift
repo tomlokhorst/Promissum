@@ -8,26 +8,24 @@
 
 import Foundation
 
-public class Box<T> {
-  public let unbox: T
-  public init(_ value: T) { self.unbox = value }
-}
+/// Type used when there is no error possible.
+public enum NoError : ErrorType {}
 
-public enum State<T> {
+/// State of a PromiseSource.
+public enum State<Value, Error> {
   case Unresolved
-  case Resolved(Box<T>)
-  case Rejected(NSError)
+  case Resolved(Value)
+  case Rejected(Error)
 }
 
-extension State: Printable {
+extension State: CustomStringConvertible {
 
   public var description: String {
     switch self {
     case .Unresolved:
       return "Unresolved"
-    case .Resolved(let boxed):
-      let val = boxed.unbox
-      return "Resolved(\(val))"
+    case .Resolved(let value):
+      return "Resolved(\(value))"
     case .Rejected(let error):
       return "Rejected(\(error))"
     }

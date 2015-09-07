@@ -7,12 +7,11 @@
 //
 
 import AVFoundation
-import Promissum
 
 
 extension AVCaptureDevice {
-  public static func requestAccessForMediaTypePromise(mediaType: String) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public static func requestAccessForMediaTypePromise(mediaType: String) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.requestAccessForMediaType(mediaType) { granted in
       dispatch_async(dispatch_get_main_queue()) {

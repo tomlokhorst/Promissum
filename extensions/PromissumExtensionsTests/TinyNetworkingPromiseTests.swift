@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-import Promissum
+//import Promissum
 import PromissumExtensions
 
 class TinyNetworkingPromiseTests: XCTestCase {
@@ -24,21 +24,15 @@ class TinyNetworkingPromiseTests: XCTestCase {
       headers: [:],
       parse: decodeJSON)
 
-    apiRequestPromise({ _ in }, baseURL, repoResource)
+    apiRequestPromise({ _ in }, baseURL: baseURL, resource: repoResource)
       .then { json in
         let name_ = json["name"] as? String
         if name_ == "Promissum" {
           expectation.fulfill()
         }
       }
-      .catch { e in
-        if e.domain == TinyNetworkingPromiseErrorDomain {
-          if let reason = e.userInfo?[TinyNetworkingPromiseReasonKey] as? Box<Reason> {
-            println(reason.unbox)
-            return
-          }
-        }
-        println(e)
+      .trap { e in
+        print(e.reason)
       }
 
     // Wait for 1 second for the request to finish

@@ -6,52 +6,51 @@
 //  Copyright (c) 2015 Tom Lokhorst. All rights reserved.
 //
 
-import Promissum
 import UIKit
 
 extension UIView {
-  public class func animatePromise(# duration: NSTimeInterval, animations: () -> Void) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public class func animatePromise(duration duration: NSTimeInterval, animations: () -> Void) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.animateWithDuration(duration, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func animatePromise(# duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public class func animatePromise(duration duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.animateWithDuration(duration, delay: delay, options: options, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func transitionPromise(# view: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public class func transitionPromise(view view: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.transitionWithView(view, duration: duration, options: options, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func transitionPromise(# fromView: UIView, toView: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public class func transitionPromise(fromView fromView: UIView, toView: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.transitionFromView(fromView, toView: toView, duration: duration, options: options, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func performSystemAnimationPromise(animation: UISystemAnimation, onViews views: [AnyObject], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public class func performSystemAnimationPromise(animation: UISystemAnimation, onViews views: [UIView], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.performSystemAnimation(animation, onViews: views, options: options, animations: parallelAnimations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func animateKeyframesPromise(# duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewKeyframeAnimationOptions, animations: () -> Void) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public class func animateKeyframesPromise(duration duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewKeyframeAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.animateKeyframesWithDuration(duration, delay: delay, options: options, animations: animations, completion: source.resolve)
 
@@ -60,24 +59,24 @@ extension UIView {
 }
 
 extension UIViewController {
-  public func presentViewControllerPromise(viewControllerToPresent: UIViewController, animated flag: Bool) -> Promise<Void> {
-    let source = PromiseSource<Void>()
+  public func presentViewControllerPromise(viewControllerToPresent: UIViewController, animated flag: Bool) -> Promise<Void, NoError> {
+    let source = PromiseSource<Void, NoError>()
 
     self.presentViewController(viewControllerToPresent, animated: flag, completion: source.resolve)
 
     return source.promise
   }
 
-  public func dismissViewControllerPromise(animated flag: Bool) -> Promise<Void> {
-    let source = PromiseSource<Void>()
+  public func dismissViewControllerPromise(animated flag: Bool) -> Promise<Void, NoError> {
+    let source = PromiseSource<Void, NoError>()
 
     self.dismissViewControllerAnimated(flag, completion: source.resolve)
 
     return source.promise
   }
 
-  public func transitionPromise(# fromViewController: UIViewController, toViewController: UIViewController, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool> {
-    let source = PromiseSource<Bool>()
+  public func transitionPromise(fromView fromViewController: UIViewController, toViewController: UIViewController, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
+    let source = PromiseSource<Bool, NoError>()
 
     self.transitionFromViewController(fromViewController, toViewController: toViewController, duration: duration, options: options, animations: animations, completion: source.resolve)
 
@@ -86,7 +85,7 @@ extension UIViewController {
 }
 
 var associatedObjectHandle: UInt8 = 0
-let associationPolicy = objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+let associationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
 
 // UIAlertView is deprecated per iOS 8, however this extension is here for convenience
 extension UIAlertView {
@@ -99,8 +98,8 @@ extension UIAlertView {
     }
   }
 
-  public func showPromise() -> Promise<Int> {
-    let source = PromiseSource<Int>()
+  public func showPromise() -> Promise<Int, NoError> {
+    let source = PromiseSource<Int, NoError>()
     let originalDelegate = self.delegate as? UIAlertViewDelegate
 
     self.delegate = AlertViewDelegate(source: source, alertView: self, originalDelegate: originalDelegate)
@@ -110,11 +109,11 @@ extension UIAlertView {
   }
 
   internal class AlertViewDelegate: NSObject, UIAlertViewDelegate {
-    let source: PromiseSource<Int>
+    let source: PromiseSource<Int, NoError>
     let alertView: UIAlertView
     let originalDelegate: UIAlertViewDelegate?
 
-    init(source: PromiseSource<Int>, alertView: UIAlertView, originalDelegate: UIAlertViewDelegate?) {
+    init(source: PromiseSource<Int, NoError>, alertView: UIAlertView, originalDelegate: UIAlertViewDelegate?) {
       self.source = source
       self.alertView = alertView
       self.originalDelegate = originalDelegate
@@ -158,6 +157,7 @@ extension UIAlertView {
 }
 
 // UIActionSheet is deprecated per iOS 8, however this extension is here for convenience
+@available(iOS, deprecated=8.3, message="'UIActionSheet' was deprecated in iOS 8.3: UIActionSheet is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleActionSheet instead")
 extension UIActionSheet {
   var strongDelegate: ActionSheetDelegate? {
     get {
@@ -168,8 +168,8 @@ extension UIActionSheet {
     }
   }
 
-  public func showInViewPromise(view: UIView!) -> Promise<Int> {
-    let source = PromiseSource<Int>()
+  public func showInViewPromise(view: UIView!) -> Promise<Int, NoError> {
+    let source = PromiseSource<Int, NoError>()
     let originalDelegate = self.delegate
 
     self.delegate = ActionSheetDelegate(source: source, actionSheet: self, originalDelegate: originalDelegate)
@@ -179,11 +179,11 @@ extension UIActionSheet {
   }
 
   internal class ActionSheetDelegate: NSObject, UIActionSheetDelegate {
-    let source: PromiseSource<Int>
+    let source: PromiseSource<Int, NoError>
     let actionSheet: UIActionSheet
     let originalDelegate: UIActionSheetDelegate?
 
-    init(source: PromiseSource<Int>, actionSheet: UIActionSheet, originalDelegate: UIActionSheetDelegate?) {
+    init(source: PromiseSource<Int, NoError>, actionSheet: UIActionSheet, originalDelegate: UIActionSheetDelegate?) {
       self.source = source
       self.actionSheet = actionSheet
       self.originalDelegate = originalDelegate

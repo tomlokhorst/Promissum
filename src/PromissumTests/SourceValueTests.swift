@@ -15,7 +15,7 @@ class SourceValueTests: XCTestCase {
   func testValue() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     value = p.value
@@ -28,7 +28,7 @@ class SourceValueTests: XCTestCase {
   func testValueVoid() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.then { x in
@@ -43,7 +43,7 @@ class SourceValueTests: XCTestCase {
   func testValueMap() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .map { $0 + 1 }
 
@@ -59,7 +59,7 @@ class SourceValueTests: XCTestCase {
   func testValueFlatMap() {
     var value: Int?
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
       .flatMap { Promise(value: $0 + 1) }
 
@@ -75,7 +75,7 @@ class SourceValueTests: XCTestCase {
   func testFinally() {
     var finally: Bool = false
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finally {

@@ -15,13 +15,13 @@ class MultipleErrorTests: XCTestCase {
   func testValueVoid() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    p.catch { _ in
+    p.trap { _ in
       calls += 1
     }
-    p.catch { _ in
+    p.trap { _ in
       calls += 1
     }
 
@@ -33,14 +33,14 @@ class MultipleErrorTests: XCTestCase {
   func testValueMap() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    p.catch { _ in
+    p.trap { _ in
       calls += 1
     }
     p.mapError { $0.code + 1 }
-      .then { _ in
+      .trap { _ in
         calls += 1
       }
 
@@ -52,13 +52,13 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    p.catch { _ in
+    p.trap { _ in
       calls += 1
     }
-    p.flatMapError { Promise(value: $0.code + 1) }
+    p.flatMapError { Promise<Int, String>(value: $0.code + 1) }
       .then { _ in
         calls += 1
       }
@@ -71,14 +71,14 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap2() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
-    p.catch { _ in
+    p.trap { _ in
       calls += 1
     }
-    p.flatMapError { Promise(error: NSError(domain: PromissumErrorDomain, code: $0.code + 1, userInfo: nil))  }
-      .catch { _ in
+    p.flatMapError { Promise<Int, String>(error: "\($0.code + 1)")  }
+      .trap { _ in
         calls += 1
       }
 
@@ -90,12 +90,12 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap3() {
     var calls = 0
 
-    let source1 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
-    let source2 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int, NSError>()
     let p2 = source2.promise
 
-    p1.catch { _ in
+    p1.trap { _ in
       calls += 1
     }
     p1.flatMapError { _ in p2 }
@@ -112,16 +112,16 @@ class MultipleErrorTests: XCTestCase {
   func testValueFlatMap4() {
     var calls = 0
 
-    let source1 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
-    let source2 = PromiseSource<Int>()
+    let source2 = PromiseSource<Int, NSError>()
     let p2 = source2.promise
 
-    p1.catch { _ in
+    p1.trap { _ in
       calls += 1
     }
     p1.flatMapError { _ in p2 }
-      .catch { _ in
+      .trap { _ in
         calls += 1
       }
 
@@ -134,7 +134,7 @@ class MultipleErrorTests: XCTestCase {
   func testFinally() {
     var calls = 0
 
-    let source = PromiseSource<Int>()
+    let source = PromiseSource<Int, NSError>()
     let p = source.promise
 
     p.finally {

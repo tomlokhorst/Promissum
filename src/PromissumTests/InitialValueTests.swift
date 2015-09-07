@@ -15,7 +15,7 @@ class InitialValueTests: XCTestCase {
   func testValue() {
     var value: Int?
 
-    let p = Promise(value: 42)
+    let p: Promise<Int, NSError> = Promise(value: 42)
 
     value = p.value
 
@@ -25,7 +25,7 @@ class InitialValueTests: XCTestCase {
   func testValueVoid() {
     var value: Int?
 
-    let p = Promise(value: 42)
+    let p: Promise<Int, NSError> = Promise(value: 42)
 
     p.then { x in
       value = x
@@ -37,7 +37,7 @@ class InitialValueTests: XCTestCase {
   func testValueMap() {
     var value: Int?
 
-    let p = Promise(value: 42)
+    let p: Promise<Int, NSError> = Promise(value: 42)
       .map { $0 + 1 }
 
     p.then { x in
@@ -50,7 +50,7 @@ class InitialValueTests: XCTestCase {
   func testValueFlatMap() {
     var value: Int?
 
-    let p = Promise(value: 42)
+    let p: Promise<Int, NSError> = Promise(value: 42)
       .flatMap { Promise(value: $0 + 1) }
 
     p.then { x in
@@ -63,7 +63,7 @@ class InitialValueTests: XCTestCase {
   func testFinally() {
     var finally: Bool = false
 
-    let p = Promise<Int>(value: 42)
+    let p = Promise<Int, NSError>(value: 42)
 
     p.finally {
       finally = true

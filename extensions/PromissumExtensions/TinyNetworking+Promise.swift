@@ -7,33 +7,18 @@
 //
 
 import Foundation
-import Promissum
 
-public let TinyNetworkingPromiseErrorDomain = "com.nonstrict.promissum.tiny-networking"
+public typealias TinyNetworkingError = (reason: Reason, data: NSData?)
 
-public let TinyNetworkingPromiseReasonKey = "reason"
-public let TinyNetworkingPromiseDataKey = "data"
+public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseURL: NSURL, resource: Resource<A>) -> Promise<A, TinyNetworkingError> {
+  let source = PromiseSource<A, TinyNetworkingError>()
 
-public func apiRequestPromise<A>(modifyRequest: NSMutableURLRequest -> (), baseURL: NSURL, resource: Resource<A>) -> Promise<A> {
-  let source = PromiseSource<A>()
-
-  func onFailure(reason: Reason, data: NSData?) {
-    var userInfo: [NSObject: AnyObject] = [
-      TinyNetworkingPromiseReasonKey: Box(reason),
-    ]
-    if let data = data {
-      userInfo[TinyNetworkingPromiseDataKey] = data
-    }
-
-    source.reject(NSError(domain: TinyNetworkingPromiseErrorDomain, code: -1, userInfo: userInfo))
-  }
-
-  apiRequest(modifyRequest, baseURL, resource, onFailure, source.resolve)
+  apiRequest(modifyRequest, baseURL: baseURL, resource: resource, failure: source.reject, completion: source.resolve)
 
   return source.promise
 }
 
-extension Reason: Printable {
+extension Reason: CustomStringConvertible {
   public var description: String {
     switch self {
     case .CouldNotParseJSON:

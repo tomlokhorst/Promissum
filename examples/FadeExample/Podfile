@@ -2,8 +2,9 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Alamofire'
-pod 'CoreDataKit'
+pod 'Alamofire', '~> 2.0.0.beta.4'
+pod 'CoreDataKit', :git => 'https://github.com/tomlokhorst/CoreDataKit', :branch => 'feature/fixes'
 pod 'Promissum', :path => '../../'
 pod 'Promissum/Alamofire', :path => '../../'
 pod 'Promissum/CoreDataKit', :path => '../../'
+pod 'Promissum/UIKit', :path => '../../'

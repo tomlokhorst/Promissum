@@ -41,18 +41,22 @@ class ViewController: UIViewController {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let jsonPromise = Alamofire.request(.GET, url).responseJSONPromise()
+    let jsonPromise = Alamofire.request(.GET, url)
+      .responseJSONPromise()
+      .mapErrorType()
 
     // Fade out the "load" button
     let fadeoutPromise = UIView.animatePromise(duration: 0.5) {
-      self.loadButton.alpha = 0
-    }.void()
+        self.loadButton.alpha = 0
+      }
+      .void()
+      .mapErrorType()
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, fadeoutPromise)
       .map { json, _ in parseJson(json) }
       .flatMap(storeInCoreData)
-      .flatMap(delay(0.5))
+      .delay(0.5)
       .then { project in
         self.nameLabel.text = project.name
         self.descriptionLabel.text = project.descr
@@ -61,10 +65,11 @@ class ViewController: UIViewController {
           self.detailsView.alpha = 1
         }
       }
-      .catch { e in
-        self.errorLabel.text = e.localizedDescription
+      .trap { error in
+        self.errorLabel.text = "\(error)"
         self.errorView.alpha = 1
       }
+
   }
 }
 
@@ -76,17 +81,29 @@ func parseJson(json: AnyObject) -> (name: String, description: String) {
   return (name, description)
 }
 
-func storeInCoreData(result: (name: String, description: String)) -> Promise<Project> {
+func storeInCoreData(result: (name: String, description: String)) -> Promise<Project, ErrorType> {
 
   var project: Project!
 
   return CDK.performBlockOnBackgroundContextPromise { context in
-    project = context.create(Project.self).value()
-    project.name = result.name
-    project.descr = result.description
+      do {
+        project = try context.create(Project.self)
+        project.name = result.name
+        project.descr = result.description
 
-    return .SaveToPersistentStore
-  }.flatMap { _ in
-    CDK.backgroundContext.find(project).promise
-  }
+        return .SaveToPersistentStore
+      }
+      catch {
+        fatalError("Shouldn't happen")
+      }
+    }
+    .map { _ -> Project in
+      do {
+        return try CDK.backgroundContext.find(Project.self, managedObjectID: project.objectID)
+      }
+      catch {
+        fatalError("Shouldn't happen")
+      }
+    }
+    .mapErrorType()
 }
