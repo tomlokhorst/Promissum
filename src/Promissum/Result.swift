@@ -8,10 +8,12 @@
 
 import Foundation
 
+/// The Result type is used for Promises that are Resolved or Rejected.
 public enum Result<TValue, TError> {
   case Value(TValue)
   case Error(TError)
 
+  /// Optional value, set when Result is Value.
   public var value: TValue? {
     switch self {
     case .Value(let value):
@@ -21,6 +23,7 @@ public enum Result<TValue, TError> {
     }
   }
 
+  /// Optional error, set when Result is Error.
   public var error: TError? {
     switch self {
     case .Error(let error):

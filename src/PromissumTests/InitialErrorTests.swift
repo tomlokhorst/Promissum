@@ -10,6 +10,8 @@ import Foundation
 import XCTest
 import Promissum
 
+let PromissumErrorDomain = "com.nonstrict.Promissum"
+
 class InitialErrorTests: XCTestCase {
 
   func testError() {

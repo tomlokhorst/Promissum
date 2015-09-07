@@ -8,8 +8,10 @@
 
 import Foundation
 
+/// Type used when there is no error possible.
 public enum NoError : ErrorType {}
 
+/// State of a PromiseSource.
 public enum State<Value, Error> {
   case Unresolved
   case Resolved(Value)
