@@ -108,7 +108,7 @@ To integrate Promissum into your Xcode project using CocoaPods, specify it in yo
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'Promissum', '~> 0.3.0.beta.1'
+pod 'Promissum', '~> 0.3.0'
 ```
 
 Then, run the following command:
@@ -121,7 +121,7 @@ $ pod install
 Releases
 --------
 
- - **0.3.0** - 2015-xx-xx - Swift 2.0 support, added custom error types
+ - **0.3.0** - 2015-09-11 - Swift 2 support, added custom error types
  - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
  - 0.2.3 - 2015-04-13 - Swift 1.2 support
  - 0.2.2 - 2015-03-01 - Mac OS X support
