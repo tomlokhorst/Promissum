@@ -12,16 +12,7 @@ import Foundation
 ///
 /// The returned Promise resolves (or rejects) when the nested Promise resolves.
 public func flatten<Value, Error>(promise: Promise<Promise<Value, Error>, Error>) -> Promise<Value, Error> {
-  let source = PromiseSource<Value, Error>()
-
-  promise
-    .trap(source.reject)
-    .then { p in
-      p.trap(source.reject).then(source.resolve)
-      return
-    }
-
-  return source.promise
+  return promise.flatMap { $0 }
 }
 
 
