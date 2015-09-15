@@ -44,7 +44,7 @@ public func delayPromise<Error>(seconds: NSTimeInterval, queue: dispatch_queue_t
 
 extension Promise {
 
-  /// Delays the resolve or reject of this Promise by the specified number of seconds.
+  /// Return a Promise with the resolve or reject delayed by the specified number of seconds.
   public func delay(seconds: NSTimeInterval) -> Promise<Value, Error> {
     return self
       .flatMap { value in

@@ -25,7 +25,7 @@ public func flatten<Value, Error>(promise: Promise<Promise<Value, Error>, Error>
 }
 
 
-/// Creates a Promise that resolves when both arguments to `whenBoth` resolve.
+/// Creates a Promise that resolves when both arguments resolve.
 ///
 /// The new Promise's value is of a tuple type constructed from both argument promises.
 ///
@@ -35,8 +35,9 @@ public func whenBoth<A, B, Error>(promiseA: Promise<A, Error>, _ promiseB: Promi
 }
 
 
-/// Creates a Promise that resolves with an array of all values all provided Promises.
+/// Creates a Promise that resolves when all of the provided Promises are resolved.
 ///
+/// The new Promise's value is an array of all resolved values.
 /// If any of the supplied Promises fails, the returned Promise immediately fails.
 ///
 /// When called with an empty array of promises, this returns a Resolved Promise (with an empty array value).
@@ -71,7 +72,7 @@ public func whenAll<Value, Error>(promises: [Promise<Value, Error>]) -> Promise<
 }
 
 
-/// Creates a Promise that resolves when either argument to `whenEither` resolves.
+/// Creates a Promise that resolves when either argument resolves.
 ///
 /// The new Promise's value is the value of the first promise to resolve.
 /// If both argument Promises are already Resolved, the first Promise's value is used.
