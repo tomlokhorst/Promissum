@@ -15,8 +15,8 @@ class CombinatorTests: XCTestCase {
   func testFlattenValueValue() {
     var value: Int?
 
-    let source1 = PromiseSource<Promise<Int>>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let outer = source1.promise
     let inner = source2.promise
 
@@ -34,13 +34,13 @@ class CombinatorTests: XCTestCase {
   func testFlattenValueError() {
     var error: NSError?
 
-    let source1 = PromiseSource<Promise<Int>>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let outer = source1.promise
     let inner = source2.promise
 
     flatten(outer)
-      .catch { e in
+      .trap { e in
         error = e
       }
 
@@ -53,13 +53,13 @@ class CombinatorTests: XCTestCase {
   func testFlattenErrorError() {
     var error: NSError?
 
-    let source1 = PromiseSource<Promise<Int>>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let outer = source1.promise
     let inner = source2.promise
 
     flatten(outer)
-      .catch { e in
+      .trap { e in
         error = e
       }
 
@@ -71,15 +71,15 @@ class CombinatorTests: XCTestCase {
   func testBothValue() {
     var value: Int?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
     whenBoth(p1, p2)
       .then { (x, y) in
         value = x + y
-    }
+      }
 
     source1.resolve(40)
     source2.resolve(2)
@@ -90,13 +90,13 @@ class CombinatorTests: XCTestCase {
   func testBothError() {
     var error: Int?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
     whenBoth(p1, p2)
-      .catch { e in
+      .trap { e in
         error = e.code
       }
 
@@ -109,8 +109,8 @@ class CombinatorTests: XCTestCase {
   func testEitherLeft() {
     var value: Int?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
@@ -118,7 +118,7 @@ class CombinatorTests: XCTestCase {
       .then { x in
         value = x
       }
-      .catch { e in
+      .trap { e in
         value = e.code
       }
 
@@ -131,8 +131,8 @@ class CombinatorTests: XCTestCase {
   func testEitherRight() {
     var value: Int?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
@@ -140,7 +140,7 @@ class CombinatorTests: XCTestCase {
       .then { x in
         value = x
       }
-      .catch { e in
+      .trap { e in
         value = e.code
       }
 
@@ -153,8 +153,8 @@ class CombinatorTests: XCTestCase {
   func testEitherError() {
     var value: Int?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
@@ -162,7 +162,7 @@ class CombinatorTests: XCTestCase {
       .then { x in
         value = x
       }
-      .catch { e in
+      .trap { e in
         value = e.code
       }
 
@@ -175,8 +175,8 @@ class CombinatorTests: XCTestCase {
   func testWhenAllResolved() {
     var values: [Int]?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
@@ -194,8 +194,8 @@ class CombinatorTests: XCTestCase {
   func testWhenAnyResolved() {
     var value: Int?
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
@@ -212,7 +212,7 @@ class CombinatorTests: XCTestCase {
   func testWhenAllEmpy() {
     var values: [Int]?
 
-    let promises: [Promise<Int>] = []
+    let promises: [Promise<Int, NSError>] = []
 
     whenAll(promises)
       .then { xs in
@@ -223,23 +223,28 @@ class CombinatorTests: XCTestCase {
   }
 
   func testWhenAnyEmpty() {
+    var value: Int?
     var error: NSError?
 
-    let promises: [Promise<Int>] = []
+    let promises: [Promise<Int, NSError>] = []
 
     whenAny(promises)
-      .catch { e in
+      .then { x in
+        value = x
+      }
+      .trap { e in
         error = e
       }
 
-    XCTAssert(error != nil, "Error should be set")
+    XCTAssert(value == nil, "Value shouldn't be set")
+    XCTAssert(error == nil, "Error shouldn't be set")
   }
 
   func testWhenAllFinalized() {
     var finalized = false
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
@@ -257,8 +262,8 @@ class CombinatorTests: XCTestCase {
   func testWhenAnyFinalized() {
     var finalized = false
 
-    let source1 = PromiseSource<Int>()
-    let source2 = PromiseSource<Int>()
+    let source1 = PromiseSource<Int, NSError>()
+    let source2 = PromiseSource<Int, NSError>()
     let p1 = source1.promise
     let p2 = source2.promise
 
