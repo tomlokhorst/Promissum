@@ -359,8 +359,8 @@ public class Promise<Value, Error> {
   // MARK: Result combinators
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
-  public func mapResult(transform: Result<Value, Error> -> Result<Value, Error>) -> Promise<Value, Error> {
-    let resultSource = PromiseSource<Value, Error>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
+  public func mapResult<NewValue, NewError>(transform: Result<Value, Error> -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
+    let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch transform(result) {
