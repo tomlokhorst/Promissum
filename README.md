@@ -33,7 +33,7 @@ Alamofire.request(.GET, url).responseJSONPromise()
       self.detailsView.alpha = 1
     }
   }
-  .catch { e in
+  .trap { e in
 
     // Either an Alamofire error or a CoreData error occured
     self.errorLabel.text = e.localizedDescription
