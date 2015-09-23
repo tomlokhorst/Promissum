@@ -129,7 +129,7 @@ Releases
  - **0.2.0** - 2015-02-15 - Side-effects happen in a better order. Regression tests added.
  - 0.1.1 - 2015-05-31 - `whenAnyFinalized` combinator added
  - **0.1.0** - 2015-01-27 - Initial public release
- - 0.0.0 - 2014-10-12 - Initial privat version for project at [Q42](http://q42.com)
+ - 0.0.0 - 2014-10-12 - Initial private version for project at [Q42](http://q42.com)
 
 
 Licence & Credits
