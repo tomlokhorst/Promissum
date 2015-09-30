@@ -10,13 +10,13 @@ import Foundation
 import Alamofire
 
 
-public struct AFPValue<T> {
+public struct AFPValue<T> : ErrorType {
   public let request: NSURLRequest?
   public let response: NSHTTPURLResponse?
   public let value: T
 }
 
-public struct AFPError {
+public struct AFPError : ErrorType {
   public let request: NSURLRequest?
   public let response: NSHTTPURLResponse?
   public let data: NSData?
