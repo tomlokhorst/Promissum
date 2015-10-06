@@ -87,7 +87,8 @@ extension UIViewController {
 var associatedObjectHandle: UInt8 = 0
 let associationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
 
-// UIAlertView is deprecated per iOS 8, however this extension is here for convenience
+// UIAlertView is deprecated per iOS 9, however this extension is here for convenience
+@available(iOS, introduced=2.0, deprecated=9.0, message="UIAlertView is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleAlert instead")
 extension UIAlertView {
   var strongDelegate: AlertViewDelegate? {
     get {
