@@ -43,42 +43,6 @@ extension Request {
   }
 }
 
-// MARK: - JSON decode
-
-public enum AlamofireDecodeError : ErrorType {
-  case JsonDecodeError
-  case HttpError(status: Int, result: Alamofire.Result<AnyObject>?)
-  case UnknownError(error: ErrorType, data: NSData?)
-}
-
-extension Request {
-  public func responseDecodePromise<T>(decoder: AnyObject -> T?) -> Promise<T, AlamofireDecodeError> {
-
-    return self.responseJSONPromise()
-      .mapError { err in
-        if let resp = err.response where resp.statusCode < 200 || resp.statusCode > 299 {
-          let result: Alamofire.Result<AnyObject> = Alamofire.Result.Failure(err.data, err.error)
-          return AlamofireDecodeError.HttpError(status: resp.statusCode, result: result)
-        }
-
-        return AlamofireDecodeError.UnknownError(error: err.error, data: err.data)
-      }
-      .flatMap { val in
-        // Don't know if this will ever happen, but better safe than sorry.
-        if let resp = val.response where resp.statusCode < 200 || resp.statusCode > 299 {
-          let result = Alamofire.Result.Success(val.value)
-          return Promise(error: AlamofireDecodeError.HttpError(status: resp.statusCode, result: result))
-        }
-
-        guard let decoded = decoder(val.value) else {
-          return Promise(error: AlamofireDecodeError.JsonDecodeError)
-        }
-
-        return Promise(value: decoded)
-      }
-  }
-}
-
 // MARK: - Data
 
 extension Request {

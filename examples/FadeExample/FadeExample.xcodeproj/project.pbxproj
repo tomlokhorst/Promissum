@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C8D27B8719781D5173444610 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9996FB6C34D424F82C9BAA /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		C8D27B8719781D5173444610 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9996FB6C34D424F82C9BAA /* Pods.framework */; };
 		E2F97BDB1A729D9B00B9BDD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97BDA1A729D9B00B9BDD7 /* AppDelegate.swift */; };
 		E2F97BDD1A729D9B00B9BDD7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97BDC1A729D9B00B9BDD7 /* ViewController.swift */; };
 		E2F97BE01A729D9B00B9BDD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BDE1A729D9B00B9BDD7 /* Main.storyboard */; };
@@ -301,6 +301,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -367,6 +368,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FadeExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -378,6 +380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FadeExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

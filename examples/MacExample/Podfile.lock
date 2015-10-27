@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (2.0.0)
+  - Alamofire (2.0.2)
   - Promissum (0.3.0):
     - Promissum/Core (= 0.3.0)
   - Promissum/Alamofire (0.3.0):
@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :path: ../../
 
 SPEC CHECKSUMS:
-  Alamofire: 2f13548b29d25a58ecd91c9225fb51493e2b782b
+  Alamofire: 8edbab00802a752bb5240cc2abe70e7e881488ad
   Promissum: bfa1008ed6a7b4acb23d60ccc1b791f566b27c6c
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

@@ -46,7 +46,7 @@ class ViewController: NSViewController {
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, fadeoutPromise)
-      .map { json, _ in parseJson(json) }
+      .map { json, _ in parseJson(json.value) }
       .delay(0.5)
       .then { project in
         self.nameField.stringValue = project.name
