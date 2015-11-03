@@ -16,6 +16,13 @@ public struct SuccessResponse<Value> {
   public let response: NSHTTPURLResponse?
   public let data: NSData?
   public let result: Value
+
+  public init(request: NSURLRequest?, response: NSHTTPURLResponse?, data: NSData?, result: Value) {
+    self.request = request
+    self.response = response
+    self.data = data
+    self.result = result
+  }
 }
 
 
@@ -26,6 +33,13 @@ public struct ErrorResponse<Error: ErrorType> : ErrorType {
   public let response: NSHTTPURLResponse?
   public let data: NSData?
   public let result: Error
+
+  public init(request: NSURLRequest?, response: NSHTTPURLResponse?, data: NSData?, result: Error) {
+    self.request = request
+    self.response = response
+    self.data = data
+    self.result = result
+  }
 }
 
 extension Request {
