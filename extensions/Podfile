@@ -6,6 +6,6 @@ xcodeproj "PromissumExtensions.xcodeproj"
 link_with "PromissumExtensions", "PromissumExtensionsTests"
 
 pod 'Alamofire', '~> 3.0'
-pod 'CoreDataKit', '~> 0.8'
+pod 'CoreDataKit', '~> 0.9'
 # pod 'Promissum', :path => '../' # All Promissum source files are manually included in project
 
