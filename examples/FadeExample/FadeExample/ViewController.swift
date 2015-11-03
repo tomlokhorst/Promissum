@@ -54,7 +54,7 @@ class ViewController: UIViewController {
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, fadeoutPromise)
-      .map { json, _ in parseJson(json.value) }
+      .map { response, _ in parseJson(response.result) }
       .flatMap(storeInCoreData)
       .delay(0.5)
       .then { project in

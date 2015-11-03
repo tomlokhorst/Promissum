@@ -9,33 +9,58 @@
 import Foundation
 import Alamofire
 
-
-public struct AFPValue<T> : ErrorType {
-  public let request: NSURLRequest?
-  public let response: NSHTTPURLResponse?
-  public let value: T
-}
-
-public struct AFPError : ErrorType {
+/// Used to store all response data returned from a successfully completed `Request`.
+/// Based on `Alamofire.Response`.
+public struct SuccessResponse<Value> {
   public let request: NSURLRequest?
   public let response: NSHTTPURLResponse?
   public let data: NSData?
-  public let error: ErrorType
+  public let result: Value
+}
+
+
+/// Used to store all response data returned from a failed completed `Request`.
+/// Based on `Alamofire.Response`.
+public struct ErrorResponse<Error: ErrorType> : ErrorType {
+  public let request: NSURLRequest?
+  public let response: NSHTTPURLResponse?
+  public let data: NSData?
+  public let result: Error
 }
 
 extension Request {
 
-  public func responsePromise<T: ResponseSerializer, V where T.SerializedObject == V>(
-    queue queue: dispatch_queue_t? = nil, responseSerializer: T) -> Promise<AFPValue<V>, AFPError> {
+  public func responsePromise(
+    queue queue: dispatch_queue_t? = nil)
+    -> Promise<SuccessResponse<NSData?>, ErrorResponse<NSError>>
+  {
+    let source = PromiseSource<SuccessResponse<NSData?>, ErrorResponse<NSError>>()
 
-    let source = PromiseSource<AFPValue<V>, AFPError>()
+    self.response(queue: queue) { (request, response, data, error) in
+      if let error = error {
+        source.reject(ErrorResponse(request: request, response: response, data: data, result: error))
+      }
+      else {
+        source.resolve(SuccessResponse(request: request, response: response, data: data, result: data))
+      }
+    }
 
-    self.response(queue: queue, responseSerializer: responseSerializer) { request, response, result in
-      switch result {
-      case let .Failure(data, error):
-        source.reject(AFPError(request: request, response: response, data: data, error: error))
-      case let.Success(value):
-        source.resolve(AFPValue(request: request, response: response, value: value))
+    return source.promise
+  }
+
+  public func responsePromise<T: ResponseSerializerType>(
+    queue queue: dispatch_queue_t? = nil,
+    responseSerializer: T)
+    -> Promise<SuccessResponse<T.SerializedObject>, ErrorResponse<T.ErrorObject>>
+  {
+    let source = PromiseSource<SuccessResponse<T.SerializedObject>, ErrorResponse<T.ErrorObject>>()
+
+    self.response(queue: queue, responseSerializer: responseSerializer) { response in
+      switch response.result {
+      case .Success(let value):
+        source.resolve(SuccessResponse(request: response.request, response: response.response, data: response.data, result: value))
+      case .Failure(let error):
+        source.reject(ErrorResponse(request: response.request, response: response.response, data: response.data, result: error))
       }
     }
 
@@ -46,7 +71,9 @@ extension Request {
 // MARK: - Data
 
 extension Request {
-  public func responseDataPromise() -> Promise<AFPValue<NSData>, AFPError> {
+  public func responseDataPromise()
+    -> Promise<SuccessResponse<NSData>, ErrorResponse<NSError>>
+  {
     return self.responsePromise(responseSerializer: Request.dataResponseSerializer())
   }
 }
@@ -54,7 +81,10 @@ extension Request {
 // MARK: - String
 
 extension Request {
-  public func responseStringPromise(encoding encoding: NSStringEncoding? = nil) -> Promise<AFPValue<String>, AFPError> {
+  public func responseStringPromise(
+    encoding encoding: NSStringEncoding? = nil)
+    -> Promise<SuccessResponse<String>, ErrorResponse<NSError>>
+  {
     return self.responsePromise(responseSerializer: Request.stringResponseSerializer(encoding: encoding))
   }
 }
@@ -62,7 +92,10 @@ extension Request {
 // MARK: - JSON
 
 extension Request {
-  public func responseJSONPromise(options options: NSJSONReadingOptions = .AllowFragments) -> Promise<AFPValue<AnyObject>, AFPError> {
+  public func responseJSONPromise(
+    options options: NSJSONReadingOptions = .AllowFragments)
+    -> Promise<SuccessResponse<AnyObject>, ErrorResponse<NSError>>
+  {
     return self.responsePromise(responseSerializer: Request.JSONResponseSerializer(options: options))
   }
 }
@@ -70,7 +103,10 @@ extension Request {
 // MARK: - Property List
 
 extension Request {
-  public func responsePropertyListPromise(options options: NSPropertyListReadOptions = NSPropertyListReadOptions()) -> Promise<AFPValue<AnyObject>, AFPError> {
+  public func responsePropertyListPromise(
+    options options: NSPropertyListReadOptions = NSPropertyListReadOptions())
+    -> Promise<SuccessResponse<AnyObject>, ErrorResponse<NSError>>
+  {
     return self.responsePromise(responseSerializer: Request.propertyListResponseSerializer(options: options))
   }
 }
