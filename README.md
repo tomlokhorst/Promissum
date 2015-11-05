@@ -121,6 +121,7 @@ $ pod install
 Releases
 --------
 
+ - **0.4.0** - 2015-11-04 - Update Alamofire+Promise to Alamofire 3
  - **0.3.0** - 2015-09-11 - Swift 2 support, added custom error types
  - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
  - 0.2.3 - 2015-04-13 - Swift 1.2 support
