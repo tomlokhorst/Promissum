@@ -99,14 +99,14 @@ public class Promise<Value, Error> {
   ///
   /// Example: `Promise<Int, NoError>(value: 42)`
   public convenience init(value: Value) {
-    self.init(source: PromiseSource(state: .Resolved(value), originalSource: nil, warnUnresolvedDeinit: false))
+    self.init(source: PromiseSource(state: .Resolved(value), originalSource: nil, warnUnresolvedDeinit: Warning.DontWarn, sourceLocation: nil))
   }
 
   /// Initialize a rejected Promise with an error.
   ///
   /// Example: `Promise<Int, String>(error: "Oops")`
   public convenience init(error: Error) {
-    self.init(source: PromiseSource(state: .Rejected(error), originalSource: nil, warnUnresolvedDeinit: false))
+    self.init(source: PromiseSource(state: .Rejected(error), originalSource: nil, warnUnresolvedDeinit: Warning.DontWarn, sourceLocation: nil))
   }
 
   internal init(source: PromiseSource<Value, Error>) {
@@ -270,12 +270,13 @@ public class Promise<Value, Error> {
     return self
   }
 
-
   // MARK: - Value combinators
 
   /// Return a Promise containing the results of mapping `transform` over the value of `self`.
   public func map<NewValue>(transform: Value -> NewValue) -> Promise<NewValue, Error> {
-    let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
+
+    let sourceLocation = SourceLocation(file: __FILE__, line: __LINE__, column: __COLUMN__, function: __FUNCTION__)
+    let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: self.source.warnUnresolvedDeinit, sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
@@ -318,7 +319,9 @@ public class Promise<Value, Error> {
 
   /// Return a Promise containing the results of mapping `transform` over the error of `self`.
   public func mapError<NewError>(transform: Error -> NewError) -> Promise<Value, NewError> {
-    let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
+
+    let sourceLocation = SourceLocation(file: __FILE__, line: __LINE__, column: __COLUMN__, function: __FUNCTION__)
+    let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: Warning.FatalError, sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
@@ -360,7 +363,9 @@ public class Promise<Value, Error> {
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
   public func mapResult<NewValue, NewError>(transform: Result<Value, Error> -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
-    let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: true)
+
+    let sourceLocation = SourceLocation(file: __FILE__, line: __LINE__, column: __COLUMN__, function: __FUNCTION__)
+    let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: Warning.FatalError, sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch transform(result) {

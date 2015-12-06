@@ -8,8 +8,21 @@
 
 import Foundation
 
+public enum Warning {
+  case FatalError
+  case Print
+  case DontWarn
+}
+
+internal struct SourceLocation {
+  let file: String
+  let line: Int
+  let column: Int
+  let function: String
+}
+
 // This Notifier is used to implement Promise.map
-internal protocol OriginalSource {
+internal protocol OriginalSource : class {
   func registerHandler(handler: () -> Void)
 }
 
@@ -75,38 +88,62 @@ public class PromiseSource<Value, Error> : OriginalSource {
   typealias ResultHandler = Result<Value, Error> -> Void
 
   private var handlers: [Result<Value, Error> -> Void] = []
-  private let originalSource: OriginalSource?
+  private weak var originalSource: OriginalSource?
+
+  private let sourceLocation: SourceLocation?
 
   /// The current state of the PromiseSource
   public var state: State<Value, Error>
 
   /// Print a warning on deinit of an unresolved PromiseSource
-  public var warnUnresolvedDeinit: Bool
+  public var warnUnresolvedDeinit: Warning
 
   // MARK: Initializers & deinit
 
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Unresolved, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(
+    warnUnresolvedDeinit: Warning = Warning.Print,
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__)
+  {
+    let sourceLocation = SourceLocation(file: file, line: line, column: column, function: function)
+
+    self.init(
+      state: .Unresolved,
+      originalSource: nil,
+      warnUnresolvedDeinit: warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
   }
 
-  internal init(state: State<Value, Error>, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
+  internal init(
+    state: State<Value, Error>,
+    originalSource: OriginalSource?,
+    warnUnresolvedDeinit: Warning,
+    sourceLocation: SourceLocation?)
+  {
     self.originalSource = originalSource
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
     self.state = state
+
+    self.sourceLocation = sourceLocation
   }
 
   deinit {
-    if warnUnresolvedDeinit {
-      switch state {
-      case .Unresolved:
-        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
-      default:
-        break
-      }
+    guard case .Unresolved = state else { return }
+    guard let sourceLocation = sourceLocation else { return }
+
+    let filename = NSURL(fileURLWithPath: sourceLocation.file).lastPathComponent ?? sourceLocation.file
+    let message = "Unresolved PromiseSource deallocated, maybe retain this object? Created in \(sourceLocation.function) - \(filename):\(sourceLocation.line)"
+
+    switch warnUnresolvedDeinit {
+    case .FatalError: fatalError(message)
+    case .Print:      print("WARNING: \(message)")
+    case .DontWarn:   break
     }
   }
 
