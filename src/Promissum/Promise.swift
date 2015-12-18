@@ -273,10 +273,26 @@ public class Promise<Value, Error> {
   // MARK: - Value combinators
 
   /// Return a Promise containing the results of mapping `transform` over the value of `self`.
-  public func map<NewValue>(transform: Value -> NewValue) -> Promise<NewValue, Error> {
+  public func map<NewValue>(
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__,
+    transform: Value -> NewValue)
+    -> Promise<NewValue, Error>
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name: " + map")
 
-    let sourceLocation = SourceLocation(file: __FILE__, line: __LINE__, column: __COLUMN__, function: __FUNCTION__)
-    let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: self.source.warnUnresolvedDeinit, sourceLocation: sourceLocation)
+    let resultSource = PromiseSource<NewValue, Error>(
+      state: .Unresolved,
+      originalSource: self.source,
+      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
@@ -294,8 +310,26 @@ public class Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the value of `self`.
-  public func flatMap<NewValue>(transform: Value -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
-    let resultSource = PromiseSource<NewValue, Error>()
+  public func flatMap<NewValue>(
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__,
+    transform: Value -> Promise<NewValue, Error>)
+    -> Promise<NewValue, Error>
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + flatMap")
+
+    let resultSource = PromiseSource<NewValue, Error>(
+      state: .Unresolved,
+      originalSource: nil,
+      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
@@ -318,10 +352,26 @@ public class Promise<Value, Error> {
   // MARK: Error combinators
 
   /// Return a Promise containing the results of mapping `transform` over the error of `self`.
-  public func mapError<NewError>(transform: Error -> NewError) -> Promise<Value, NewError> {
+  public func mapError<NewError>(
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__,
+    transform: Error -> NewError)
+    -> Promise<Value, NewError>
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + mapError")
 
-    let sourceLocation = SourceLocation(file: __FILE__, line: __LINE__, column: __COLUMN__, function: __FUNCTION__)
-    let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: Warning.FatalError, sourceLocation: sourceLocation)
+    let resultSource = PromiseSource<Value, NewError>(
+      state: .Unresolved,
+      originalSource: self.source,
+      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
@@ -339,8 +389,26 @@ public class Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the error of `self`.
-  public func flatMapError<NewError>(transform: Error -> Promise<Value, NewError>) -> Promise<Value, NewError> {
-    let resultSource = PromiseSource<Value, NewError>()
+  public func flatMapError<NewError>(
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__,
+    transform: Error -> Promise<Value, NewError>)
+    -> Promise<Value, NewError>
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + flatMapError")
+
+    let resultSource = PromiseSource<Value, NewError>(
+      state: .Unresolved,
+      originalSource: nil,
+      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch result {
@@ -362,10 +430,26 @@ public class Promise<Value, Error> {
   // MARK: Result combinators
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
-  public func mapResult<NewValue, NewError>(transform: Result<Value, Error> -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
+  public func mapResult<NewValue, NewError>(
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__,
+    transform: Result<Value, Error> -> Result<NewValue, NewError>)
+    -> Promise<NewValue, NewError>
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + mapResult")
 
-    let sourceLocation = SourceLocation(file: __FILE__, line: __LINE__, column: __COLUMN__, function: __FUNCTION__)
-    let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, originalSource: self.source, warnUnresolvedDeinit: Warning.FatalError, sourceLocation: sourceLocation)
+    let resultSource = PromiseSource<NewValue, NewError>(
+      state: .Unresolved,
+      originalSource: self.source,
+      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       switch transform(result) {
@@ -382,8 +466,26 @@ public class Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the result of `self`.
-  public func flatMapResult<NewValue, NewError>(transform: Result<Value, Error> -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
-    let resultSource = PromiseSource<NewValue, NewError>()
+  public func flatMapResult<NewValue, NewError>(
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__,
+    transform: Result<Value, Error> -> Promise<NewValue, NewError>)
+    -> Promise<NewValue, NewError>
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + flatMapResult")
+
+    let resultSource = PromiseSource<NewValue, NewError>(
+      state: .Unresolved,
+      originalSource: nil,
+      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
 
     let handler: Result<Value, Error> -> Void = { result in
       let transformedPromise = transform(result)

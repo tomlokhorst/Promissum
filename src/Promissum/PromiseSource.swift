@@ -9,20 +9,25 @@
 import Foundation
 
 public enum Warning {
-  case FatalError
   case Print
+  case FatalError
+  case Callback(callstack: [SourceLocation] -> ())
   case DontWarn
 }
 
-internal struct SourceLocation {
+public struct SourceLocation {
   let file: String
   let line: Int
   let column: Int
   let function: String
+  let name: String
 }
 
 // This Notifier is used to implement Promise.map
 internal protocol OriginalSource : class {
+  var originalSource: OriginalSource? { get }
+  var sourceLocation: SourceLocation? { get }
+
   func registerHandler(handler: () -> Void)
 }
 
@@ -88,9 +93,10 @@ public class PromiseSource<Value, Error> : OriginalSource {
   typealias ResultHandler = Result<Value, Error> -> Void
 
   private var handlers: [Result<Value, Error> -> Void] = []
-  private weak var originalSource: OriginalSource?
 
-  private let sourceLocation: SourceLocation?
+  internal weak var originalSource: OriginalSource?
+  internal let sourceLocation: SourceLocation?
+  private let callstack: [SourceLocation]
 
   /// The current state of the PromiseSource
   public var state: State<Value, Error>
@@ -110,7 +116,12 @@ public class PromiseSource<Value, Error> : OriginalSource {
     column: Int = __COLUMN__,
     function: String = __FUNCTION__)
   {
-    let sourceLocation = SourceLocation(file: file, line: line, column: column, function: function)
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name: "PromiseSource")
 
     self.init(
       state: .Unresolved,
@@ -131,19 +142,25 @@ public class PromiseSource<Value, Error> : OriginalSource {
     self.state = state
 
     self.sourceLocation = sourceLocation
+    self.callstack = createCallstack(sourceLocation, originalSource: originalSource)
   }
 
   deinit {
     guard case .Unresolved = state else { return }
-    guard let sourceLocation = sourceLocation else { return }
+    guard !callstack.isEmpty else { return }
 
-    let filename = NSURL(fileURLWithPath: sourceLocation.file).lastPathComponent ?? sourceLocation.file
-    let message = "Unresolved PromiseSource deallocated, maybe retain this object? Created in \(sourceLocation.function) - \(filename):\(sourceLocation.line)"
+    let message = "Unresolved PromiseSource deallocated, maybe retain this object?\n"
+      + "Callstack for deallocated object:\n\(callstackString(callstack))"
 
     switch warnUnresolvedDeinit {
-    case .FatalError: fatalError(message)
-    case .Print:      print("WARNING: \(message)")
-    case .DontWarn:   break
+    case .Print:
+      print("WARNING: \(message)")
+    case .FatalError:
+      fatalError(message)
+    case .Callback(let callback):
+      callback(callstack)
+    case .DontWarn:
+      break
     }
   }
 
@@ -247,4 +264,34 @@ internal func callHandlers<T>(arg: T, handlers: [T -> Void]) {
   for handler in handlers {
     handler(arg)
   }
+}
+
+private func createCallstack(source: SourceLocation?, originalSource: OriginalSource?) -> [SourceLocation] {
+  guard let sourceLocation = source else { return [] }
+
+  var callstack = [sourceLocation]
+  var parent = originalSource
+
+  while parent != nil {
+    if let location = parent?.sourceLocation {
+      callstack.append(location)
+    }
+
+    parent = originalSource?.originalSource
+  }
+
+  return callstack.reverse()
+}
+
+private func callstackString(callstack: [SourceLocation]) -> String {
+  var lines: [String] = []
+
+  for location in callstack {
+    let name = "\(location.name):".stringByPaddingToLength(18, withString: " ", startingAtIndex: 0)
+    let str = "\(name)\(location.file):\(location.line):\(location.column) - \(location.function)"
+
+    lines.append(str)
+  }
+
+  return lines.joinWithSeparator("\n")
 }

@@ -13,49 +13,42 @@ import Promissum
 class DeinitWarningTests: XCTestCase {
 
   func testUnresolvedSourceDeinit() {
-    var value: Int?
+    var deallocWarning = false
 
-    makeUnresolvedPromise()
-      .then { x in
-        value = x
-      }
+    makeUnresolvedPromise({ _ in deallocWarning = true })
 
-    XCTAssert(value == 42, "Value should be 42")
+    XCTAssert(deallocWarning, "Dealloc warning callback should have been called")
   }
 
-  func makeUnresolvedPromise() -> Promise<Int, NSError> {
-    let source = PromiseSource<Int, NSError>()
-    source.warnUnresolvedDeinit = Warning.Print
+  func makeUnresolvedPromise(deallocWarning: [SourceLocation] -> Void) -> Promise<Int, NoError> {
+    let source = PromiseSource<Int, NoError>()
+    source.warnUnresolvedDeinit = Warning.Callback(callstack: deallocWarning)
 
     return source.promise
   }
 
   func testUnresolvedMapDeinit() {
-    var value: Int?
+    var deallocWarning = false
 
-    mappedPromise()
-      .then { x in
-        value = x
-      }
+    mappedPromise({ _ in deallocWarning = true })
 
-    XCTAssert(value == 42, "Value should be 42")
+    XCTAssert(deallocWarning, "Dealloc warning callback should have been called")
   }
 
-  func mappedPromise() -> Promise<Int, NSError> {
-    return makeUnresolvedPromise().map { x in x * 2 }
+  func mappedPromise(deallocWarning: [SourceLocation] -> Void) -> Promise<Int, NoError> {
+    return makeUnresolvedPromise(deallocWarning).map { x in x * 2 }
   }
 
-  func testUnresolvedTwoDeinit() {
-    var value: Int?
+  func testUnresolvedVariableDeinit() {
+    var deallocWarning = false
 
-    let promise = makeUnresolvedPromise()
+    var promise: Promise<Int, NoError>? = makeUnresolvedPromise({ _ in deallocWarning = true })
 
-    promise
-      .map { $0 }
-      .then { x in
-        value = x
-      }
+    promise?.map { $0 }
 
-    XCTAssert(value == 42, "Value should be 42")
+    // Explicitly reset promise to trigger ARC dealloc of source at this point
+    promise = nil
+
+    XCTAssert(deallocWarning, "Dealloc warning callback should have been called")
   }
 }
