@@ -8,8 +8,26 @@
 
 import Foundation
 
+public enum Warning {
+  case Print
+  case FatalError
+  case Callback(callstack: [SourceLocation] -> ())
+  case DontWarn
+}
+
+public struct SourceLocation {
+  let file: String
+  let line: Int
+  let column: Int
+  let function: String
+  let name: String
+}
+
 // This Notifier is used to implement Promise.map
-internal protocol OriginalSource {
+internal protocol OriginalSource : class {
+  var originalSource: OriginalSource? { get }
+  var sourceLocation: SourceLocation? { get }
+
   func registerHandler(handler: () -> Void)
 }
 
@@ -75,38 +93,74 @@ public class PromiseSource<Value, Error> : OriginalSource {
   typealias ResultHandler = Result<Value, Error> -> Void
 
   private var handlers: [Result<Value, Error> -> Void] = []
-  private let originalSource: OriginalSource?
+
+  internal weak var originalSource: OriginalSource?
+  internal let sourceLocation: SourceLocation?
+  private let callstack: [SourceLocation]
 
   /// The current state of the PromiseSource
   public var state: State<Value, Error>
 
   /// Print a warning on deinit of an unresolved PromiseSource
-  public var warnUnresolvedDeinit: Bool
+  public var warnUnresolvedDeinit: Warning
 
   // MARK: Initializers & deinit
 
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Unresolved, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(
+    warnUnresolvedDeinit: Warning = Warning.Print,
+    file: String = __FILE__,
+    line: Int = __LINE__,
+    column: Int = __COLUMN__,
+    function: String = __FUNCTION__)
+  {
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name: "PromiseSource")
+
+    self.init(
+      state: .Unresolved,
+      originalSource: nil,
+      warnUnresolvedDeinit: warnUnresolvedDeinit,
+      sourceLocation: sourceLocation)
   }
 
-  internal init(state: State<Value, Error>, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
+  internal init(
+    state: State<Value, Error>,
+    originalSource: OriginalSource?,
+    warnUnresolvedDeinit: Warning,
+    sourceLocation: SourceLocation?)
+  {
     self.originalSource = originalSource
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
 
     self.state = state
+
+    self.sourceLocation = sourceLocation
+    self.callstack = createCallstack(sourceLocation, originalSource: originalSource)
   }
 
   deinit {
-    if warnUnresolvedDeinit {
-      switch state {
-      case .Unresolved:
-        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
-      default:
-        break
-      }
+    guard case .Unresolved = state else { return }
+    guard !callstack.isEmpty else { return }
+
+    let message = "Unresolved PromiseSource deallocated, maybe retain this object?\n"
+      + "Callstack for deallocated object:\n\(callstackString(callstack))"
+
+    switch warnUnresolvedDeinit {
+    case .Print:
+      print("WARNING: \(message)")
+    case .FatalError:
+      fatalError(message)
+    case .Callback(let callback):
+      callback(callstack)
+    case .DontWarn:
+      break
     }
   }
 
@@ -210,4 +264,34 @@ internal func callHandlers<T>(arg: T, handlers: [T -> Void]) {
   for handler in handlers {
     handler(arg)
   }
+}
+
+private func createCallstack(source: SourceLocation?, originalSource: OriginalSource?) -> [SourceLocation] {
+  guard let sourceLocation = source else { return [] }
+
+  var callstack = [sourceLocation]
+  var parent = originalSource
+
+  while parent != nil {
+    if let location = parent?.sourceLocation {
+      callstack.append(location)
+    }
+
+    parent = originalSource?.originalSource
+  }
+
+  return callstack.reverse()
+}
+
+private func callstackString(callstack: [SourceLocation]) -> String {
+  var lines: [String] = []
+
+  for location in callstack {
+    let name = "\(location.name):".stringByPaddingToLength(18, withString: " ", startingAtIndex: 0)
+    let str = "\(name)\(location.file):\(location.line):\(location.column) - \(location.function)"
+
+    lines.append(str)
+  }
+
+  return lines.joinWithSeparator("\n")
 }
