@@ -208,6 +208,13 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
 internal func callHandlers<T>(arg: T, handlers: [T -> Void]) {
   for handler in handlers {
-    handler(arg)
+    if NSThread.isMainThread() {
+      handler(arg)
+    }
+    else {
+      dispatch_async(dispatch_get_main_queue()) {
+        handler(arg)
+      }
+    }
   }
 }
