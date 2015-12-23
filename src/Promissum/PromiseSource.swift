@@ -76,6 +76,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
   private var handlers: [Result<Value, Error> -> Void] = []
   private let originalSource: OriginalSource?
+  internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
   public var state: State<Value, Error>
@@ -85,18 +86,26 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
   // MARK: Initializers & deinit
 
+  internal convenience init(value: Value) {
+    self.init(state: .Resolved(value), dispatch: .Unspecified, originalSource: nil, warnUnresolvedDeinit: false)
+  }
+
+  internal convenience init(error: Error) {
+    self.init(state: .Rejected(error), dispatch: .Unspecified, originalSource: nil, warnUnresolvedDeinit: false)
+  }
+
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Unresolved, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(dispatch: DispatchMethod = .Unspecified, warnUnresolvedDeinit: Bool = true) {
+    self.init(state: .Unresolved, dispatch: dispatch, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  internal init(state: State<Value, Error>, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
+  internal init(state: State<Value, Error>, dispatch: DispatchMethod, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
+    self.state = state
+    self.dispatchMethod = dispatch
     self.originalSource = originalSource
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
-
-    self.state = state
   }
 
   deinit {
