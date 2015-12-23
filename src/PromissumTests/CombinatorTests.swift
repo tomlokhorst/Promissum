@@ -20,7 +20,7 @@ class CombinatorTests: XCTestCase {
     let outer = source1.promise
     let inner = source2.promise
 
-    flatten(outer)
+    let p = flatten(outer)
       .then { x in
         value = x
       }
@@ -28,7 +28,9 @@ class CombinatorTests: XCTestCase {
     source1.resolve(inner)
     source2.resolve(42)
 
-    XCTAssert(value == 42, "Value should be 42")
+    expectation(p) {
+      XCTAssert(value == 42, "Value should be 42")
+    }
   }
 
   func testFlattenValueError() {
@@ -39,7 +41,7 @@ class CombinatorTests: XCTestCase {
     let outer = source1.promise
     let inner = source2.promise
 
-    flatten(outer)
+    let p = flatten(outer)
       .trap { e in
         error = e
       }
@@ -47,7 +49,9 @@ class CombinatorTests: XCTestCase {
     source1.resolve(inner)
     source2.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(error?.code == 42, "Error should be 42")
+    expectation(p) {
+      XCTAssert(error?.code == 42, "Error should be 42")
+    }
   }
 
   func testFlattenErrorError() {
@@ -56,16 +60,17 @@ class CombinatorTests: XCTestCase {
     let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
     let source2 = PromiseSource<Int, NSError>()
     let outer = source1.promise
-    let inner = source2.promise
 
-    flatten(outer)
+    let p = flatten(outer)
       .trap { e in
         error = e
       }
 
     source1.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(error?.code == 42, "Error should be 42")
+    expectation(p) {
+      XCTAssert(error?.code == 42, "Error should be 42")
+    }
   }
 
   func testBothValue() {
@@ -76,7 +81,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenBoth(p1, p2)
+    let p = whenBoth(p1, p2)
       .then { (x, y) in
         value = x + y
       }
@@ -84,7 +89,9 @@ class CombinatorTests: XCTestCase {
     source1.resolve(40)
     source2.resolve(2)
 
-    XCTAssert(value == 42, "Value should be 42")
+    expectation(p) {
+      XCTAssert(value == 42, "Value should be 42")
+    }
   }
 
   func testBothError() {
@@ -95,7 +102,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenBoth(p1, p2)
+    let p = whenBoth(p1, p2)
       .trap { e in
         error = e.code
       }
@@ -103,7 +110,9 @@ class CombinatorTests: XCTestCase {
     source1.resolve(40)
     source2.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(error == 42, "Error should be 42")
+    expectation(p) {
+      XCTAssert(error == 42, "Error should be 42")
+    }
   }
 
   func testEitherLeft() {
@@ -114,7 +123,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenEither(p1, p2)
+    let p = whenEither(p1, p2)
       .then { x in
         value = x
       }
@@ -125,7 +134,9 @@ class CombinatorTests: XCTestCase {
     source1.resolve(1)
     source2.reject(NSError(domain: PromissumErrorDomain, code: 2, userInfo: nil))
 
-    XCTAssert(value == 1, "Value should be 1")
+    expectation(p) {
+      XCTAssert(value == 1, "Value should be 1")
+    }
   }
 
   func testEitherRight() {
@@ -136,7 +147,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenEither(p1, p2)
+    let p = whenEither(p1, p2)
       .then { x in
         value = x
       }
@@ -147,7 +158,9 @@ class CombinatorTests: XCTestCase {
     source1.reject(NSError(domain: PromissumErrorDomain, code: 1, userInfo: nil))
     source2.resolve(2)
 
-    XCTAssert(value == 2, "Value should be 2")
+    expectation(p) {
+      XCTAssert(value == 2, "Value should be 2")
+    }
   }
 
   func testEitherError() {
@@ -158,7 +171,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenEither(p1, p2)
+    let p = whenEither(p1, p2)
       .then { x in
         value = x
       }
@@ -169,7 +182,9 @@ class CombinatorTests: XCTestCase {
     source1.reject(NSError(domain: PromissumErrorDomain, code: 1, userInfo: nil))
     source2.reject(NSError(domain: PromissumErrorDomain, code: 2, userInfo: nil))
 
-    XCTAssert(value == 2, "Value should be 2")
+    expectation(p) {
+      XCTAssert(value == 2, "Value should be 2")
+    }
   }
 
   func testWhenAllResolved() {
@@ -180,7 +195,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenAll([p1, p2])
+    let p = whenAll([p1, p2])
       .then { xs in
         values = xs
       }
@@ -188,7 +203,9 @@ class CombinatorTests: XCTestCase {
     source2.resolve(2)
     source1.resolve(1)
 
-    XCTAssert(values != nil && values! == [1, 2], "Values should be [1, 2]")
+    expectation(p) {
+      XCTAssert(values != nil && values! == [1, 2], "Values should be [1, 2]")
+    }
   }
 
   func testWhenAnyResolved() {
@@ -199,14 +216,16 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenAny([p1, p2])
+    let p = whenAny([p1, p2])
       .then { x in
         value = x
       }
 
     source2.resolve(2)
 
-    XCTAssert(value == 2, "Value should be 2")
+    expectation(p) {
+      XCTAssert(value == 2, "Value should be 2")
+    }
   }
 
   func testWhenAllEmpy() {
@@ -214,12 +233,14 @@ class CombinatorTests: XCTestCase {
 
     let promises: [Promise<Int, NSError>] = []
 
-    whenAll(promises)
+    let p = whenAll(promises)
       .then { xs in
         values = xs
       }
 
-    XCTAssert(values != nil && values! == [], "Values should be [1]")
+    expectation(p) {
+      XCTAssert(values != nil && values! == [], "Values should be [1]")
+    }
   }
 
   func testWhenAnyEmpty() {
@@ -236,8 +257,12 @@ class CombinatorTests: XCTestCase {
         error = e
       }
 
-    XCTAssert(value == nil, "Value shouldn't be set")
-    XCTAssert(error == nil, "Error shouldn't be set")
+    let p: Promise<Void, NSError> = delayPromise(0.001)
+
+    expectation(p) {
+      XCTAssert(value == nil, "Value shouldn't be set")
+      XCTAssert(error == nil, "Error shouldn't be set")
+    }
   }
 
   func testWhenAllFinalized() {
@@ -248,7 +273,7 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenAllFinalized([p1, p2])
+    let p = whenAllFinalized([p1, p2])
       .then {
         finalized = true
       }
@@ -256,7 +281,9 @@ class CombinatorTests: XCTestCase {
     source1.resolve(1)
     source2.reject(NSError(domain: PromissumErrorDomain, code: 2, userInfo: nil))
 
-    XCTAssert(finalized, "Finalized should be set")
+    expectation(p) {
+      XCTAssert(finalized, "Finalized should be set")
+    }
   }
 
   func testWhenAnyFinalized() {
@@ -267,13 +294,15 @@ class CombinatorTests: XCTestCase {
     let p1 = source1.promise
     let p2 = source2.promise
 
-    whenAnyFinalized([p1, p2])
+    let p = whenAnyFinalized([p1, p2])
       .then {
         finalized = true
       }
 
     source1.resolve(1)
 
-    XCTAssert(finalized, "Finalized should be set")
+    expectation(p) {
+      XCTAssert(finalized, "Finalized should be set")
+    }
   }
 }

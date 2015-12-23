@@ -39,7 +39,9 @@ class SourceResultTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(result?.value == 42, "Result should be value")
+    expectation(p) {
+      XCTAssert(result?.value == 42, "Result should be value")
+    }
   }
 
   func testResultError() {
@@ -54,7 +56,9 @@ class SourceResultTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(result?.error?.code == 42, "Result should be error")
+    expectation(p) {
+      XCTAssert(result?.error?.code == 42, "Result should be error")
+    }
   }
 
   func testResultMapError() {
@@ -77,7 +81,9 @@ class SourceResultTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
 
@@ -101,7 +107,9 @@ class SourceResultTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testResultFlatMapValueValue() {
@@ -124,7 +132,9 @@ class SourceResultTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testResultFlatMapValueError() {
@@ -147,7 +157,9 @@ class SourceResultTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(error?.code == 43, "Error should be set")
+    expectation(p) {
+      XCTAssert(error?.code == 43, "Error should be set")
+    }
   }
 
   func testResultFlatMapErrorValue() {
@@ -170,7 +182,9 @@ class SourceResultTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testResultFlatMapErrorError() {
@@ -193,6 +207,8 @@ class SourceResultTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(error?.code == 43, "Error should be set")
+    expectation(p) {
+      XCTAssert(error?.code == 43, "Error should be set")
+    }
   }
 }

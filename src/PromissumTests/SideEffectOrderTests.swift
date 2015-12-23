@@ -30,7 +30,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.resolve(42)
 
-    XCTAssertEqual(step, 2, "Should be step 2")
+    expectation(p) {
+      XCTAssertEqual(step, 2, "Should be step 2")
+    }
   }
 
   func testCatch() {
@@ -51,7 +53,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssertEqual(step, 2, "Should be step 2")
+    expectation(p) {
+      XCTAssertEqual(step, 2, "Should be step 2")
+    }
   }
 
   func testMap() {
@@ -83,7 +87,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.resolve(42)
 
-    XCTAssertEqual(step, 3, "Should be step 3")
+    expectation(q) {
+      XCTAssertEqual(step, 3, "Should be step 3")
+    }
   }
 
   func testMap2() {
@@ -117,7 +123,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.resolve(42)
 
-    XCTAssertEqual(step, 3, "Should be step 3")
+    expectation(q) {
+      XCTAssertEqual(step, 3, "Should be step 3")
+    }
   }
 
   func testMapError() {
@@ -151,7 +159,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssertEqual(step, 3, "Should be step 3")
+    expectation(q) {
+      XCTAssertEqual(step, 3, "Should be step 3")
+    }
   }
 
   func testErrorMap() {
@@ -183,7 +193,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssertEqual(step, 2, "Should be step 1")
+    expectation(q) {
+      XCTAssertEqual(step, 2, "Should be step 1")
+    }
   }
 
   func testFlatMap() {
@@ -215,7 +227,9 @@ class SideEffectOrderTests : XCTestCase {
 
     source.resolve(42)
 
-    XCTAssertEqual(step, 3, "Should be step 3")
+    expectation(q) {
+      XCTAssertEqual(step, 3, "Should be step 3")
+    }
   }
 
   func testFlatMapError() {
@@ -247,6 +261,8 @@ class SideEffectOrderTests : XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssertEqual(step, 3, "Should be step 3")
+    expectation(q) {
+      XCTAssertEqual(step, 3, "Should be step 3")
+    }
   }
 }
