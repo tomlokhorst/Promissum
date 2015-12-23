@@ -10,7 +10,7 @@ import Foundation
 
 // This Notifier is used to implement Promise.map
 internal protocol OriginalSource {
-  func registerHandler(handler: () -> Void)
+  func registerHandler(dispatch: DispatchMethod, handler: () -> Void)
 }
 
 /**
@@ -164,7 +164,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
   private func executeResultHandlers(result: Result<Value, Error>) {
 
     // Call all previously scheduled handlers
-    callHandlers(result, handlers: handlers)
+    callHandlers(result, handlers: handlers.map { ($0, dispatchMethod) })
 
     // Cleanup
     handlers = []
@@ -172,27 +172,27 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
   // MARK: Adding result handlers
 
-  internal func registerHandler(handler: () -> Void) {
-    addOrCallResultHandler({ _ in handler() })
+  internal func registerHandler(dispatch: DispatchMethod, handler: () -> Void) {
+    addOrCallResultHandler(dispatch, handler: { _ in handler() })
   }
 
-  internal func addOrCallResultHandler(handler: Result<Value, Error> -> Void) {
+  internal func addOrCallResultHandler(dispatch: DispatchMethod, handler: Result<Value, Error> -> Void) {
 
     switch state {
     case .Unresolved:
       // Register with original source
       // Only call handlers after original completes
       if let originalSource = originalSource {
-        originalSource.registerHandler {
+        originalSource.registerHandler(dispatch) {
 
           switch self.state {
           case .Resolved(let value):
             // Value is already available, call handler immediately
-            callHandlers(Result.Value(value), handlers: [handler])
+            callHandlers(Result.Value(value), handlers: [(handler, dispatch)])
 
           case .Rejected(let error):
             // Error is already available, call handler immediately
-            callHandlers(Result.Error(error), handlers: [handler])
+            callHandlers(Result.Error(error), handlers: [(handler, dispatch)])
 
           case .Unresolved:
             assertionFailure("callback should only be called if state is resolved or rejected")
@@ -206,23 +206,48 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
     case .Resolved(let value):
       // Value is already available, call handler immediately
-      callHandlers(Result.Value(value), handlers: [handler])
+      callHandlers(Result.Value(value), handlers: [(handler, dispatchMethod)])
 
     case .Rejected(let error):
       // Error is already available, call handler immediately
-      callHandlers(Result.Error(error), handlers: [handler])
+      callHandlers(Result.Error(error), handlers: [(handler, dispatchMethod)])
     }
   }
 }
 
-internal func callHandlers<T>(arg: T, handlers: [T -> Void]) {
-  for handler in handlers {
-    if NSThread.isMainThread() {
-      handler(arg)
-    }
-    else {
-      dispatch_async(dispatch_get_main_queue()) {
+internal func callHandlers<T>(arg: T, handlers: [(T -> Void, DispatchMethod)]) {
+
+  for (handler, dispatch) in handlers {
+    switch dispatch {
+    case .Unspecified:
+
+      if NSThread.isMainThread() {
         handler(arg)
+      }
+      else {
+        dispatch_async(dispatch_get_main_queue()) {
+          handler(arg)
+        }
+      }
+
+    case .Synchronous:
+
+      handler(arg)
+
+    case let .OnQueue(targetQueue):
+      let currentQueueLabel = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL))!
+      let targetQueueLabel = String(UTF8String: dispatch_queue_get_label(targetQueue))!
+
+      // Assume on correct queue if labels match, but be conservative if label is empty
+      let alreadyOnQueue = currentQueueLabel == targetQueueLabel && currentQueueLabel != ""
+
+      if alreadyOnQueue {
+        handler(arg)
+      }
+      else {
+        dispatch_async(targetQueue) {
+          handler(arg)
+        }
       }
     }
   }

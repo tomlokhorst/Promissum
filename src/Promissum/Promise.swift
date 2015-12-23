@@ -185,7 +185,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(resultHandler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: resultHandler)
 
     return self
   }
@@ -215,7 +215,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(resultHandler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: resultHandler)
 
     return self
   }
@@ -242,7 +242,7 @@ public class Promise<Value, Error> {
       handler()
     }
 
-    source.addOrCallResultHandler(resultHandler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: resultHandler)
 
     return self
   }
@@ -265,7 +265,7 @@ public class Promise<Value, Error> {
   /// the handler is called synchronously on the thread where `PromiseSource.resolve` or `PromiseSource.reject` is called.
   public func finallyResult(handler: Result<Value, Error> -> Void) -> Promise<Value, Error> {
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return self
   }
@@ -287,7 +287,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return resultSource.promise
   }
@@ -308,7 +308,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return resultSource.promise
   }
@@ -330,7 +330,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return resultSource.promise
   }
@@ -351,7 +351,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return resultSource.promise
   }
@@ -371,7 +371,7 @@ public class Promise<Value, Error> {
       }
     }
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return resultSource.promise
   }
@@ -387,7 +387,7 @@ public class Promise<Value, Error> {
         .trap(resultSource.reject)
     }
 
-    source.addOrCallResultHandler(handler)
+    source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return resultSource.promise
   }
