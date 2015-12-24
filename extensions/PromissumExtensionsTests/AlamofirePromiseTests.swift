@@ -20,8 +20,8 @@ class AlamofirePromiseTests: XCTestCase {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     Alamofire.request(.GET, url).responseJSONPromise()
-      .then { val in
-        if let dict = val.value as? [String: AnyObject],
+      .then { response in
+        if let dict = response.result as? [String: AnyObject],
           let name = dict["name"] as? String
           where name == "Promissum" {
           expectation.fulfill()
