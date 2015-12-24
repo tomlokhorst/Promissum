@@ -58,7 +58,6 @@ class CombinatorTests: XCTestCase {
     var error: NSError?
 
     let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
-    let source2 = PromiseSource<Int, NSError>()
     let outer = source1.promise
 
     let p = flatten(outer)
