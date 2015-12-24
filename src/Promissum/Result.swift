@@ -32,6 +32,15 @@ public enum Result<TValue, TError> {
       return nil
     }
   }
+
+  internal var state: State<TValue, TError> {
+    switch self {
+    case .Value(let boxed):
+      return .Resolved(boxed)
+    case .Error(let error):
+      return .Rejected(error)
+    }
+  }
 }
 
 extension Result: CustomStringConvertible {

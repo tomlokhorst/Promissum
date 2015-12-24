@@ -135,14 +135,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func resolve(value: Value) {
 
-    switch state {
-    case .Unresolved:
-      state = .Resolved(value)
-
-      executeResultHandlers(.Value(value))
-    default:
-      break
-    }
+    resolveResult(.Value(value))
   }
 
 
@@ -151,11 +144,16 @@ public class PromiseSource<Value, Error> : OriginalSource {
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func reject(error: Error) {
 
+    resolveResult(.Error(error))
+  }
+
+  internal func resolveResult(result: Result<Value, Error>) {
+
     switch state {
     case .Unresolved:
-      state = .Rejected(error)
+      state = result.state
 
-      executeResultHandlers(.Error(error))
+      executeResultHandlers(result)
     default:
       break
     }

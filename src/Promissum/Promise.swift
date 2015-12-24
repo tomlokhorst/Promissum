@@ -158,7 +158,7 @@ public class Promise<Value, Error> {
   }
 
 
-  // MARK: Attach handlers
+  // MARK: - Attach handlers
 
   /// Register a handler to be called when value is available.
   /// The value is passed as an argument to the handler.
@@ -268,6 +268,36 @@ public class Promise<Value, Error> {
     source.addOrCallResultHandler(source.dispatchMethod, handler: handler)
 
     return self
+  }
+
+
+
+  // MARK: Dispatch methods
+
+  public func dispatchOn(queue: dispatch_queue_t) -> Promise<Value, Error> {
+    return dispatchOn(.OnQueue(queue))
+  }
+
+  public func dispatchSync() -> Promise<Value, Error> {
+    switch source.dispatchMethod {
+    case .Unspecified:
+      return dispatchOn(.Synchronous)
+
+    default:
+      return self
+    }
+  }
+
+  public func dispatchMain() -> Promise<Value, Error> {
+    return dispatchOn(dispatch_get_main_queue())
+  }
+
+  internal func dispatchOn(dispatch: DispatchMethod) -> Promise<Value, Error> {
+    let resultSource = PromiseSource<Value, Error>(state: .Unresolved, dispatch: dispatch, originalSource: self.source, warnUnresolvedDeinit: true)
+
+    source.addOrCallResultHandler(dispatch, handler: resultSource.resolveResult)
+
+    return resultSource.promise
   }
 
 
