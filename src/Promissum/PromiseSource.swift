@@ -155,7 +155,7 @@ public class PromiseSource<Value, Error> {
   private func executeResultHandlers(result: Result<Value, Error>) {
 
     // Call all previously scheduled handlers
-    callHandlers(result, handlers: handlers.map { ($0, dispatchMethod) })
+    callHandlers(result, handlers: handlers, dispatchMethod: dispatchMethod)
 
     // Cleanup
     handlers = []
@@ -163,11 +163,7 @@ public class PromiseSource<Value, Error> {
 
   // MARK: Adding result handlers
 
-  internal func registerHandler(dispatch: DispatchMethod, handler: () -> Void) {
-    addOrCallResultHandler(dispatch, handler: { _ in handler() })
-  }
-
-  internal func addOrCallResultHandler(dispatch: DispatchMethod, handler: Result<Value, Error> -> Void) {
+  internal func addOrCallResultHandler(handler: Result<Value, Error> -> Void) {
 
     switch state {
     case .Unresolved:
@@ -176,33 +172,33 @@ public class PromiseSource<Value, Error> {
 
     case .Resolved(let value):
       // Value is already available, call handler immediately
-      callHandlers(Result.Value(value), handlers: [(handler, dispatchMethod)])
+      callHandlers(Result.Value(value), handlers: [handler], dispatchMethod: dispatchMethod)
 
     case .Rejected(let error):
       // Error is already available, call handler immediately
-      callHandlers(Result.Error(error), handlers: [(handler, dispatchMethod)])
+      callHandlers(Result.Error(error), handlers: [handler], dispatchMethod: dispatchMethod)
     }
   }
 }
 
-internal func callHandlers<T>(arg: T, handlers: [(T -> Void, DispatchMethod)]) {
+internal func callHandlers<T>(value: T, handlers: [T -> Void], dispatchMethod: DispatchMethod) {
 
-  for (handler, dispatch) in handlers {
-    switch dispatch {
+  for handler in handlers {
+    switch dispatchMethod {
     case .Unspecified:
 
       if NSThread.isMainThread() {
-        handler(arg)
+        handler(value)
       }
       else {
         dispatch_async(dispatch_get_main_queue()) {
-          handler(arg)
+          handler(value)
         }
       }
 
     case .Synchronous:
 
-      handler(arg)
+      handler(value)
 
     case let .OnQueue(targetQueue):
       let currentQueueLabel = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL))!
@@ -212,11 +208,11 @@ internal func callHandlers<T>(arg: T, handlers: [(T -> Void, DispatchMethod)]) {
       let alreadyOnQueue = currentQueueLabel == targetQueueLabel && currentQueueLabel != ""
 
       if alreadyOnQueue {
-        handler(arg)
+        handler(value)
       }
       else {
         dispatch_async(targetQueue) {
-          handler(arg)
+          handler(value)
         }
       }
     }
