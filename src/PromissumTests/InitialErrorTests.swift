@@ -12,6 +12,12 @@ import Promissum
 
 let PromissumErrorDomain = "com.nonstrict.Promissum"
 
+extension NSError {
+  convenience init(code: Int) {
+    self.init(domain: PromissumErrorDomain, code: code, userInfo: nil)
+  }
+}
+
 class InitialErrorTests: XCTestCase {
 
   func testError() {
