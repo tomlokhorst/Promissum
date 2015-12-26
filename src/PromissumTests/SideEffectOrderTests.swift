@@ -107,18 +107,20 @@ class SideEffectOrderTests : XCTestCase {
         return value + 1
       }
 
+    // As of version with GCD support:
+    // callbacks registered to "map"-promise happen before callbacks registered after `map`
     p.then { value in
       XCTAssertEqual(value, 42, "Value should be 42")
 
       step += 1
-      XCTAssertEqual(step, 2, "Should be step 2")
+      XCTAssertEqual(step, 3, "Should be step 3")
     }
 
     q.then { value in
       XCTAssertEqual(value, 43, "Value should be 43")
 
       step += 1
-      XCTAssertEqual(step, 3, "Should be step 3")
+      XCTAssertEqual(step, 2, "Should be step 2")
     }
 
     source.resolve(42)
@@ -143,18 +145,20 @@ class SideEffectOrderTests : XCTestCase {
         return NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil)
       }
 
+    // As of version with GCD support:
+    // callbacks registered to "map"-promise happen before callbacks registered after `map`
     p.trap { error in
       XCTAssertEqual(error.code, 42, "Error should be 42")
 
       step += 1
-      XCTAssertEqual(step, 2, "Should be step 2")
+      XCTAssertEqual(step, 3, "Should be step 3")
     }
 
     q.trap { error in
       XCTAssertEqual(error.code, 43, "Value should be 43")
 
       step += 1
-      XCTAssertEqual(step, 3, "Should be step 3")
+      XCTAssertEqual(step, 2, "Should be step 2")
     }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
@@ -177,18 +181,20 @@ class SideEffectOrderTests : XCTestCase {
         return value
       }
 
+    // As of version with GCD support:
+    // callbacks registered to "map"-promise happen before callbacks registered after `map`
     p.trap { error in
       XCTAssertEqual(error.code, 42, "Error should be 42")
 
       step += 1
-      XCTAssertEqual(step, 1, "Should be step 1")
+      XCTAssertEqual(step, 2, "Should be step 2")
     }
 
     q.trap { error in
       XCTAssertEqual(error.code, 42, "Value should be 42")
 
       step += 1
-      XCTAssertEqual(step, 2, "Should be step 2")
+      XCTAssertEqual(step, 1, "Should be step 1")
     }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))

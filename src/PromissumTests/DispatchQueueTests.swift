@@ -242,7 +242,7 @@ class DispatchQueueTests: XCTestCase {
         let currentQueueLabel = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL))!
         XCTAssertEqual(currentQueueLabel, testQueueLabel, "callback for queued dispatch method should be called on specified queue")
         calls += 2
-    }
+      }
 
     source.resolve(42)
 

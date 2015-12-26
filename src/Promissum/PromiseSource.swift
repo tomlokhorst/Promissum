@@ -8,11 +8,6 @@
 
 import Foundation
 
-// This Notifier is used to implement Promise.map
-internal protocol OriginalSource {
-  func registerHandler(dispatch: DispatchMethod, handler: () -> Void)
-}
-
 /**
 ## Creating Promises
 
@@ -71,11 +66,10 @@ In that case, you must manually retain the PromiseSource, or the Promise will ne
 Note that `PromiseSource.deinit` by default will log a warning when an unresolved PromiseSource is deallocated.
 
 */
-public class PromiseSource<Value, Error> : OriginalSource {
+public class PromiseSource<Value, Error> {
   typealias ResultHandler = Result<Value, Error> -> Void
 
   private var handlers: [Result<Value, Error> -> Void] = []
-  private let originalSource: OriginalSource?
   internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
@@ -87,24 +81,23 @@ public class PromiseSource<Value, Error> : OriginalSource {
   // MARK: Initializers & deinit
 
   internal convenience init(value: Value) {
-    self.init(state: .Resolved(value), dispatch: .Unspecified, originalSource: nil, warnUnresolvedDeinit: false)
+    self.init(state: .Resolved(value), dispatch: .Unspecified, warnUnresolvedDeinit: false)
   }
 
   internal convenience init(error: Error) {
-    self.init(state: .Rejected(error), dispatch: .Unspecified, originalSource: nil, warnUnresolvedDeinit: false)
+    self.init(state: .Rejected(error), dispatch: .Unspecified, warnUnresolvedDeinit: false)
   }
 
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
   public convenience init(dispatch: DispatchMethod = .Unspecified, warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Unresolved, dispatch: dispatch, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+    self.init(state: .Unresolved, dispatch: dispatch, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  internal init(state: State<Value, Error>, dispatch: DispatchMethod, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
+  internal init(state: State<Value, Error>, dispatch: DispatchMethod, warnUnresolvedDeinit: Bool) {
     self.state = state
     self.dispatchMethod = dispatch
-    self.originalSource = originalSource
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
   }
 
@@ -178,29 +171,8 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
     switch state {
     case .Unresolved:
-      // Register with original source
-      // Only call handlers after original completes
-      if let originalSource = originalSource {
-        originalSource.registerHandler(dispatch) {
-
-          switch self.state {
-          case .Resolved(let value):
-            // Value is already available, call handler immediately
-            callHandlers(Result.Value(value), handlers: [(handler, dispatch)])
-
-          case .Rejected(let error):
-            // Error is already available, call handler immediately
-            callHandlers(Result.Error(error), handlers: [(handler, dispatch)])
-
-          case .Unresolved:
-            assertionFailure("callback should only be called if state is resolved or rejected")
-          }
-        }
-      }
-      else {
-        // Save handler for later
-        handlers.append(handler)
-      }
+      // Save handler for later
+      handlers.append(handler)
 
     case .Resolved(let value):
       // Value is already available, call handler immediately
