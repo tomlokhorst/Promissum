@@ -89,7 +89,7 @@ Note that it is often not needed to create a new Promise.
 If an existing Promise is available, transforming that using `map` or `flatMap` is often sufficient.
 
 */
-public class Promise<Value, Error> {
+public struct Promise<Value, Error> {
   private let source: PromiseSource<Value, Error>
 
 
@@ -98,14 +98,14 @@ public class Promise<Value, Error> {
   /// Initialize a resolved Promise with a value.
   ///
   /// Example: `Promise<Int, NoError>(value: 42)`
-  public convenience init(value: Value) {
+  public init(value: Value) {
     self.init(source: PromiseSource(value: value))
   }
 
   /// Initialize a rejected Promise with an error.
   ///
   /// Example: `Promise<Int, String>(error: "Oops")`
-  public convenience init(error: Error) {
+  public init(error: Error) {
     self.init(source: PromiseSource(error: error))
   }
 
