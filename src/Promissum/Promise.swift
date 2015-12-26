@@ -99,14 +99,14 @@ public struct Promise<Value, Error> {
   ///
   /// Example: `Promise<Int, NoError>(value: 42)`
   public init(value: Value) {
-    self.init(source: PromiseSource(value: value))
+    self.source = PromiseSource(value: value)
   }
 
   /// Initialize a rejected Promise with an error.
   ///
   /// Example: `Promise<Int, String>(error: "Oops")`
   public init(error: Error) {
-    self.init(source: PromiseSource(error: error))
+    self.source = PromiseSource(error: error)
   }
 
   internal init(source: PromiseSource<Value, Error>) {
