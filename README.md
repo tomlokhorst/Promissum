@@ -71,6 +71,9 @@ Listed below are some of the methods and functions provided this library. More d
 * `.flatMapError(transform: Error -> Promise<Value, NewError>)`  
   Returns the flattened result of mapping a function over the promise error.
 
+* `.dispatchOn(queue: dispatch_queue_t)`
+  Returns a new promise that will execute all callbacks on the specified dispatch_queue. See [dispatch queues](#dispatch-queues)
+
 
 ### Functions for dealing with Promises
 
@@ -88,6 +91,52 @@ Listed below are some of the methods and functions provided this library. More d
 
 * `whenAny(promises: [Promise<Value, Error>])`  
   Creates a Promise that resolves when any of the argument Promises resolves.
+
+
+Dispatch queues
+---------------
+
+Promises can call handlers on different threads or queues. Handlers are all closures supplied to methods like `.then`, `.trap`, `.map`, and `.flatMap`.
+
+If nothing else is specified, by default, all handlers will be called on the main queue.
+This way, you're free to update the UI, without having to worry about manually calling `dispatch_async`.
+
+However, it's easy to change the dispatch queue used by a promise. In one of two ways:
+
+1. Set the dispatch queue when creating a PromiseSource, e.g.:
+
+```swift
+let background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+let source = PromiseSource<Int, NoError>(dispatch: .OnQueue(background))
+source.promise
+  .then { x in
+    // Handler is called on background queue
+  }
+```
+
+2. Or, create a new promise using the `.dispatchOn` combinator:
+
+```swift
+let background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+somePromise()
+  .dispatchOn(background)
+  .then { x in
+    // Handler is called on background queue
+  }
+```
+
+For convenience, there's also `.dispatchMain` to move back to the main queue, after doing some work on a background queue:
+
+```swift
+let background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+somePromise()
+  .dispatchOn(background)
+  .map { expensiveComputation($0) }
+  .dispatchMain()
+  .then { x in
+    self.updateUi(x)
+  }
+```
 
 
 Installation
@@ -108,7 +157,7 @@ To integrate Promissum into your Xcode project using CocoaPods, specify it in yo
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'Promissum', '~> 0.3.0'
+pod 'Promissum'
 ```
 
 Then, run the following command:
@@ -121,6 +170,7 @@ $ pod install
 Releases
 --------
 
+ - **0.5.0** - 2016-??-?? - Add `dispatchOn` methods for dispatching on different queues
  - **0.4.0** - 2015-11-04 - Update Alamofire+Promise to Alamofire 3
  - **0.3.0** - 2015-09-11 - Swift 2 support, added custom error types
  - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
