@@ -47,68 +47,6 @@ class DispatchSynchronousTests: XCTestCase {
     }
   }
 
-  func testDispatchSyncAfterResolve() {
-    expectation(backgroundQueue) {
-      var calls = 0
-
-      let source = PromiseSource<Int, NSError>()
-
-      source.resolve(42)
-
-      source.promise
-        .dispatchSync()
-        .then { _ in
-          calls += 1
-        }
-
-      XCTAssertEqual(calls, 1, "handler should have been called synchronously on current thread")
-    }
-  }
-
-  func testDispatchSyncBeforeResolve() {
-    expectation(backgroundQueue) {
-      var calls = 0
-
-      let source = PromiseSource<Int, NSError>()
-
-      source.promise
-        .dispatchSync()
-        .then { _ in
-          calls += 1
-        }
-
-      source.resolve(42)
-
-      XCTAssertEqual(calls, 1, "handler should have been called synchronously on current thread")
-    }
-  }
-
-  func testSynchronousValue() {
-    expectation(backgroundQueue) {
-      var calls = 0
-
-      let p = Promise<Int, NSError>(value: 42)
-      p.then { _ in
-        calls += 1
-      }
-
-      XCTAssertEqual(calls, 1, "handler should have been called synchronously on current thread")
-    }
-  }
-
-  func testSynchronousError() {
-    expectation(backgroundQueue) {
-      var calls = 0
-
-      let p = Promise<Int, NSError>(error: NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
-      p.trap { _ in
-        calls += 1
-      }
-
-      XCTAssertEqual(calls, 1, "handler should have been called synchronously on current thread")
-    }
-  }
-
   func testSynchronousFinally() {
     expectation(backgroundQueue) {
       var calls = 0
@@ -196,7 +134,9 @@ class DispatchSynchronousTests: XCTestCase {
       p.flatMap { x -> Promise<Int, NSError> in
         calls += 1
 
-        return Promise(value: x).dispatchSync()
+        let s = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+        s.resolve(x + 1)
+        return s.promise // Promise(value: x + 1)
       }
       .then { _ in
         calls += 2
@@ -240,7 +180,9 @@ class DispatchSynchronousTests: XCTestCase {
       p.flatMap { x -> Promise<Int, NSError> in
         calls += 1
 
-        return Promise(value: x).dispatchSync()
+        let s = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+        s.resolve(x + 1)
+        return s.promise // Promise(value: x + 1)
       }
       .finally {
         calls += 2
