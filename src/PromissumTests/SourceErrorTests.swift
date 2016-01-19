@@ -37,7 +37,9 @@ class SourceErrorTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(error?.code == 42, "Error should be set")
+    expectation(p) {
+      XCTAssert(error?.code == 42, "Error should be set")
+    }
   }
 
   func testErrorMap() {
@@ -53,7 +55,9 @@ class SourceErrorTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testErrorFlatMapValue() {
@@ -69,7 +73,9 @@ class SourceErrorTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testErrorFlatMapError() {
@@ -85,7 +91,9 @@ class SourceErrorTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(error?.code == 43, "Error should be set")
+    expectation(p) {
+      XCTAssert(error?.code == 43, "Error should be set")
+    }
   }
 
   func testFinally() {
@@ -100,6 +108,8 @@ class SourceErrorTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(finally, "Finally should be set")
+    expectation(p) {
+      XCTAssert(finally, "Finally should be set")
+    }
   }
 }

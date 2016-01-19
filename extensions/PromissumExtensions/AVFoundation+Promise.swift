@@ -14,9 +14,7 @@ extension AVCaptureDevice {
     let source = PromiseSource<Bool, NoError>()
 
     self.requestAccessForMediaType(mediaType) { granted in
-      dispatch_async(dispatch_get_main_queue()) {
-        source.resolve(granted)
-      }
+      source.resolve(granted)
     }
 
     return source.promise

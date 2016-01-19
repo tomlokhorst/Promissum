@@ -8,11 +8,6 @@
 
 import Foundation
 
-// This Notifier is used to implement Promise.map
-internal protocol OriginalSource {
-  func registerHandler(handler: () -> Void)
-}
-
 /**
 ## Creating Promises
 
@@ -71,11 +66,11 @@ In that case, you must manually retain the PromiseSource, or the Promise will ne
 Note that `PromiseSource.deinit` by default will log a warning when an unresolved PromiseSource is deallocated.
 
 */
-public class PromiseSource<Value, Error> : OriginalSource {
+public class PromiseSource<Value, Error> {
   typealias ResultHandler = Result<Value, Error> -> Void
 
   private var handlers: [Result<Value, Error> -> Void] = []
-  private let originalSource: OriginalSource?
+  internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
   public var state: State<Value, Error>
@@ -85,18 +80,25 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
   // MARK: Initializers & deinit
 
+  internal convenience init(value: Value) {
+    self.init(state: .Resolved(value), dispatch: .Unspecified, warnUnresolvedDeinit: false)
+  }
+
+  internal convenience init(error: Error) {
+    self.init(state: .Rejected(error), dispatch: .Unspecified, warnUnresolvedDeinit: false)
+  }
+
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .Unresolved, originalSource: nil, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(dispatch: DispatchMethod = .Unspecified, warnUnresolvedDeinit: Bool = true) {
+    self.init(state: .Unresolved, dispatch: dispatch, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  internal init(state: State<Value, Error>, originalSource: OriginalSource?, warnUnresolvedDeinit: Bool) {
-    self.originalSource = originalSource
-    self.warnUnresolvedDeinit = warnUnresolvedDeinit
-
+  internal init(state: State<Value, Error>, dispatch: DispatchMethod, warnUnresolvedDeinit: Bool) {
     self.state = state
+    self.dispatchMethod = dispatch
+    self.warnUnresolvedDeinit = warnUnresolvedDeinit
   }
 
   deinit {
@@ -126,14 +128,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func resolve(value: Value) {
 
-    switch state {
-    case .Unresolved:
-      state = .Resolved(value)
-
-      executeResultHandlers(.Value(value))
-    default:
-      break
-    }
+    resolveResult(.Value(value))
   }
 
 
@@ -142,11 +137,16 @@ public class PromiseSource<Value, Error> : OriginalSource {
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func reject(error: Error) {
 
+    resolveResult(.Error(error))
+  }
+
+  internal func resolveResult(result: Result<Value, Error>) {
+
     switch state {
     case .Unresolved:
-      state = .Rejected(error)
+      state = result.state
 
-      executeResultHandlers(.Error(error))
+      executeResultHandlers(result)
     default:
       break
     }
@@ -155,7 +155,7 @@ public class PromiseSource<Value, Error> : OriginalSource {
   private func executeResultHandlers(result: Result<Value, Error>) {
 
     // Call all previously scheduled handlers
-    callHandlers(result, handlers: handlers)
+    callHandlers(result, handlers: handlers, dispatchMethod: dispatchMethod)
 
     // Cleanup
     handlers = []
@@ -163,51 +163,58 @@ public class PromiseSource<Value, Error> : OriginalSource {
 
   // MARK: Adding result handlers
 
-  internal func registerHandler(handler: () -> Void) {
-    addOrCallResultHandler({ _ in handler() })
-  }
-
   internal func addOrCallResultHandler(handler: Result<Value, Error> -> Void) {
 
     switch state {
     case .Unresolved:
-      // Register with original source
-      // Only call handlers after original completes
-      if let originalSource = originalSource {
-        originalSource.registerHandler {
-
-          switch self.state {
-          case .Resolved(let value):
-            // Value is already available, call handler immediately
-            callHandlers(Result.Value(value), handlers: [handler])
-
-          case .Rejected(let error):
-            // Error is already available, call handler immediately
-            callHandlers(Result.Error(error), handlers: [handler])
-
-          case .Unresolved:
-            assertionFailure("callback should only be called if state is resolved or rejected")
-          }
-        }
-      }
-      else {
-        // Save handler for later
-        handlers.append(handler)
-      }
+      // Save handler for later
+      handlers.append(handler)
 
     case .Resolved(let value):
       // Value is already available, call handler immediately
-      callHandlers(Result.Value(value), handlers: [handler])
+      callHandlers(Result.Value(value), handlers: [handler], dispatchMethod: dispatchMethod)
 
     case .Rejected(let error):
       // Error is already available, call handler immediately
-      callHandlers(Result.Error(error), handlers: [handler])
+      callHandlers(Result.Error(error), handlers: [handler], dispatchMethod: dispatchMethod)
     }
   }
 }
 
-internal func callHandlers<T>(arg: T, handlers: [T -> Void]) {
+internal func callHandlers<T>(value: T, handlers: [T -> Void], dispatchMethod: DispatchMethod) {
+
   for handler in handlers {
-    handler(arg)
+    switch dispatchMethod {
+    case .Unspecified:
+
+      if NSThread.isMainThread() {
+        handler(value)
+      }
+      else {
+        dispatch_async(dispatch_get_main_queue()) {
+          handler(value)
+        }
+      }
+
+    case .Synchronous:
+
+      handler(value)
+
+    case let .OnQueue(targetQueue):
+      let currentQueueLabel = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL))!
+      let targetQueueLabel = String(UTF8String: dispatch_queue_get_label(targetQueue))!
+
+      // Assume on correct queue if labels match, but be conservative if label is empty
+      let alreadyOnQueue = currentQueueLabel == targetQueueLabel && currentQueueLabel != ""
+
+      if alreadyOnQueue {
+        handler(value)
+      }
+      else {
+        dispatch_async(targetQueue) {
+          handler(value)
+        }
+      }
+    }
   }
 }

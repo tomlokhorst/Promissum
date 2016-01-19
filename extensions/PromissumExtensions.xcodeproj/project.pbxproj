@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20401271C2C05E600239770 /* DispatchMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20401261C2C05E600239770 /* DispatchMethod.swift */; };
 		E22010F41B88EC4800FAF379 /* AVFoundation+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22010F31B88EC4800FAF379 /* AVFoundation+Promise.swift */; };
 		E2218CD21A642966009FE208 /* UIKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2218CD11A642966009FE208 /* UIKit+Promise.swift */; };
 		E2406AFA1A5BBB8D000E5C78 /* PromissumExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2406AEE1A5BBB8D000E5C78 /* PromissumExtensions.framework */; };
@@ -53,6 +54,7 @@
 		5E6CC1C6B4D883A36C4F959D /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB348054543B08B297FEBDC /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BD862433C1160DF8DA29F6A3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		E20401261C2C05E600239770 /* DispatchMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchMethod.swift; sourceTree = "<group>"; };
 		E22010F31B88EC4800FAF379 /* AVFoundation+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVFoundation+Promise.swift"; sourceTree = "<group>"; };
 		E2218CD11A642966009FE208 /* UIKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+Promise.swift"; sourceTree = "<group>"; };
 		E2406AEE1A5BBB8D000E5C78 /* PromissumExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromissumExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +185,7 @@
 		E2857EED1B8DC09E00A9B97C /* Promissum */ = {
 			isa = PBXGroup;
 			children = (
+				E20401261C2C05E600239770 /* DispatchMethod.swift */,
 				E2857EEE1B8DC09E00A9B97C /* Combinators.swift */,
 				E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */,
 				E2857EF11B8DC09E00A9B97C /* Promise.swift */,
@@ -389,6 +392,7 @@
 				E2406B1F1A5BBD6E000E5C78 /* Alamofire+Promise.swift in Sources */,
 				E26288421A5F38DF0087390A /* TinyNetworking+Promise.swift in Sources */,
 				E22010F41B88EC4800FAF379 /* AVFoundation+Promise.swift in Sources */,
+				E20401271C2C05E600239770 /* DispatchMethod.swift in Sources */,
 				E2857EFB1B8DC09E00A9B97C /* State.swift in Sources */,
 				E2857EF91B8DC09E00A9B97C /* PromiseSource.swift in Sources */,
 				E2857EF61B8DC09E00A9B97C /* Delay+Promise.swift in Sources */,

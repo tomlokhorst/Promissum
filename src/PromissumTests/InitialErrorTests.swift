@@ -12,6 +12,12 @@ import Promissum
 
 let PromissumErrorDomain = "com.nonstrict.Promissum"
 
+extension NSError {
+  convenience init(code: Int) {
+    self.init(domain: PromissumErrorDomain, code: code, userInfo: nil)
+  }
+}
+
 class InitialErrorTests: XCTestCase {
 
   func testError() {
@@ -33,7 +39,9 @@ class InitialErrorTests: XCTestCase {
       error = e
     }
 
-    XCTAssert(error?.code == 42, "Error should be set")
+    expectation(p) {
+      XCTAssert(error?.code == 42, "Error should be set")
+    }
   }
 
   func testErrorMap() {
@@ -46,7 +54,9 @@ class InitialErrorTests: XCTestCase {
       value = x
     }
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testErrorFlatMap() {
@@ -59,7 +69,9 @@ class InitialErrorTests: XCTestCase {
       value = x
     }
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testErrorFlatMap2() {
@@ -72,7 +84,9 @@ class InitialErrorTests: XCTestCase {
       error = e
     }
 
-    XCTAssert(error?.code == 43, "Error should be set")
+    expectation(p) {
+      XCTAssert(error?.code == 43, "Error should be set")
+    }
   }
 
   func testFinally() {
@@ -84,6 +98,8 @@ class InitialErrorTests: XCTestCase {
       finally = true
     }
 
-    XCTAssert(finally, "Finally should be set")
+    expectation(p) {
+      XCTAssert(finally, "Finally should be set")
+    }
   }
 }

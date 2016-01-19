@@ -37,7 +37,9 @@ class SourceValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(value == 42, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 42, "Value should be set")
+    }
   }
 
   func testValueMap() {
@@ -53,7 +55,9 @@ class SourceValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testValueFlatMap() {
@@ -69,7 +73,9 @@ class SourceValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(value == 43, "Value should be set")
+    expectation(p) {
+      XCTAssert(value == 43, "Value should be set")
+    }
   }
 
   func testFinally() {
@@ -84,6 +90,8 @@ class SourceValueTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(finally, "Finally should be set")
+    expectation(p) {
+      XCTAssert(finally, "Finally should be set")
+    }
   }
 }

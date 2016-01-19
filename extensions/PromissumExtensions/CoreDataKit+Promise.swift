@@ -28,17 +28,15 @@ extension NSManagedObjectContext {
     let promiseSource = PromiseSource<CommitAction, CoreDataKitError>()
 
     performBlock(block) { result in
-      dispatch_async(dispatch_get_main_queue()) {
-        do {
-          let action = try result()
-          promiseSource.resolve(action)
-        }
-        catch let error as CoreDataKitError {
-            promiseSource.reject(error)
-        }
-        catch let error {
-          promiseSource.reject(CoreDataKitError.UnknownError(description: "\(error)"))
-        }
+      do {
+        let action = try result()
+        promiseSource.resolve(action)
+      }
+      catch let error as CoreDataKitError {
+          promiseSource.reject(error)
+      }
+      catch let error {
+        promiseSource.reject(CoreDataKitError.UnknownError(description: "\(error)"))
       }
     }
 

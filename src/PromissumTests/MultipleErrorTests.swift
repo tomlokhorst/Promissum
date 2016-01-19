@@ -27,7 +27,9 @@ class MultipleErrorTests: XCTestCase {
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssertEqual(calls, 2, "Calls should be 2")
+    expectation(p) {
+      XCTAssertEqual(calls, 2, "Calls should be 2")
+    }
   }
 
   func testValueMap() {
@@ -39,14 +41,18 @@ class MultipleErrorTests: XCTestCase {
     p.trap { _ in
       calls += 1
     }
-    p.mapError { $0.code + 1 }
+
+    let q = p
+      .mapError { $0.code + 1 }
       .trap { _ in
         calls += 1
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssertEqual(calls, 2, "Calls should be 2")
+    expectation(q) {
+      XCTAssertEqual(calls, 2, "Calls should be 2")
+    }
   }
 
   func testValueFlatMap() {
@@ -58,14 +64,18 @@ class MultipleErrorTests: XCTestCase {
     p.trap { _ in
       calls += 1
     }
-    p.flatMapError { Promise<Int, String>(value: $0.code + 1) }
+
+    let q = p
+      .flatMapError { Promise<Int, String>(value: $0.code + 1) }
       .then { _ in
         calls += 1
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    expectation(q) {
+      XCTAssert(calls == 2, "Calls should be 2")
+    }
   }
 
   func testValueFlatMap2() {
@@ -77,14 +87,18 @@ class MultipleErrorTests: XCTestCase {
     p.trap { _ in
       calls += 1
     }
-    p.flatMapError { Promise<Int, String>(error: "\($0.code + 1)")  }
+
+    let q = p
+      .flatMapError { Promise<Int, String>(error: "\($0.code + 1)")  }
       .trap { _ in
         calls += 1
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    expectation(q) {
+      XCTAssert(calls == 2, "Calls should be 2")
+    }
   }
 
   func testValueFlatMap3() {
@@ -98,7 +112,9 @@ class MultipleErrorTests: XCTestCase {
     p1.trap { _ in
       calls += 1
     }
-    p1.flatMapError { _ in p2 }
+
+    let q = p1
+      .flatMapError { _ in p2 }
       .then { _ in
         calls += 1
       }
@@ -106,7 +122,9 @@ class MultipleErrorTests: XCTestCase {
     source1.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
     source2.resolve(42)
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    expectation(q) {
+      XCTAssert(calls == 2, "Calls should be 2")
+    }
   }
 
   func testValueFlatMap4() {
@@ -120,7 +138,9 @@ class MultipleErrorTests: XCTestCase {
     p1.trap { _ in
       calls += 1
     }
-    p1.flatMapError { _ in p2 }
+
+    let q = p1
+      .flatMapError { _ in p2 }
       .trap { _ in
         calls += 1
       }
@@ -128,7 +148,9 @@ class MultipleErrorTests: XCTestCase {
     source1.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
     source2.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    expectation(q) {
+      XCTAssert(calls == 2, "Calls should be 2")
+    }
   }
 
   func testFinally() {
@@ -140,13 +162,17 @@ class MultipleErrorTests: XCTestCase {
     p.finally {
       calls += 1
     }
-    p.map { $0 + 1 }
+
+    let q = p
+      .map { $0 + 1 }
       .finally {
         calls += 1
       }
 
     source.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
 
-    XCTAssert(calls == 2, "Calls should be 2")
+    expectation(q) {
+      XCTAssert(calls == 2, "Calls should be 2")
+    }
   }
 }
