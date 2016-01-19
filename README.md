@@ -170,7 +170,7 @@ $ pod install
 Releases
 --------
 
- - **0.5.0** - 2016-??-?? - Add `dispatchOn` methods for dispatching on different queues
+ - **0.5.0** - 2016-01-19 - Add `dispatchOn` methods for dispatching on different queues
  - **0.4.0** - 2015-11-04 - Update Alamofire+Promise to Alamofire 3
  - **0.3.0** - 2015-09-11 - Swift 2 support, added custom error types
  - 0.2.4 - 2015-05-31 - Fixed examples. Updated CoreDataKit+Promise
