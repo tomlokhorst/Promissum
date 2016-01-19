@@ -271,28 +271,19 @@ public struct Promise<Value, Error> {
   }
 
 
-
   // MARK: Dispatch methods
 
+  /// Returns a Promise that dispatches its handlers on the specified dispatch queue.
   public func dispatchOn(queue: dispatch_queue_t) -> Promise<Value, Error> {
     return dispatchOn(.OnQueue(queue))
   }
 
-  public func dispatchSync() -> Promise<Value, Error> {
-    switch source.dispatchMethod {
-    case .Unspecified:
-      return dispatchOn(.Synchronous)
-
-    default:
-      return self
-    }
-  }
-
+  /// Returns a Promise that dispatches its handlers on the main dispatch queue.
   public func dispatchMain() -> Promise<Value, Error> {
     return dispatchOn(dispatch_get_main_queue())
   }
 
-  internal func dispatchOn(dispatch: DispatchMethod) -> Promise<Value, Error> {
+  private func dispatchOn(dispatch: DispatchMethod) -> Promise<Value, Error> {
     let resultSource = PromiseSource<Value, Error>(state: .Unresolved, dispatch: dispatch, warnUnresolvedDeinit: true)
 
     source.addOrCallResultHandler(resultSource.resolveResult)
