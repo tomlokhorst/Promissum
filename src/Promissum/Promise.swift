@@ -274,11 +274,13 @@ public struct Promise<Value, Error> {
   // MARK: Dispatch methods
 
   /// Returns a Promise that dispatches its handlers on the specified dispatch queue.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func dispatchOn(queue: dispatch_queue_t) -> Promise<Value, Error> {
     return dispatchOn(.OnQueue(queue))
   }
 
   /// Returns a Promise that dispatches its handlers on the main dispatch queue.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func dispatchMain() -> Promise<Value, Error> {
     return dispatchOn(dispatch_get_main_queue())
   }
@@ -295,6 +297,7 @@ public struct Promise<Value, Error> {
   // MARK: - Value combinators
 
   /// Return a Promise containing the results of mapping `transform` over the value of `self`.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func map<NewValue>(transform: Value -> NewValue) -> Promise<NewValue, Error> {
     let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
@@ -314,6 +317,7 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the value of `self`.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func flatMap<NewValue>(transform: Value -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
     let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
@@ -338,6 +342,7 @@ public struct Promise<Value, Error> {
   // MARK: Error combinators
 
   /// Return a Promise containing the results of mapping `transform` over the error of `self`.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func mapError<NewError>(transform: Error -> NewError) -> Promise<Value, NewError> {
     let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
@@ -357,6 +362,7 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the error of `self`.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func flatMapError<NewError>(transform: Error -> Promise<Value, NewError>) -> Promise<Value, NewError> {
     let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
@@ -380,6 +386,7 @@ public struct Promise<Value, Error> {
   // MARK: Result combinators
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func mapResult<NewValue, NewError>(transform: Result<Value, Error> -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
     let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
@@ -398,6 +405,7 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the result of `self`.
+  @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func flatMapResult<NewValue, NewError>(transform: Result<Value, Error> -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
     let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
