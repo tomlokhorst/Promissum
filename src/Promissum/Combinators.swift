@@ -163,7 +163,7 @@ extension Promise {
   }
 
   /// Returns a Promise where the value information is thrown away.
-  @available(*, deprecated, message="Use mapVoid")
+  @available(*, deprecated, renamed="mapVoid")
   @warn_unused_result(message="Forget to call `then` or `trap`?")
   public func void() -> Promise<Void, Error> {
     return self.mapVoid()
