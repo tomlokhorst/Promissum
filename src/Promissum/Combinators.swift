@@ -150,8 +150,14 @@ public func whenAnyFinalized<Value, Error>(promises: [Promise<Value, Error>]) ->
 extension Promise {
 
   /// Returns a Promise where the value information is thrown away.
-  public func void() -> Promise<Void, Error> {
+  public func mapVoid() -> Promise<Void, Error> {
     return self.map { _ in }
+  }
+
+  /// Returns a Promise where the value information is thrown away.
+  @available(*, deprecated, message="Use mapVoid")
+  public func void() -> Promise<Void, Error> {
+    return self.mapVoid()
   }
 }
 
