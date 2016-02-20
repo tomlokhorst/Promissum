@@ -6,6 +6,14 @@ Statham is a Json decoding library for Swift. It is used by the [JsonGen](https:
 This library has been used since 2014 for several high profile production apps at [Q42](http://q42.com/swift).
 
 
+# CocoaHeadsNL presentation
+
+Tom Lokhorst presented at the January 2016 CocoaHeadsNL meetup.
+Comparing several Json decoding libraries for Swift and talking about code generation with JsonGen.
+
+<a href="https://vimeo.com/152054122"><img src="https://i.vimeocdn.com/video/551951015.jpg?mw=960&mh=540" width="560"></a>
+
+
 Installation
 ------------
 
@@ -28,7 +36,7 @@ Releases
 --------
 
  - **0.4.0** - 2016-02-20 - Release as separate library
- - **0.1.0** - 2015-05-25 - Initial public release as part of JsonGen
+ - **0.1.0** - 2015-05-25 - Public release as part of JsonGen
  - 0.0.0 - 2014-10-11 - Initial private version for project at [Q42](http://q42.com)
 
 
