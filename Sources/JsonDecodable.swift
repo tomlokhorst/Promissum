@@ -8,11 +8,12 @@
 
 import Foundation
 
-class JsonDecoder {
-  var errors: [(String, JsonDecodeError)] = []
-  let dict: [String : AnyObject]
+public class JsonDecoder {
+  public var errors: [(String, JsonDecodeError)] = []
 
-  init(json: AnyObject) throws {
+  private let dict: [String : AnyObject]
+
+  public init(json: AnyObject) throws {
 
     guard let dict = json as? [String : AnyObject] else {
       self.dict = [:] // Init field, for Swift 2.0
@@ -22,7 +23,7 @@ class JsonDecoder {
     self.dict = dict
   }
 
-  func decode<T>(name: String, decoder: AnyObject throws -> T) throws -> T? {
+  public func decode<T>(name: String, decoder: AnyObject throws -> T) throws -> T? {
 
     if let field: AnyObject = dict[name] {
       do {
@@ -39,7 +40,7 @@ class JsonDecoder {
     return nil
   }
 
-  func decode<T>(name: String, decoder: AnyObject throws -> T?) throws -> T?? {
+  public func decode<T>(name: String, decoder: AnyObject throws -> T?) throws -> T?? {
 
     if let field: AnyObject = dict[name] {
       do {
