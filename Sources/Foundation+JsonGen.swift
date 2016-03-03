@@ -8,10 +8,6 @@
 
 import Foundation
 
-public typealias AnyJson = AnyObject
-public typealias JsonObject = [String: AnyJson]
-public typealias JsonArray = [AnyJson]
-
 extension String {
   public static func decodeJson(json: AnyObject) throws -> String {
     guard let result = json as? String else {
