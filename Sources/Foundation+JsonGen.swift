@@ -143,6 +143,10 @@ extension NSURL {
 extension Optional {
   public static func decodeJson(decodeWrapped: AnyObject throws -> Wrapped) -> AnyObject throws -> Wrapped? {
     return { json in
+      if json is NSNull {
+        return nil
+      }
+
       do {
         return try decodeWrapped(json)
       }
@@ -168,7 +172,7 @@ extension Array {
         throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Array")
       }
 
-      var errors: [Int: JsonDecodeError] = [:]
+      var errors: [(Int, JsonDecodeError)] = []
       var result: [Element] = []
 
       for (index, element) in arr.enumerate() {
@@ -176,7 +180,7 @@ extension Array {
           result.append(try decodeElement(element))
         }
         catch let error as JsonDecodeError {
-          errors[index] = error
+          errors.append((index, error))
         }
       }
 
@@ -200,7 +204,7 @@ extension Dictionary {
         throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Dictionary")
       }
 
-      var errors: [String: JsonDecodeError] = [:]
+      var errors: [(String, JsonDecodeError)] = []
       var result: [Key: Value] = [:]
 
       for (key, val) in dict {
@@ -208,7 +212,7 @@ extension Dictionary {
           result[key] = try decodeValue(val)
         }
         catch let error as JsonDecodeError {
-          errors["\(key)"] = error
+          errors.append(("\(key)", error))
         }
       }
 

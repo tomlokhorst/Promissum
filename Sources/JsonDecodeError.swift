@@ -12,9 +12,9 @@ public enum JsonDecodeError : ErrorType {
   case MissingField
   case WrongType(rawValue: AnyObject, expectedType: String)
   case WrongEnumRawValue(rawValue: AnyObject, enumType: String)
-  case ArrayElementErrors([Int: JsonDecodeError])
-  case DictionaryErrors([String: JsonDecodeError])
-  case StructErrors(type: String, errors: [String: JsonDecodeError])
+  case ArrayElementErrors([(Int, JsonDecodeError)])
+  case DictionaryErrors([(String, JsonDecodeError)])
+  case StructErrors(type: String, errors: [(String, JsonDecodeError)])
 }
 
 extension JsonDecodeError: CustomStringConvertible {

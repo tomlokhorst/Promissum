@@ -9,7 +9,7 @@
 import Foundation
 
 class JsonDecoder {
-  var errors: [String: JsonDecodeError] = [:]
+  var errors: [(String, JsonDecodeError)] = []
   let dict: [String : AnyObject]
 
   init(json: AnyObject) throws {
@@ -29,11 +29,11 @@ class JsonDecoder {
         return try decoder(field)
       }
       catch let error as JsonDecodeError {
-        errors[name] = error
+        errors.append((name, error))
       }
     }
     else {
-      errors[name] = JsonDecodeError.MissingField
+      errors.append((name, JsonDecodeError.MissingField))
     }
 
     return nil
@@ -41,18 +41,18 @@ class JsonDecoder {
 
   func decode<T>(name: String, decoder: AnyObject throws -> T?) throws -> T?? {
 
-    if let field: AnyObject = dict[name] where !(field is NSNull) {
+    if let field: AnyObject = dict[name] {
       do {
         return try decoder(field)
       }
       catch let error as JsonDecodeError {
-        errors[name] = error
+        errors.append((name, error))
       }
     }
     else {
       return .Some(nil)
     }
-    
+
     return nil
   }
 }
