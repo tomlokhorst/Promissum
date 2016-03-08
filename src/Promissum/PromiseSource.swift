@@ -73,7 +73,7 @@ public class PromiseSource<Value, Error> {
   internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
-  public var state: State<Value, Error>
+  private(set) public var state: State<Value, Error>
 
   /// Print a warning on deinit of an unresolved PromiseSource
   public var warnUnresolvedDeinit: Bool
