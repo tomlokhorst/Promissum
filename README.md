@@ -35,6 +35,7 @@ $ pod install
 Releases
 --------
 
+ - 0.6.1 - 2016-03-14 - Add JsonArray docodeJson & encodeJson
  - **0.6.0** - 2016-03-03 - Release as separate library
  - **0.1.0** - 2015-05-25 - Public release as part of JsonGen
  - 0.0.0 - 2014-10-11 - Initial private version for project at [Q42](http://q42.com)
