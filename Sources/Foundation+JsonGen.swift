@@ -236,7 +236,7 @@ extension Dictionary {
   }
 }
 
-// JsonObject.decodeJson
+// JsonObject
 extension SequenceType where Generator.Element == (String, AnyObject) {
   public static func decodeJson(json: AnyObject) throws -> JsonObject {
     guard let result = json as? JsonObject else {
@@ -254,5 +254,20 @@ extension SequenceType where Generator.Element == (String, AnyObject) {
     }
 
     return dict
+  }
+}
+
+// JsonArray
+extension SequenceType where Generator.Element == AnyObject {
+  public static func decodeJson(json: AnyObject) throws -> JsonArray {
+    guard let result = json as? JsonArray else {
+      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "JsonArray")
+    }
+
+    return result
+  }
+
+  public func encodeJson() -> [AnyObject] {
+    return Array(self)
   }
 }
