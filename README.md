@@ -25,6 +25,12 @@ Specify Statham in your Podfile:
 pod 'Statham'
 ```
 
+Alternatively, if you also want the ISO8601 NSDate decoder, use this subspec: 
+
+```ruby
+pod 'Statham/NSDate-iso8601'
+```
+
 Then, run the following command:
 
 ```bash
