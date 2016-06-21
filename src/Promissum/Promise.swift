@@ -122,7 +122,7 @@ public struct Promise<Value, Error> {
   /// In most situations it is recommended to register a handler with `then` method instead of directly using this property.
   public var value: Value? {
     switch source.state {
-    case .Resolved(let value):
+    case .resolved(let value):
       return value
     default:
       return nil
@@ -135,7 +135,7 @@ public struct Promise<Value, Error> {
   /// In most situations it is recommended to register a handler with `trap` method instead of directly using this property.
   public var error: Error? {
     switch source.state {
-    case .Rejected(let error):
+    case .rejected(let error):
       return error
     default:
       return nil
@@ -148,9 +148,9 @@ public struct Promise<Value, Error> {
   /// In most situations it is recommended to register a handler with `finallyResult` method instead of directly using this property.
   public var result: Result<Value, Error>? {
     switch source.state {
-    case .Resolved(let boxed):
+    case .resolved(let boxed):
       return .Value(boxed)
-    case .Rejected(let boxed):
+    case .rejected(let boxed):
       return .Error(boxed)
     default:
       return nil
@@ -174,9 +174,10 @@ public struct Promise<Value, Error> {
   /// ## Dispatch queue
   /// The handler is synchronously called on the current thread when Promise is already Resolved.
   /// Or, when Promise is resolved later on, the handler is called synchronously on the thread where `PromiseSource.resolve` is called.
-  public func then(handler: Value -> Void) -> Promise<Value, Error> {
+  @discardableResult
+  public func then(_ handler: (Value) -> Void) -> Promise<Value, Error> {
 
-    let resultHandler: Result<Value, Error> -> Void = { result in
+    let resultHandler: (Result<Value, Error>) -> Void = { result in
       switch result {
       case .Value(let value):
         handler(value)
@@ -204,9 +205,10 @@ public struct Promise<Value, Error> {
   /// ## Dispatch queue
   /// The handler is synchronously called on the current thread when Promise is already Rejected.
   /// Or, when Promise is rejected later on, the handler is called synchronously on the thread where `PromiseSource.reject` is called.
-  public func trap(handler: Error -> Void) -> Promise<Value, Error> {
+  @discardableResult
+  public func trap(_ handler: (Error) -> Void) -> Promise<Value, Error> {
 
-    let resultHandler: Result<Value, Error> -> Void = { result in
+    let resultHandler: (Result<Value, Error>) -> Void = { result in
       switch result {
       case .Value:
         break
@@ -236,9 +238,10 @@ public struct Promise<Value, Error> {
   /// The handler is synchronously called on the current thread when Promise is already Resolved or Rejected.
   /// Or, when Promise is resolved or rejected later on,
   /// the handler is called synchronously on the thread where `PromiseSource.resolve` or `PromiseSource.reject` is called.
-  public func finally(handler: () -> Void) -> Promise<Value, Error> {
+  @discardableResult
+  public func finally(_ handler: () -> Void) -> Promise<Value, Error> {
 
-    let resultHandler: Result<Value, Error> -> Void = { _ in
+    let resultHandler: (Result<Value, Error>) -> Void = { _ in
       handler()
     }
 
@@ -263,7 +266,8 @@ public struct Promise<Value, Error> {
   /// The handler is synchronously called on the current thread when Promise is already Resolved or Rejected.
   /// Or, when Promise is resolved or rejected later on,
   /// the handler is called synchronously on the thread where `PromiseSource.resolve` or `PromiseSource.reject` is called.
-  public func finallyResult(handler: Result<Value, Error> -> Void) -> Promise<Value, Error> {
+  @discardableResult
+  public func finallyResult(_ handler: (Result<Value, Error>) -> Void) -> Promise<Value, Error> {
 
     source.addOrCallResultHandler(handler)
 
@@ -274,19 +278,19 @@ public struct Promise<Value, Error> {
   // MARK: Dispatch methods
 
   /// Returns a Promise that dispatches its handlers on the specified dispatch queue.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func dispatchOn(queue: dispatch_queue_t) -> Promise<Value, Error> {
-    return dispatchOn(.OnQueue(queue))
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func dispatchOn(_ queue: DispatchQueue) -> Promise<Value, Error> {
+    return dispatchOn(.onQueue(queue))
   }
 
   /// Returns a Promise that dispatches its handlers on the main dispatch queue.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
   public func dispatchMain() -> Promise<Value, Error> {
-    return dispatchOn(dispatch_get_main_queue())
+    return dispatchOn(DispatchQueue.main)
   }
 
-  private func dispatchOn(dispatch: DispatchMethod) -> Promise<Value, Error> {
-    let resultSource = PromiseSource<Value, Error>(state: .Unresolved, dispatch: dispatch, warnUnresolvedDeinit: true)
+  private func dispatchOn(_ dispatch: DispatchMethod) -> Promise<Value, Error> {
+    let resultSource = PromiseSource<Value, Error>(state: .unresolved, dispatch: dispatch, warnUnresolvedDeinit: true)
 
     source.addOrCallResultHandler(resultSource.resolveResult)
 
@@ -297,11 +301,11 @@ public struct Promise<Value, Error> {
   // MARK: - Value combinators
 
   /// Return a Promise containing the results of mapping `transform` over the value of `self`.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func map<NewValue>(transform: Value -> NewValue) -> Promise<NewValue, Error> {
-    let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func map<NewValue>(_ transform: (Value) -> NewValue) -> Promise<NewValue, Error> {
+    let resultSource = PromiseSource<NewValue, Error>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
-    let handler: Result<Value, Error> -> Void = { result in
+    let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
       case .Value(let value):
         let transformed = transform(value)
@@ -317,11 +321,11 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the value of `self`.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func flatMap<NewValue>(transform: Value -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
-    let resultSource = PromiseSource<NewValue, Error>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func flatMap<NewValue>(_ transform: (Value) -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
+    let resultSource = PromiseSource<NewValue, Error>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
-    let handler: Result<Value, Error> -> Void = { result in
+    let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
       case .Value(let value):
         let transformedPromise = transform(value)
@@ -342,11 +346,11 @@ public struct Promise<Value, Error> {
   // MARK: Error combinators
 
   /// Return a Promise containing the results of mapping `transform` over the error of `self`.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func mapError<NewError>(transform: Error -> NewError) -> Promise<Value, NewError> {
-    let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func mapError<NewError>(_ transform: (Error) -> NewError) -> Promise<Value, NewError> {
+    let resultSource = PromiseSource<Value, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
-    let handler: Result<Value, Error> -> Void = { result in
+    let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
       case .Value(let value):
         resultSource.resolve(value)
@@ -362,11 +366,11 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the error of `self`.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func flatMapError<NewError>(transform: Error -> Promise<Value, NewError>) -> Promise<Value, NewError> {
-    let resultSource = PromiseSource<Value, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func flatMapError<NewError>(_ transform: (Error) -> Promise<Value, NewError>) -> Promise<Value, NewError> {
+    let resultSource = PromiseSource<Value, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
-    let handler: Result<Value, Error> -> Void = { result in
+    let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
       case .Value(let value):
         resultSource.resolve(value)
@@ -386,11 +390,11 @@ public struct Promise<Value, Error> {
   // MARK: Result combinators
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func mapResult<NewValue, NewError>(transform: Result<Value, Error> -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
-    let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func mapResult<NewValue, NewError>(_ transform: (Result<Value, Error>) -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
+    let resultSource = PromiseSource<NewValue, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
-    let handler: Result<Value, Error> -> Void = { result in
+    let handler: (Result<Value, Error>) -> Void = { result in
       switch transform(result) {
       case .Value(let value):
         resultSource.resolve(value)
@@ -405,11 +409,11 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the result of `self`.
-  @warn_unused_result(message="Forget to call `then` or `trap`?")
-  public func flatMapResult<NewValue, NewError>(transform: Result<Value, Error> -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
-    let resultSource = PromiseSource<NewValue, NewError>(state: .Unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
+  @warn_unused_result(message:"Forget to call `then` or `trap`?")
+  public func flatMapResult<NewValue, NewError>(_ transform: (Result<Value, Error>) -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
+    let resultSource = PromiseSource<NewValue, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
-    let handler: Result<Value, Error> -> Void = { result in
+    let handler: (Result<Value, Error>) -> Void = { result in
       let transformedPromise = transform(result)
       transformedPromise
         .then(resultSource.resolve)

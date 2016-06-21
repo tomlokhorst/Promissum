@@ -9,14 +9,14 @@
 import Foundation
 
 /// Wrapper around `dispatch_after`, with a seconds parameter.
-public func delay(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue(), block: dispatch_block_t!) {
-  let when = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
+public func delay(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue.main, execute: () -> Void) {
+  let when = DispatchTime.now() + seconds
 
-  dispatch_after(when, queue, block)
+  queue.after(when: when, execute: execute)
 }
 
 /// Create a Promise that resolves with the specified value after the specified number of seconds.
-public func delayPromise<Value, Error>(seconds: NSTimeInterval, value: Value, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Value, Error> {
+public func delayPromise<Value, Error>(_ seconds: TimeInterval, value: Value, queue: DispatchQueue! = DispatchQueue.main) -> Promise<Value, Error> {
   let source = PromiseSource<Value, Error>()
 
   delay(seconds, queue: queue) {
@@ -27,7 +27,7 @@ public func delayPromise<Value, Error>(seconds: NSTimeInterval, value: Value, qu
 }
 
 /// Create a Promise that rejects with the specified error after the specified number of seconds.
-public func delayErrorPromise<Value, Error>(seconds: NSTimeInterval, error: Error, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Value, Error> {
+public func delayErrorPromise<Value, Error>(_ seconds: TimeInterval, error: Error, queue: DispatchQueue! = DispatchQueue.main) -> Promise<Value, Error> {
   let source = PromiseSource<Value, Error>()
 
   delay(seconds, queue: queue) {
@@ -38,14 +38,14 @@ public func delayErrorPromise<Value, Error>(seconds: NSTimeInterval, error: Erro
 }
 
 /// Create a Promise that resolves after the specified number of seconds.
-public func delayPromise<Error>(seconds: NSTimeInterval, queue: dispatch_queue_t! = dispatch_get_main_queue()) -> Promise<Void, Error> {
+public func delayPromise<Error>(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue.main) -> Promise<Void, Error> {
   return delayPromise(seconds, value: (), queue: queue)
 }
 
 extension Promise {
 
   /// Return a Promise with the resolve or reject delayed by the specified number of seconds.
-  public func delay(seconds: NSTimeInterval) -> Promise<Value, Error> {
+  public func delay(_ seconds: TimeInterval) -> Promise<Value, Error> {
     return self
       .flatMap { value in
         return delayPromise(seconds).map { value }

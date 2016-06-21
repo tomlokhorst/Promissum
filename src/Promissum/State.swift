@@ -9,24 +9,24 @@
 import Foundation
 
 /// Type used when there is no error possible.
-public enum NoError : ErrorType {}
+public enum NoError : ErrorProtocol {}
 
 /// State of a PromiseSource.
 public enum State<Value, Error> {
-  case Unresolved
-  case Resolved(Value)
-  case Rejected(Error)
+  case unresolved
+  case resolved(Value)
+  case rejected(Error)
 }
 
 extension State: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .Unresolved:
+    case .unresolved:
       return "Unresolved"
-    case .Resolved(let value):
+    case .resolved(let value):
       return "Resolved(\(value))"
-    case .Rejected(let error):
+    case .rejected(let error):
       return "Rejected(\(error))"
     }
   }

@@ -36,9 +36,9 @@ public enum Result<TValue, TError> {
   internal var state: State<TValue, TError> {
     switch self {
     case .Value(let boxed):
-      return .Resolved(boxed)
+      return .resolved(boxed)
     case .Error(let error):
-      return .Rejected(error)
+      return .rejected(error)
     }
   }
 }
