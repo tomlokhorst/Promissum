@@ -9,54 +9,56 @@
 import XCTest
 import Promissum
 
-func dispatch_current_queue_name() -> String {
-  return String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL))!
+extension DispatchQueue {
+  class var currentLabel: String {
+    return String(cString: __dispatch_queue_get_label(nil))
+  }
 }
 
 extension XCTestCase {
 
-  func expectation<V, E>(p: Promise<V, E>, handler: () -> Void) {
+  func expectation<V, E>(_ p: Promise<V, E>, handler: () -> Void) {
 
-    let ex = expectationWithDescription("Promise didn't finish")
+    let ex = self.expectation(withDescription: "Promise didn't finish")
     p.finally {
       handler()
       ex.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.1, handler: nil)
+    waitForExpectations(withTimeout: 0.1, handler: nil)
   }
 
   @nonobjc
-  func expectation(queue: dispatch_queue_t, handler: () -> Void) {
+  func expectation(_ queue: DispatchQueue, handler: () -> Void) {
 
-    let ex = expectationWithDescription("Dispatch queue")
+    let ex = self.expectation(withDescription: "Dispatch queue")
 
-    dispatch_async(queue) {
+    queue.async {
       handler()
       ex.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.1, handler: nil)
+    waitForExpectations(withTimeout: 0.1, handler: nil)
   }
 
   @nonobjc
-  func expectationQueue(queue: dispatch_queue_t, handler: XCTestExpectation -> Void) {
+  func expectationQueue(_ queue: DispatchQueue, handler: (XCTestExpectation) -> Void) {
 
-    let ex1 = expectationWithDescription("Dispatch queue")
-    let ex2 = expectationWithDescription("Dispatch queue")
+    let ex1 = self.expectation(withDescription: "Dispatch queue")
+    let ex2 = self.expectation(withDescription: "Dispatch queue")
 
-    dispatch_async(queue) {
+    queue.async {
       handler(ex1)
       ex2.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.1, handler: nil)
+    waitForExpectations(withTimeout: 0.1, handler: nil)
   }
 
   @nonobjc
-  func dispatch(queue: dispatch_queue_t, expectation: XCTestExpectation, handler: () -> Void) {
+  func dispatch(_ queue: DispatchQueue, expectation: XCTestExpectation, handler: () -> Void) {
 
-    dispatch_async(queue) {
+    queue.async {
       handler()
       expectation.fulfill()
     }

@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import Promissum
 
-let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+let backgroundQueue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground)
 
 class DispatchSynchronousTests: XCTestCase {
 
@@ -18,7 +18,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
       p.then { _ in
         calls += 1
@@ -34,7 +34,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
 
       source.resolve(42)
 
@@ -51,7 +51,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.finally {
@@ -68,7 +68,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.map { x -> Int in
@@ -87,7 +87,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.flatMap { x -> Promise<Int, NSError> in
@@ -106,7 +106,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.map { x -> Int in
@@ -128,13 +128,13 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.flatMap { x -> Promise<Int, NSError> in
         calls += 1
 
-        let s = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+        let s = PromiseSource<Int, NSError>(dispatch: .synchronous)
         s.resolve(x + 1)
         return s.promise // Promise(value: x + 1)
       }
@@ -152,7 +152,7 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.map { x -> Int in
@@ -174,13 +174,13 @@ class DispatchSynchronousTests: XCTestCase {
     expectation(backgroundQueue) {
       var calls = 0
 
-      let source = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+      let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
       p.flatMap { x -> Promise<Int, NSError> in
         calls += 1
 
-        let s = PromiseSource<Int, NSError>(dispatch: .Synchronous)
+        let s = PromiseSource<Int, NSError>(dispatch: .synchronous)
         s.resolve(x + 1)
         return s.promise // Promise(value: x + 1)
       }

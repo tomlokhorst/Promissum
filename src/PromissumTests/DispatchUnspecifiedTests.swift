@@ -23,7 +23,7 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     source.resolve(42)
 
-    XCTAssert(NSThread.isMainThread(), "Should be running on main thread")
+    XCTAssert(Thread.isMainThread(), "Should be running on main thread")
     XCTAssertEqual(calls, 1, "Tests are run on main thread, handler should have been resolved synchronously.")
   }
 
@@ -37,10 +37,10 @@ class DispatchUnspecifiedTests: XCTestCase {
     }
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-      XCTAssert(!NSThread.isMainThread(), "Shouldn't be running on main thread")
+    DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUserInitiated).async {
+      XCTAssert(!Thread.isMainThread(), "Shouldn't be running on main thread")
 
       source.resolve(42)
 
@@ -48,7 +48,7 @@ class DispatchUnspecifiedTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedResolved() {
@@ -56,19 +56,19 @@ class DispatchUnspecifiedTests: XCTestCase {
     let p = Promise<Int, NSError>(value: 42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
 
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-      XCTAssert(!NSThread.isMainThread(), "Shouldn't be running on main thread")
+    DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUserInitiated).async {
+      XCTAssert(!Thread.isMainThread(), "Shouldn't be running on main thread")
 
       p.then { _ in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         expectation.fulfill()
       }
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedThen() {
@@ -78,21 +78,21 @@ class DispatchUnspecifiedTests: XCTestCase {
     let p = source.promise
 
     p.then { _ in
-      XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+      XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
       calls += 1
     }
 
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     p.finally {
-      XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+      XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
       XCTAssertEqual(calls, 1, "Calls should be 1")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedFinally() {
@@ -102,21 +102,21 @@ class DispatchUnspecifiedTests: XCTestCase {
     let p = source.promise
 
     p.finally {
-      XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+      XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
       calls += 1
     }
 
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     p.finally {
-      XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+      XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
       XCTAssertEqual(calls, 1, "Calls should be 1")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedMap() {
@@ -127,7 +127,7 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     let q: Promise<Int, NSError> = p
       .map { x in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
 
         return x
@@ -136,13 +136,13 @@ class DispatchUnspecifiedTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     q.finally {
       XCTAssertEqual(calls, 1, "Calls should be 1")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedFlatMap() {
@@ -153,7 +153,7 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     let q: Promise<Int, NSError> = p
       .flatMap { x in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
 
         return Promise(value: x)
@@ -162,13 +162,13 @@ class DispatchUnspecifiedTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     q.finally {
       XCTAssertEqual(calls, 1, "Calls should be 1")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedMapThen() {
@@ -179,26 +179,26 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     let q: Promise<Int, NSError> = p
       .map { x in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
 
         return x
       }
       .then { _ in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
       }
 
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     q.finally {
       XCTAssertEqual(calls, 2, "Calls should be 2")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedFlatMapThen() {
@@ -209,26 +209,26 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     let q: Promise<Int, NSError> = p
       .flatMap { x in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
 
         return Promise(value: x)
       }
       .then { _ in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
       }
 
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     q.finally {
       XCTAssertEqual(calls, 2, "Calls should be 2")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedMapFinally() {
@@ -239,26 +239,26 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     let q: Promise<Int, NSError> = p
       .map { x in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
 
         return x
       }
       .finally {
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
       }
 
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     q.finally {
       XCTAssertEqual(calls, 2, "Calls should be 2")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 
   func testUnspecifiedFlatMapFinally() {
@@ -269,25 +269,25 @@ class DispatchUnspecifiedTests: XCTestCase {
 
     let q: Promise<Int, NSError> = p
       .flatMap { x in
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
 
         return Promise(value: x)
       }
       .finally {
-        XCTAssert(NSThread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
         calls += 1
       }
 
     source.resolve(42)
 
     // Check assertions
-    let expectation = expectationWithDescription("Promise didn't finish")
+    let expectation = self.expectation(withDescription: "Promise didn't finish")
     q.finally {
       XCTAssertEqual(calls, 2, "Calls should be 2")
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(0.03, handler: nil)
+    waitForExpectations(withTimeout: 0.03, handler: nil)
   }
 }
