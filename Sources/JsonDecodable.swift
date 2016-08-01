@@ -16,14 +16,13 @@ public class JsonDecoder {
   public init(json: AnyObject) throws {
 
     guard let dict = json as? [String : AnyObject] else {
-      self.dict = [:] // Init field, for Swift 2.0
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Object")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Object")
     }
 
     self.dict = dict
   }
 
-  public func decode<T>(name: String, decoder: AnyObject throws -> T) throws -> T? {
+  public func decode<T>(_ name: String, decoder: (AnyObject) throws -> T) throws -> T? {
 
     if let field: AnyObject = dict[name] {
       do {
@@ -34,13 +33,13 @@ public class JsonDecoder {
       }
     }
     else {
-      errors.append((name, JsonDecodeError.MissingField))
+      errors.append((name, JsonDecodeError.missingField))
     }
 
     return nil
   }
 
-  public func decode<T>(name: String, decoder: AnyObject throws -> T?) throws -> T?? {
+  public func decode<T>(_ name: String, decoder: (AnyObject) throws -> T?) throws -> T?? {
 
     if let field: AnyObject = dict[name] {
       do {
@@ -51,7 +50,7 @@ public class JsonDecoder {
       }
     }
     else {
-      return .Some(nil)
+      return .some(nil)
     }
 
     return nil

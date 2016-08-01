@@ -9,9 +9,9 @@
 import Foundation
 
 extension String {
-  public static func decodeJson(json: AnyObject) throws -> String {
+  public static func decodeJson(_ json: AnyObject) throws -> String {
     guard let result = json as? String else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "String")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "String")
     }
 
     return result
@@ -23,9 +23,9 @@ extension String {
 }
 
 extension Bool {
-  public static func decodeJson(json: AnyObject) throws -> Bool {
+  public static func decodeJson(_ json: AnyObject) throws -> Bool {
     guard let result = json as? Bool else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Bool")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Bool")
     }
 
     return result
@@ -37,9 +37,9 @@ extension Bool {
 }
 
 extension Int {
-  public static func decodeJson(json: AnyObject) throws -> Int {
+  public static func decodeJson(_ json: AnyObject) throws -> Int {
     guard let result = json as? Int else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Int")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Int")
     }
 
     return result
@@ -51,9 +51,9 @@ extension Int {
 }
 
 extension UInt {
-  public static func decodeJson(json: AnyObject) throws -> UInt {
+  public static func decodeJson(_ json: AnyObject) throws -> UInt {
     guard let result = json as? UInt else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "UInt")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "UInt")
     }
 
     return result
@@ -65,23 +65,23 @@ extension UInt {
 }
 
 extension Int64 {
-  public static func decodeJson(json: AnyObject) throws -> Int64 {
+  public static func decodeJson(_ json: AnyObject) throws -> Int64 {
     guard let number = json as? NSNumber else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Int64")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Int64")
     }
 
-    return number.longLongValue
+    return number.int64Value
   }
 
   public func encodeJson() -> NSNumber {
-    return NSNumber(longLong: self)
+    return NSNumber(value: self)
   }
 }
 
 extension Float {
-  public static func decodeJson(json : AnyObject) throws -> Float {
+  public static func decodeJson(_ json : AnyObject) throws -> Float {
     guard let number = json as? NSNumber else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Float")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Float")
     }
 
     return number.floatValue
@@ -93,9 +93,9 @@ extension Float {
 }
 
 extension Double {
-  public static func decodeJson(json : AnyObject) throws -> Double {
+  public static func decodeJson(_ json : AnyObject) throws -> Double {
     guard let number = json as? NSNumber else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Double")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Double")
     }
 
     return number.doubleValue
@@ -107,9 +107,9 @@ extension Double {
 }
 
 extension NSDictionary {
-  public static func decodeJson(json: AnyObject) throws -> NSDictionary {
+  public static func decodeJson(_ json: AnyObject) throws -> NSDictionary {
     guard let result = json as? NSDictionary else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "NSDictionary")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "NSDictionary")
     }
 
     return result
@@ -120,12 +120,12 @@ extension NSDictionary {
   }
 }
 
-extension NSURL {
-  public static func decodeJson(json: AnyObject) throws -> NSURL {
+extension URL {
+  public static func decodeJson(_ json: AnyObject) throws -> URL {
     guard let str = json as? String,
-      let result = NSURL(string: str)
+      let result = URL(string: str)
       else {
-        throw JsonDecodeError.WrongType(rawValue: json, expectedType: "NSURL")
+        throw JsonDecodeError.wrongType(rawValue: json, expectedType: "NSURL")
     }
 
     return result
@@ -137,7 +137,7 @@ extension NSURL {
 }
 
 extension Optional {
-  public static func decodeJson(decodeWrapped: AnyObject throws -> Wrapped) -> AnyObject throws -> Wrapped? {
+  public static func decodeJson(_ decodeWrapped: (AnyObject) throws -> Wrapped) -> (AnyObject) throws -> Wrapped? {
     return { json in
       if json is NSNull {
         return nil
@@ -147,8 +147,8 @@ extension Optional {
         return try decodeWrapped(json)
       }
       catch let error as JsonDecodeError {
-        if case let .WrongType(rawValue: rawValue, expectedType: expectedType) = error {
-          throw JsonDecodeError.WrongType(rawValue: rawValue, expectedType: "\(expectedType)?")
+        if case let .wrongType(rawValue: rawValue, expectedType: expectedType) = error {
+          throw JsonDecodeError.wrongType(rawValue: rawValue, expectedType: "\(expectedType)?")
         }
 
         throw error
@@ -156,22 +156,22 @@ extension Optional {
     }
   }
 
-  public func encodeJson(encodeJsonWrapped: Wrapped -> AnyObject) -> AnyObject {
+  public func encodeJson(_ encodeJsonWrapped: (Wrapped) -> AnyObject) -> AnyObject {
     return self.map(encodeJsonWrapped) ?? NSNull()
   }
 }
 
 extension Array {
-  public static func decodeJson(decodeElement: AnyObject throws -> Element) -> AnyObject throws -> [Element] {
+  public static func decodeJson(_ decodeElement: (AnyObject) throws -> Element) -> (AnyObject) throws -> [Element] {
     return { json in
       guard let arr = json as? [AnyObject] else {
-        throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Array")
+        throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Array")
       }
 
       var errors: [(Int, JsonDecodeError)] = []
       var result: [Element] = []
 
-      for (index, element) in arr.enumerate() {
+      for (index, element) in arr.enumerated() {
         do {
           result.append(try decodeElement(element))
         }
@@ -181,23 +181,23 @@ extension Array {
       }
 
       if errors.count > 0 {
-        throw JsonDecodeError.ArrayElementErrors(errors)
+        throw JsonDecodeError.arrayElementErrors(errors)
       }
 
       return result
     }
   }
 
-  public func encodeJson(encodeJsonElement: Element -> AnyObject) -> [AnyObject] {
+  public func encodeJson(_ encodeJsonElement: (Element) -> AnyObject) -> [AnyObject] {
     return self.map(encodeJsonElement)
   }
 }
 
 extension Dictionary {
-  public static func decodeJson(decodeKey: AnyObject throws -> Key, _ decodeValue: AnyObject throws -> Value) -> AnyObject throws -> [Key: Value] {
+  public static func decodeJson(_ decodeKey: (AnyObject) throws -> Key, _ decodeValue: (AnyObject) throws -> Value) -> (AnyObject) throws -> [Key: Value] {
     return { json in
       guard let dict = json as? [Key: AnyObject] else {
-        throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Dictionary")
+        throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Dictionary")
       }
 
       var errors: [(String, JsonDecodeError)] = []
@@ -213,14 +213,14 @@ extension Dictionary {
       }
 
       if errors.count > 0 {
-        throw JsonDecodeError.DictionaryErrors(errors)
+        throw JsonDecodeError.dictionaryErrors(errors)
       }
 
       return result
     }
   }
 
-  public func encodeJson(encodeJsonKey: Key -> String, _ encodeJsonValue: Value -> AnyObject) -> [String: AnyObject] {
+  public func encodeJson(_ encodeJsonKey: (Key) -> String, _ encodeJsonValue: (Value) -> AnyObject) -> [String: AnyObject] {
     var dict: [String: AnyObject] = [:]
 
     for (key, val) in self {
@@ -237,10 +237,10 @@ extension Dictionary {
 }
 
 // JsonObject
-extension SequenceType where Generator.Element == (String, AnyObject) {
-  public static func decodeJson(json: AnyObject) throws -> JsonObject {
+extension Sequence where Iterator.Element == (String, AnyObject) {
+  public static func decodeJson(_ json: AnyObject) throws -> JsonObject {
     guard let result = json as? JsonObject else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "JsonObject")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "JsonObject")
     }
 
     return result
@@ -258,10 +258,10 @@ extension SequenceType where Generator.Element == (String, AnyObject) {
 }
 
 // JsonArray
-extension SequenceType where Generator.Element == AnyObject {
-  public static func decodeJson(json: AnyObject) throws -> JsonArray {
+extension Sequence where Iterator.Element == AnyObject {
+  public static func decodeJson(_ json: AnyObject) throws -> JsonArray {
     guard let result = json as? JsonArray else {
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "JsonArray")
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "JsonArray")
     }
 
     return result
