@@ -237,7 +237,7 @@ extension Dictionary {
 }
 
 // JsonObject
-extension Sequence where Iterator.Element == (String, AnyObject) {
+extension Sequence where Iterator.Element == (key: String, value: AnyObject) {
   public static func decodeJson(_ json: AnyObject) throws -> JsonObject {
     guard let result = json as? JsonObject else {
       throw JsonDecodeError.wrongType(rawValue: json, expectedType: "JsonObject")
