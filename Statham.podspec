@@ -26,8 +26,8 @@ Pod::Spec.new do |s|
     ss.source_files  = "Sources"
   end
 
-  s.subspec "NSDate-iso8601" do |ss|
-    ss.source_files = "extensions/NSDate+JsonGen.swift"
+  s.subspec "Date-iso8601" do |ss|
+    ss.source_files = "extensions/Date+JsonGen.swift"
     ss.dependency "Statham/Core"
   end
 end
