@@ -11,7 +11,7 @@ import Foundation
 public enum DispatchMethod {
   case unspecified
   case synchronous
-  case onQueue(DispatchQueue)
+  case queue(DispatchQueue)
 }
 
 extension DispatchMethod: CustomStringConvertible {
@@ -20,10 +20,12 @@ extension DispatchMethod: CustomStringConvertible {
     switch self {
     case .unspecified:
       return "unspecified"
+
     case .synchronous:
       return "synchronous"
-    case let .onQueue(dispatchQueue):
-      return "onQueue(\(dispatchQueue))"
+
+    case let .queue(dispatchQueue):
+      return "queue(\(dispatchQueue))"
     }
   }
 }

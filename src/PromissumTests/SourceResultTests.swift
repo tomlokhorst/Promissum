@@ -68,10 +68,11 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NoError> = source.promise
       .mapResult { result in
         switch result {
-        case .Error(let error):
-          return .Value(error.code + 1)
-        case .Value:
-          return .Value(-1)
+        case .error(let error):
+          return .value(error.code + 1)
+
+        case .value:
+          return .value(-1)
         }
       }
 
@@ -94,10 +95,11 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NoError> = source.promise
       .mapResult { result in
         switch result {
-        case .Value(let value):
-          return .Value(value + 1)
-        case .Error:
-          return .Value(-1)
+        case .value(let value):
+          return .value(value + 1)
+
+        case .error:
+          return .value(-1)
         }
     }
 
@@ -119,9 +121,9 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let value):
+        case .value(let value):
           return Promise(value: value + 1)
-        case .Error:
+        case .error:
           return Promise(value: -1)
         }
     }
@@ -144,9 +146,9 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Value(let value):
+        case .value(let value):
           return Promise(error: NSError(domain: PromissumErrorDomain, code: value + 1, userInfo: nil))
-        case .Error:
+        case .error:
           return Promise(value: -1)
         }
     }
@@ -169,9 +171,9 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Error(let error):
+        case .error(let error):
           return Promise(value: error.code + 1)
-        case .Value:
+        case .value:
           return Promise(value: -1)
         }
     }
@@ -194,9 +196,9 @@ class SourceResultTests: XCTestCase {
     let p: Promise<Int, NSError> = source.promise
       .flatMapResult { result in
         switch result {
-        case .Error(let error):
+        case .error(let error):
           return Promise(error: NSError(domain: PromissumErrorDomain, code: error.code + 1, userInfo: nil))
-        case .Value:
+        case .value:
           return Promise(value: -1)
         }
     }

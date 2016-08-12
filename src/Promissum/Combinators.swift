@@ -153,15 +153,9 @@ extension Promise {
   public func mapVoid() -> Promise<Void, Error> {
     return self.map { _ in }
   }
-
-  /// Returns a Promise where the value information is thrown away.
-  @available(*, deprecated, renamed:"mapVoid")
-  public func void() -> Promise<Void, Error> {
-    return self.mapVoid()
-  }
 }
 
-extension Promise {
+extension Promise where Error : Swift.Error {
 
   /// Returns a Promise where the error is casted to an ErrorType.
   public func mapErrorType() -> Promise<Value, Error> {

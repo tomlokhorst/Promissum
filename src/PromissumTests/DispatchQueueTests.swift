@@ -23,7 +23,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueThen() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     p.then { _ in
@@ -47,7 +47,7 @@ class DispatchQueueTests: XCTestCase {
 
   func testResolvedQueue() {
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let q = source.promise.map { x in
       return x + 1
     }
@@ -71,7 +71,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueFinally() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     p.finally {
@@ -96,7 +96,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueMap() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     let q: Promise<Int, NSError> = p
@@ -124,7 +124,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueFlatMap() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     let q: Promise<Int, NSError> = p
@@ -152,7 +152,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueMapThen() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     let q: Promise<Int, NSError> = p
@@ -184,7 +184,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueFlatMapThen() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     let q: Promise<Int, NSError> = p
@@ -217,7 +217,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueMapFinally() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     let q: Promise<Int, NSError> = p
@@ -249,7 +249,7 @@ class DispatchQueueTests: XCTestCase {
   func testQueueFlatMapFinally() {
     var calls = 0
 
-    let source = PromiseSource<Int, NSError>(dispatch: .onQueue(testQueue))
+    let source = PromiseSource<Int, NSError>(dispatch: .queue(testQueue))
     let p = source.promise
 
     let q: Promise<Int, NSError> = p

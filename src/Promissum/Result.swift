@@ -10,15 +10,16 @@ import Foundation
 
 /// The Result type is used for Promises that are Resolved or Rejected.
 public enum Result<TValue, TError> {
-  case Value(TValue)
-  case Error(TError)
+  case value(TValue)
+  case error(TError)
 
   /// Optional value, set when Result is Value.
   public var value: TValue? {
     switch self {
-    case .Value(let value):
+    case .value(let value):
       return value
-    case .Error:
+
+    case .error:
       return nil
     }
   }
@@ -26,18 +27,20 @@ public enum Result<TValue, TError> {
   /// Optional error, set when Result is Error.
   public var error: TError? {
     switch self {
-    case .Error(let error):
+    case .error(let error):
       return error
-    case .Value:
+
+    case .value:
       return nil
     }
   }
 
   internal var state: State<TValue, TError> {
     switch self {
-    case .Value(let boxed):
+    case .value(let boxed):
       return .resolved(boxed)
-    case .Error(let error):
+
+    case .error(let error):
       return .rejected(error)
     }
   }
@@ -47,10 +50,11 @@ extension Result: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .Value(let value):
-      return "Value(\(value))"
-    case .Error(let error):
-      return "Error(\(error))"
+    case .value(let value):
+      return "value(\(value))"
+
+    case .error(let error):
+      return "error(\(error))"
     }
   }
 }

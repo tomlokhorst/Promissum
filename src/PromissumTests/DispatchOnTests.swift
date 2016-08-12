@@ -83,7 +83,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let p = source.promise.dispatchOn(test2Queue)
+    let p = source.promise.dispatch(on: test2Queue)
 
     expectationQueue(test1Queue) { ex in
 
@@ -112,14 +112,14 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let p = source.promise.dispatchOn(test1Queue)
+    let p = source.promise.dispatch(on: test1Queue)
 
     p.then { _ in
       XCTAssertNotNil(DispatchQueue.getSpecific(key: test1QueueKey), "callback for queued dispatch method should be called on specified queue")
       calls += 1
     }
 
-    p.dispatchOn(test2Queue).then { _ in
+    p.dispatch(on: test2Queue).then { _ in
       XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
       calls += 1
     }
@@ -140,7 +140,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .map { x -> Int in
@@ -151,7 +151,7 @@ class DispatchOnTests: XCTestCase {
 
         return x + 1
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .map { x -> Int in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(x, 41)
@@ -160,7 +160,7 @@ class DispatchOnTests: XCTestCase {
 
         return x + 1
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .map { x -> Int in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(x, 42)
@@ -186,7 +186,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .flatMap { x -> Promise<Int, NSError> in
@@ -197,7 +197,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayPromise(0.01, value: x + 1)
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .flatMap { x -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(x, 41)
@@ -206,7 +206,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayPromise(0.01, value: x + 1)
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .flatMap { x -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(x, 42)
@@ -232,7 +232,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .flatMap { x -> Promise<Int, NSError> in
@@ -243,7 +243,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayPromise(0.01, value: x + 1, queue: test2Queue)
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .flatMap { x -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(x, 41)
@@ -252,7 +252,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayPromise(0.01, value: x + 1, queue: test1Queue)
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .flatMap { x -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(x, 42)
@@ -278,7 +278,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .mapError { error -> NSError in
@@ -289,7 +289,7 @@ class DispatchOnTests: XCTestCase {
 
         return NSError(code: error.code + 1)
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .mapError { error -> NSError in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(error.code, 41)
@@ -298,7 +298,7 @@ class DispatchOnTests: XCTestCase {
 
         return NSError(code: error.code + 1)
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .mapError { error -> NSError in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(error.code, 42)
@@ -324,7 +324,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .flatMapError { error -> Promise<Int, NSError> in
@@ -335,7 +335,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayErrorPromise(0.01, error: NSError(code: error.code + 1))
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .flatMapError { error -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(error.code, 41)
@@ -344,7 +344,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayErrorPromise(0.01, error: NSError(code: error.code + 1))
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .flatMapError { error -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(error.code, 42)
@@ -370,7 +370,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .mapResult { result -> Result<Int, NSError> in
@@ -379,25 +379,25 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return Result.Error(NSError(code: result.value! + 1))
+        return Result.error(NSError(code: result.value! + 1))
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .mapResult { result -> Result<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(result.error!.code, 41)
 
         calls += 1
 
-        return Result.Value(result.error!.code + 1)
+        return Result.value(result.error!.code + 1)
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .mapResult { result -> Result<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(result.value!, 42)
 
         calls += 1
 
-        return Result.Value(result.value! + 1)
+        return Result.value(result.value! + 1)
       }
 
     source.resolve(40)
@@ -416,7 +416,7 @@ class DispatchOnTests: XCTestCase {
     var calls = 0
 
     let source = PromiseSource<Int, NSError>()
-    let pr = source.promise.dispatchOn(test1Queue)
+    let pr = source.promise.dispatch(on: test1Queue)
 
     let _ = pr
       .flatMapResult { result -> Promise<Int, NSError> in
@@ -427,7 +427,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayErrorPromise(0.01, error: NSError(code: result.value! + 1))
       }
-      .dispatchOn(test2Queue)
+      .dispatch(on: test2Queue)
       .flatMapResult { result -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test2QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(result.error!.code, 41)
@@ -436,7 +436,7 @@ class DispatchOnTests: XCTestCase {
 
         return delayPromise(0.01, value: result.error!.code + 1)
       }
-      .dispatchOn(test3Queue)
+      .dispatch(on: test3Queue)
       .flatMapResult { result -> Promise<Int, NSError> in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: test3QueueKey), "callback for queued dispatch method should be called on specified queue")
         XCTAssertEqual(result.value!, 42)

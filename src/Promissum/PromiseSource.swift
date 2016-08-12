@@ -128,7 +128,7 @@ public class PromiseSource<Value, Error> {
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func resolve(_ value: Value) {
 
-    resolveResult(.Value(value))
+    resolveResult(.value(value))
   }
 
 
@@ -137,7 +137,7 @@ public class PromiseSource<Value, Error> {
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func reject(_ error: Error) {
 
-    resolveResult(.Error(error))
+    resolveResult(.error(error))
   }
 
   internal func resolveResult(_ result: Result<Value, Error>) {
@@ -172,11 +172,11 @@ public class PromiseSource<Value, Error> {
 
     case .resolved(let value):
       // Value is already available, call handler immediately
-      callHandlers(Result.Value(value), handlers: [handler], dispatchMethod: dispatchMethod)
+      callHandlers(Result.value(value), handlers: [handler], dispatchMethod: dispatchMethod)
 
     case .rejected(let error):
       // Error is already available, call handler immediately
-      callHandlers(Result.Error(error), handlers: [handler], dispatchMethod: dispatchMethod)
+      callHandlers(Result.error(error), handlers: [handler], dispatchMethod: dispatchMethod)
     }
   }
 }
@@ -200,20 +200,20 @@ internal func callHandlers<T>(_ value: T, handlers: [(T) -> Void], dispatchMetho
 
       handler(value)
 
-    case let .onQueue(targetQueue):
-      let currentQueueLabel: String? = nil // String(validatingUTF8: DISPATCH_CURRENT_QUEUE_LABEL.label)!
-
-      // Assume on correct queue if labels match, but be conservative if label is empty
-      let alreadyOnQueue = currentQueueLabel == targetQueue.label
-
-      if alreadyOnQueue {
-        handler(value)
-      }
-      else {
+    case let .queue(targetQueue):
+//      let currentQueueLabel: String? = nil // String(validatingUTF8: DISPATCH_CURRENT_QUEUE_LABEL.label)!
+//
+//      // Assume on correct queue if labels match, but be conservative if label is empty
+//      let alreadyOnQueue = currentQueueLabel == targetQueue.label
+//
+//      if alreadyOnQueue {
+//        handler(value)
+//      }
+//      else {
         targetQueue.async {
           handler(value)
         }
-      }
+//      }
     }
   }
 }
