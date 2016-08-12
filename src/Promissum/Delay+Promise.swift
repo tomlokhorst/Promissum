@@ -12,7 +12,7 @@ import Foundation
 public func delay(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue.main, execute: () -> Void) {
   let when = DispatchTime.now() + seconds
 
-  queue.after(when: when, execute: execute)
+  queue.asyncAfter(deadline: when, execute: execute)
 }
 
 /// Create a Promise that resolves with the specified value after the specified number of seconds.

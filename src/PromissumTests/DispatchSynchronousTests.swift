@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import Promissum
 
-let backgroundQueue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground)
+let backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
 
 class DispatchSynchronousTests: XCTestCase {
 

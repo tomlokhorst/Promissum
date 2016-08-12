@@ -9,7 +9,7 @@
 import Foundation
 
 /// Type used when there is no error possible.
-public enum NoError : ErrorProtocol {}
+public enum NoError : Error {}
 
 /// State of a PromiseSource.
 public enum State<Value, Error> {

@@ -11,7 +11,6 @@ import Foundation
 /// Flattens a nested Promise of Promise into a single Promise.
 ///
 /// The returned Promise resolves (or rejects) when the nested Promise resolves.
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func flatten<Value, Error>(_ promise: Promise<Promise<Value, Error>, Error>) -> Promise<Value, Error> {
   return promise.flatMap { $0 }
 }
@@ -22,7 +21,6 @@ public func flatten<Value, Error>(_ promise: Promise<Promise<Value, Error>, Erro
 /// The new Promise's value is of a tuple type constructed from both argument promises.
 ///
 /// If either of the two Promises fails, the returned Promise also fails.
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func whenBoth<A, B, Error>(_ promiseA: Promise<A, Error>, _ promiseB: Promise<B, Error>) -> Promise<(A, B), Error> {
   return promiseA.flatMap { valueA in promiseB.map { valueB in (valueA, valueB) } }
 }
@@ -34,7 +32,6 @@ public func whenBoth<A, B, Error>(_ promiseA: Promise<A, Error>, _ promiseB: Pro
 /// If any of the supplied Promises fails, the returned Promise immediately fails.
 ///
 /// When called with an empty array of promises, this returns a Resolved Promise (with an empty array value).
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func whenAll<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<[Value], Error> {
   let source = PromiseSource<[Value], Error>()
   var results = promises.map { $0.value }
@@ -72,7 +69,6 @@ public func whenAll<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promis
 /// If both argument Promises are already Resolved, the first Promise's value is used.
 ///
 /// If both Promises fail, the returned Promise also fails.
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func whenEither<Value, Error>(_ promise1: Promise<Value, Error>, _ promise2: Promise<Value, Error>) -> Promise<Value, Error> {
   return whenAny([promise1, promise2])
 }
@@ -82,7 +78,6 @@ public func whenEither<Value, Error>(_ promise1: Promise<Value, Error>, _ promis
 /// If all of the supplied Promises fail, the returned Promise fails.
 ///
 /// When called with an empty array of promises, this returns a Promise that will never resolve.
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func whenAny<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Value, Error> {
   let source = PromiseSource<Value, Error>()
   var remaining = promises.count
@@ -111,7 +106,6 @@ public func whenAny<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promis
 /// Creates a Promise that resolves when all provided Promises finalize.
 ///
 /// When called with an empty array of promises, this returns a Resolved Promise.
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func whenAllFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
   let source = PromiseSource<Void, NoError>()
   var remaining = promises.count
@@ -139,7 +133,6 @@ public func whenAllFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) 
 /// Creates a Promise that resolves when any of the provided Promises finalize.
 ///
 /// When called with an empty array of promises, this returns a Promise that will never resolve.
-@warn_unused_result(message:"Forget to call `then` or `trap`?")
 public func whenAnyFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
   let source = PromiseSource<Void, NoError>()
 
@@ -157,24 +150,21 @@ public func whenAnyFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) 
 extension Promise {
 
   /// Returns a Promise where the value information is thrown away.
-  @warn_unused_result(message:"Forget to call `then` or `trap`?")
   public func mapVoid() -> Promise<Void, Error> {
     return self.map { _ in }
   }
 
   /// Returns a Promise where the value information is thrown away.
   @available(*, deprecated, renamed:"mapVoid")
-  @warn_unused_result(message:"Forget to call `then` or `trap`?")
   public func void() -> Promise<Void, Error> {
     return self.mapVoid()
   }
 }
 
-extension Promise where Error : ErrorProtocol {
+extension Promise {
 
   /// Returns a Promise where the error is casted to an ErrorType.
-  @warn_unused_result(message:"Forget to call `then` or `trap`?")
-  public func mapErrorType() -> Promise<Value, ErrorProtocol> {
+  public func mapErrorType() -> Promise<Value, Error> {
     return self.mapError { $0 }
   }
 }

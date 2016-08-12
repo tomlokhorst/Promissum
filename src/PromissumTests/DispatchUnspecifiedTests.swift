@@ -39,7 +39,7 @@ class DispatchUnspecifiedTests: XCTestCase {
     // Check assertions
     let expectation = self.expectation(description: "Promise didn't finish")
 
-    DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUserInitiated).async {
+    DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
       XCTAssert(!Thread.isMainThread, "Shouldn't be running on main thread")
 
       source.resolve(42)
@@ -59,7 +59,7 @@ class DispatchUnspecifiedTests: XCTestCase {
     let expectation = self.expectation(description: "Promise didn't finish")
 
 
-    DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUserInitiated).async {
+    DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
       XCTAssert(!Thread.isMainThread, "Shouldn't be running on main thread")
 
       p.then { _ in
