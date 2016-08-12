@@ -37,7 +37,7 @@ class DispatchOnTests: XCTestCase {
     let p = source.promise.dispatchMain()
 
     p.then { _ in
-      XCTAssert(Thread.isMainThread(), "callback for queued dispatch method should be called on main queue")
+      XCTAssert(Thread.isMainThread, "callback for queued dispatch method should be called on main queue")
       calls += 1
     }
 
@@ -45,7 +45,7 @@ class DispatchOnTests: XCTestCase {
     XCTAssertEqual(calls, 1, "Calls should be 1")
 
     p.then { _ in
-      XCTAssert(Thread.isMainThread(), "callback should be called on main queue")
+      XCTAssert(Thread.isMainThread, "callback should be called on main queue")
       calls += 1
     }
     XCTAssertEqual(calls, 2, "Calls should be 2")
@@ -59,17 +59,17 @@ class DispatchOnTests: XCTestCase {
 
     expectationQueue(test1Queue) { ex in
 
-      XCTAssert(!Thread.isMainThread(), "shouldn't be on main queue")
+      XCTAssert(!Thread.isMainThread, "shouldn't be on main queue")
 
       p.then { _ in
-        XCTAssert(Thread.isMainThread(), "callback for queued dispatch method should be called on main queue")
+        XCTAssert(Thread.isMainThread, "callback for queued dispatch method should be called on main queue")
         calls += 1
       }
 
       source.resolve(42)
 
       p.then { _ in
-        XCTAssert(Thread.isMainThread(), "callback should be called on main queue")
+        XCTAssert(Thread.isMainThread, "callback should be called on main queue")
         calls += 1
       }
 
@@ -126,14 +126,14 @@ class DispatchOnTests: XCTestCase {
 
     source.resolve(42)
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.02) {
       XCTAssertEqual(calls, 2, "Calls should be 2")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.1, handler: nil)
+    waitForExpectations(timeout: 0.1, handler: nil)
   }
 
   func testMultipleMapDispatchOn() {
@@ -172,14 +172,14 @@ class DispatchOnTests: XCTestCase {
 
     source.resolve(40)
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.02) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.1, handler: nil)
+    waitForExpectations(timeout: 0.1, handler: nil)
   }
 
   func testMultipleFlatMapDispatchOn() {
@@ -218,14 +218,14 @@ class DispatchOnTests: XCTestCase {
 
     source.resolve(40)
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.4, handler: nil)
+    waitForExpectations(timeout: 0.4, handler: nil)
   }
 
   func testMultipleFlatMapDelayDispatchOn() {
@@ -264,14 +264,14 @@ class DispatchOnTests: XCTestCase {
 
     source.resolve(40)
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.4, handler: nil)
+    waitForExpectations(timeout: 0.4, handler: nil)
   }
 
   func testMultipleMapErrorDispatchOn() {
@@ -310,14 +310,14 @@ class DispatchOnTests: XCTestCase {
 
     source.reject(NSError(code: 40))
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.02) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.1, handler: nil)
+    waitForExpectations(timeout: 0.1, handler: nil)
   }
 
   func testMultipleFlatMapErrorDispatchOn() {
@@ -356,14 +356,14 @@ class DispatchOnTests: XCTestCase {
 
     source.reject(NSError(code: 40))
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.4, handler: nil)
+    waitForExpectations(timeout: 0.4, handler: nil)
   }
 
   func testMultipleMapResultDispatchOn() {
@@ -402,14 +402,14 @@ class DispatchOnTests: XCTestCase {
 
     source.resolve(40)
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.02) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.1, handler: nil)
+    waitForExpectations(timeout: 0.1, handler: nil)
   }
 
   func testMultipleFlatMapResultDispatchOn() {
@@ -448,14 +448,14 @@ class DispatchOnTests: XCTestCase {
 
     source.resolve(40)
 
-    let ex = self.expectation(withDescription: "Dispatch queue")
+    let ex = self.expectation(description: "Dispatch queue")
 
     delay(0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.4, handler: nil)
+    waitForExpectations(timeout: 0.4, handler: nil)
   }
 
 }

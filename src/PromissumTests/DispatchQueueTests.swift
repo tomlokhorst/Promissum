@@ -34,7 +34,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     p.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -42,7 +42,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testResolvedQueue() {
@@ -55,9 +55,9 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     delay(0.02) {
-      XCTAssert(Thread.isMainThread(), "callback for unspecified dispatch method should be called on main queue")
+      XCTAssert(Thread.isMainThread, "callback for unspecified dispatch method should be called on main queue")
       q.then { _ in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -65,7 +65,7 @@ class DispatchQueueTests: XCTestCase {
       }
     }
 
-    waitForExpectations(withTimeout: 1, handler: nil)
+    waitForExpectations(timeout: 1, handler: nil)
   }
 
   func testQueueFinally() {
@@ -82,7 +82,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     p.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -90,7 +90,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testQueueMap() {
@@ -110,7 +110,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     q.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -118,7 +118,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testQueueFlatMap() {
@@ -138,7 +138,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     q.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -146,7 +146,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testQueueMapThen() {
@@ -170,7 +170,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     q.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -178,7 +178,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testQueueFlatMapThen() {
@@ -203,7 +203,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     q.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -211,7 +211,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testQueueMapFinally() {
@@ -235,7 +235,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     q.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -243,7 +243,7 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 
   func testQueueFlatMapFinally() {
@@ -268,7 +268,7 @@ class DispatchQueueTests: XCTestCase {
     source.resolve(42)
 
     // Check assertions
-    let expectation = self.expectation(withDescription: "Promise didn't finish")
+    let expectation = self.expectation(description: "Promise didn't finish")
     q.finally {
       XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")
 
@@ -276,6 +276,6 @@ class DispatchQueueTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 0.03, handler: nil)
+    waitForExpectations(timeout: 0.03, handler: nil)
   }
 }

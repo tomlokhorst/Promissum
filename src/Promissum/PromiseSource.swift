@@ -187,7 +187,7 @@ internal func callHandlers<T>(_ value: T, handlers: [(T) -> Void], dispatchMetho
     switch dispatchMethod {
     case .unspecified:
 
-      if Thread.isMainThread() {
+      if Thread.isMainThread {
         handler(value)
       }
       else {
