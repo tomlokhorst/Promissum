@@ -163,7 +163,7 @@ public class PromiseSource<Value, Error> {
 
   // MARK: Adding result handlers
 
-  internal func addOrCallResultHandler(_ handler: (Result<Value, Error>) -> Void) {
+  internal func addOrCallResultHandler(_ handler: @escaping (Result<Value, Error>) -> Void) {
 
     switch state {
     case .unresolved:

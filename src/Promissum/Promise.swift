@@ -175,7 +175,7 @@ public struct Promise<Value, Error> {
   /// The handler is synchronously called on the current thread when Promise is already Resolved.
   /// Or, when Promise is resolved later on, the handler is called synchronously on the thread where `PromiseSource.resolve` is called.
   @discardableResult
-  public func then(_ handler: (Value) -> Void) -> Promise<Value, Error> {
+  public func then(_ handler: @escaping (Value) -> Void) -> Promise<Value, Error> {
 
     let resultHandler: (Result<Value, Error>) -> Void = { result in
       switch result {
@@ -207,7 +207,7 @@ public struct Promise<Value, Error> {
   /// The handler is synchronously called on the current thread when Promise is already Rejected.
   /// Or, when Promise is rejected later on, the handler is called synchronously on the thread where `PromiseSource.reject` is called.
   @discardableResult
-  public func trap(_ handler: (Error) -> Void) -> Promise<Value, Error> {
+  public func trap(_ handler: @escaping (Error) -> Void) -> Promise<Value, Error> {
 
     let resultHandler: (Result<Value, Error>) -> Void = { result in
       switch result {
@@ -241,7 +241,7 @@ public struct Promise<Value, Error> {
   /// Or, when Promise is resolved or rejected later on,
   /// the handler is called synchronously on the thread where `PromiseSource.resolve` or `PromiseSource.reject` is called.
   @discardableResult
-  public func finally(_ handler: () -> Void) -> Promise<Value, Error> {
+  public func finally(_ handler: @escaping () -> Void) -> Promise<Value, Error> {
 
     let resultHandler: (Result<Value, Error>) -> Void = { _ in
       handler()
@@ -269,7 +269,7 @@ public struct Promise<Value, Error> {
   /// Or, when Promise is resolved or rejected later on,
   /// the handler is called synchronously on the thread where `PromiseSource.resolve` or `PromiseSource.reject` is called.
   @discardableResult
-  public func finallyResult(_ handler: (Result<Value, Error>) -> Void) -> Promise<Value, Error> {
+  public func finallyResult(_ handler: @escaping (Result<Value, Error>) -> Void) -> Promise<Value, Error> {
 
     source.addOrCallResultHandler(handler)
 
@@ -301,7 +301,7 @@ public struct Promise<Value, Error> {
   // MARK: - Value combinators
 
   /// Return a Promise containing the results of mapping `transform` over the value of `self`.
-  public func map<NewValue>(_ transform: (Value) -> NewValue) -> Promise<NewValue, Error> {
+  public func map<NewValue>(_ transform: @escaping (Value) -> NewValue) -> Promise<NewValue, Error> {
     let resultSource = PromiseSource<NewValue, Error>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -320,7 +320,7 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the value of `self`.
-  public func flatMap<NewValue>(_ transform: (Value) -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
+  public func flatMap<NewValue>(_ transform: @escaping (Value) -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
     let resultSource = PromiseSource<NewValue, Error>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -344,7 +344,7 @@ public struct Promise<Value, Error> {
   // MARK: Error combinators
 
   /// Return a Promise containing the results of mapping `transform` over the error of `self`.
-  public func mapError<NewError>(_ transform: (Error) -> NewError) -> Promise<Value, NewError> {
+  public func mapError<NewError>(_ transform: @escaping (Error) -> NewError) -> Promise<Value, NewError> {
     let resultSource = PromiseSource<Value, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -363,7 +363,7 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the error of `self`.
-  public func flatMapError<NewError>(_ transform: (Error) -> Promise<Value, NewError>) -> Promise<Value, NewError> {
+  public func flatMapError<NewError>(_ transform: @escaping (Error) -> Promise<Value, NewError>) -> Promise<Value, NewError> {
     let resultSource = PromiseSource<Value, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -386,7 +386,7 @@ public struct Promise<Value, Error> {
   // MARK: Result combinators
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
-  public func mapResult<NewValue, NewError>(_ transform: (Result<Value, Error>) -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
+  public func mapResult<NewValue, NewError>(_ transform: @escaping (Result<Value, Error>) -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
     let resultSource = PromiseSource<NewValue, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -404,7 +404,7 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the result of `self`.
-  public func flatMapResult<NewValue, NewError>(_ transform: (Result<Value, Error>) -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
+  public func flatMapResult<NewValue, NewError>(_ transform: @escaping (Result<Value, Error>) -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
     let resultSource = PromiseSource<NewValue, NewError>(state: .unresolved, dispatch: source.dispatchMethod, warnUnresolvedDeinit: true)
 
     let handler: (Result<Value, Error>) -> Void = { result in

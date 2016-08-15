@@ -17,7 +17,7 @@ extension DispatchQueue {
 
 extension XCTestCase {
 
-  func expectation<V, E>(_ p: Promise<V, E>, handler: () -> Void) {
+  func expectation<V, E>(_ p: Promise<V, E>, handler: @escaping () -> Void) {
 
     let ex = self.expectation(description: "Promise didn't finish")
     p.finally {
@@ -29,7 +29,7 @@ extension XCTestCase {
   }
 
   @nonobjc
-  func expectation(_ queue: DispatchQueue, handler: () -> Void) {
+  func expectation(_ queue: DispatchQueue, handler: @escaping () -> Void) {
 
     let ex = self.expectation(description: "Dispatch queue")
 
@@ -42,7 +42,7 @@ extension XCTestCase {
   }
 
   @nonobjc
-  func expectationQueue(_ queue: DispatchQueue, handler: (XCTestExpectation) -> Void) {
+  func expectationQueue(_ queue: DispatchQueue, handler: @escaping (XCTestExpectation) -> Void) {
 
     let ex1 = self.expectation(description: "Dispatch queue")
     let ex2 = self.expectation(description: "Dispatch queue")
@@ -56,7 +56,7 @@ extension XCTestCase {
   }
 
   @nonobjc
-  func dispatch(_ queue: DispatchQueue, expectation: XCTestExpectation, handler: () -> Void) {
+  func dispatch(_ queue: DispatchQueue, expectation: XCTestExpectation, handler: @escaping () -> Void) {
 
     queue.async {
       handler()

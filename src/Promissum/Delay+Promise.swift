@@ -9,7 +9,7 @@
 import Foundation
 
 /// Wrapper around `dispatch_after`, with a seconds parameter.
-public func delay(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue.main, execute: () -> Void) {
+public func delay(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue.main, execute: @escaping () -> Void) {
   let when = DispatchTime.now() + seconds
 
   queue.asyncAfter(deadline: when, execute: execute)
