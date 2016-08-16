@@ -70,6 +70,7 @@ public class PromiseSource<Value, Error> {
   typealias ResultHandler = (Result<Value, Error>) -> Void
 
   private var handlers: [(Result<Value, Error>) -> Void] = []
+  internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
@@ -81,23 +82,24 @@ public class PromiseSource<Value, Error> {
   // MARK: Initializers & deinit
 
   internal convenience init(value: Value) {
-    self.init(state: .resolved(value), dispatch: .unspecified, warnUnresolvedDeinit: false)
+    self.init(state: .resolved(value), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
   }
 
   internal convenience init(error: Error) {
-    self.init(state: .rejected(error), dispatch: .unspecified, warnUnresolvedDeinit: false)
+    self.init(state: .rejected(error), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
   }
 
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(dispatch: DispatchMethod = .unspecified, warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .unresolved, dispatch: dispatch, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(dispatch dispatchMethod: DispatchMethod = .unspecified, warnUnresolvedDeinit: Bool = true) {
+    self.init(state: .unresolved, dispatchKey: DispatchSpecificKey(), dispatchMethod: dispatchMethod, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  internal init(state: State<Value, Error>, dispatch: DispatchMethod, warnUnresolvedDeinit: Bool) {
+  internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
     self.state = state
-    self.dispatchMethod = dispatch
+    self.dispatchKey = dispatchKey
+    self.dispatchMethod = dispatchMethod
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
   }
 
@@ -155,7 +157,7 @@ public class PromiseSource<Value, Error> {
   private func executeResultHandlers(_ result: Result<Value, Error>) {
 
     // Call all previously scheduled handlers
-    callHandlers(result, handlers: handlers, dispatchMethod: dispatchMethod)
+    callHandlers(result, handlers: handlers, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
 
     // Cleanup
     handlers = []
@@ -172,21 +174,22 @@ public class PromiseSource<Value, Error> {
 
     case .resolved(let value):
       // Value is already available, call handler immediately
-      callHandlers(Result.value(value), handlers: [handler], dispatchMethod: dispatchMethod)
+      callHandlers(Result.value(value), handlers: [handler], dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
 
     case .rejected(let error):
       // Error is already available, call handler immediately
-      callHandlers(Result.error(error), handlers: [handler], dispatchMethod: dispatchMethod)
+      callHandlers(Result.error(error), handlers: [handler], dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
     }
   }
 }
 
-internal func callHandlers<T>(_ value: T, handlers: [(T) -> Void], dispatchMethod: DispatchMethod) {
+internal func callHandlers<T>(_ value: T, handlers: [(T) -> Void], dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod) {
 
   for handler in handlers {
     switch dispatchMethod {
     case .unspecified:
 
+      // Main queue doesn't guarantee main thread, so this is merely an optimization
       if Thread.isMainThread {
         handler(value)
       }
@@ -200,20 +203,17 @@ internal func callHandlers<T>(_ value: T, handlers: [(T) -> Void], dispatchMetho
 
       handler(value)
 
-    case let .queue(targetQueue):
-//      let currentQueueLabel: String? = nil // String(validatingUTF8: DISPATCH_CURRENT_QUEUE_LABEL.label)!
-//
-//      // Assume on correct queue if labels match, but be conservative if label is empty
-//      let alreadyOnQueue = currentQueueLabel == targetQueue.label
-//
-//      if alreadyOnQueue {
-//        handler(value)
-//      }
-//      else {
+    case .queue(let targetQueue):
+      let alreadyOnQueue = DispatchQueue.getSpecific(key: dispatchKey) != nil
+
+      if alreadyOnQueue {
+        handler(value)
+      }
+      else {
         targetQueue.async {
           handler(value)
         }
-//      }
+      }
     }
   }
 }
