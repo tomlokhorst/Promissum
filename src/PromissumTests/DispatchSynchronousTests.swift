@@ -71,7 +71,7 @@ class DispatchSynchronousTests: XCTestCase {
       let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
-      p.map { x -> Int in
+      _ = p.map { x -> Int in
         calls += 1
 
         return x
@@ -90,7 +90,7 @@ class DispatchSynchronousTests: XCTestCase {
       let source = PromiseSource<Int, NSError>(dispatch: .synchronous)
       let p = source.promise
 
-      p.flatMap { x -> Promise<Int, NSError> in
+      _ = p.flatMap { x -> Promise<Int, NSError> in
         calls += 1
 
         return Promise(value: x)
