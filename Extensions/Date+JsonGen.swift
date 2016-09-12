@@ -14,13 +14,13 @@ extension Date
     static let withTimeZone : DateFormatter = {
       let formatter = DateFormatter()
       formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-      formatter.locale = Locale(localeIdentifier: "en_US_POSIX")
+      formatter.locale = Locale(identifier: "en_US_POSIX")
 
       return formatter
     }()
   }
 
-  public static func decodeJson(_ json : AnyObject) throws -> Date {
+  public static func decodeJson(_ json : Any) throws -> Date {
     guard
       let str = json as? String,
       let result = JsonGenDateFormatter.withTimeZone.date(from: str)

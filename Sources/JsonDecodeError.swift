@@ -8,10 +8,10 @@
 
 import Foundation
 
-public enum JsonDecodeError : ErrorProtocol {
+public enum JsonDecodeError : Error {
   case missingField
-  case wrongType(rawValue: AnyObject, expectedType: String)
-  case wrongEnumRawValue(rawValue: AnyObject, enumType: String)
+  case wrongType(rawValue: Any, expectedType: String)
+  case wrongEnumRawValue(rawValue: Any, enumType: String)
   case arrayElementErrors([(Int, JsonDecodeError)])
   case dictionaryErrors([(String, JsonDecodeError)])
   case structErrors(type: String, errors: [(String, JsonDecodeError)])
