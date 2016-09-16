@@ -9,76 +9,76 @@
 import UIKit
 
 extension UIView {
-  public class func animatePromise(duration duration: NSTimeInterval, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func animate(duration: TimeInterval, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.animateWithDuration(duration, animations: animations, completion: source.resolve)
+    self.animate(withDuration: duration, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func animatePromise(duration duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func animate(withDuration duration: TimeInterval, delay: TimeInterval, options: UIViewAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.animateWithDuration(duration, delay: delay, options: options, animations: animations, completion: source.resolve)
+    self.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func transitionPromise(view view: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func transition(with view: UIView, duration: TimeInterval, options: UIViewAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.transitionWithView(view, duration: duration, options: options, animations: animations, completion: source.resolve)
+    self.transition(with: view, duration: duration, options: options, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func transitionPromise(fromView fromView: UIView, toView: UIView, duration: NSTimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
+  public class func transition(from fromView: UIView, to toView: UIView, duration: TimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.transitionFromView(fromView, toView: toView, duration: duration, options: options, completion: source.resolve)
+    self.transition(from: fromView, to: toView, duration: duration, options: options, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func performSystemAnimationPromise(animation: UISystemAnimation, onViews views: [UIView], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
+  public class func perform(_ animation: UISystemAnimation, onViews views: [UIView], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.performSystemAnimation(animation, onViews: views, options: options, animations: parallelAnimations, completion: source.resolve)
+    self.perform(animation, on: views, options: options, animations: parallelAnimations, completion: source.resolve)
 
     return source.promise
   }
 
-  public class func animateKeyframesPromise(duration duration: NSTimeInterval, delay: NSTimeInterval, options: UIViewKeyframeAnimationOptions, animations: () -> Void) -> Promise<Bool, NoError> {
+  public class func animateKeyframes(withDuration duration: TimeInterval, delay: TimeInterval, options: UIViewKeyframeAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.animateKeyframesWithDuration(duration, delay: delay, options: options, animations: animations, completion: source.resolve)
+    self.animateKeyframes(withDuration: duration, delay: delay, options: options, animations: animations, completion: source.resolve)
 
     return source.promise
   }
 }
 
 extension UIViewController {
-  public func presentViewControllerPromise(viewControllerToPresent: UIViewController, animated flag: Bool) -> Promise<Void, NoError> {
+  public func present(_ viewControllerToPresent: UIViewController, animated flag: Bool) -> Promise<Void, NoError> {
     let source = PromiseSource<Void, NoError>()
 
-    self.presentViewController(viewControllerToPresent, animated: flag, completion: source.resolve)
+    self.present(viewControllerToPresent, animated: flag, completion: source.resolve)
 
     return source.promise
   }
 
-  public func dismissViewControllerPromise(animated flag: Bool) -> Promise<Void, NoError> {
+  public func dismiss(animated flag: Bool) -> Promise<Void, NoError> {
     let source = PromiseSource<Void, NoError>()
 
-    self.dismissViewControllerAnimated(flag, completion: source.resolve)
+    self.dismiss(animated: flag, completion: source.resolve)
 
     return source.promise
   }
 
-  public func transitionPromise(fromView fromViewController: UIViewController, toViewController: UIViewController, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
+  public func transition(from fromViewController: UIViewController, to toViewController: UIViewController, duration: TimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.transitionFromViewController(fromViewController, toViewController: toViewController, duration: duration, options: options, animations: animations, completion: source.resolve)
+    self.transition(from: fromViewController, to: toViewController, duration: duration, options: options, animations: animations, completion: source.resolve)
 
     return source.promise
   }
@@ -88,7 +88,7 @@ var associatedObjectHandle: UInt8 = 0
 let associationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
 
 // UIAlertView is deprecated per iOS 9, however this extension is here for convenience
-@available(iOS, introduced=2.0, deprecated=9.0, message="UIAlertView is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleAlert instead")
+@available(iOS, introduced: 2.0, deprecated: 9.0, message: "UIAlertView is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleAlert instead")
 extension UIAlertView {
   var strongDelegate: AlertViewDelegate? {
     get {
@@ -124,41 +124,41 @@ extension UIAlertView {
       self.alertView.strongDelegate = self
     }
 
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-      originalDelegate?.alertView?(alertView, clickedButtonAtIndex: buttonIndex)
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+      originalDelegate?.alertView?(alertView, clickedButtonAt: buttonIndex)
 
       source.resolve(buttonIndex)
     }
 
-    func alertViewCancel(alertView: UIAlertView) {
+    func alertViewCancel(_ alertView: UIAlertView) {
       originalDelegate?.alertViewCancel?(alertView)
     }
 
-    func willPresentAlertView(alertView: UIAlertView) {
-      originalDelegate?.willPresentAlertView?(alertView)
+    func willPresent(_ alertView: UIAlertView) {
+      originalDelegate?.willPresent?(alertView)
     }
 
-    func didPresentAlertView(alertView: UIAlertView) {
-      originalDelegate?.didPresentAlertView?(alertView)
+    func didPresent(_ alertView: UIAlertView) {
+      originalDelegate?.didPresent?(alertView)
     }
 
-    func alertView(alertView: UIAlertView, willDismissWithButtonIndex buttonIndex: Int) {
+    func alertView(_ alertView: UIAlertView, willDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.alertView?(alertView, willDismissWithButtonIndex: buttonIndex)
     }
 
-    func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
+    func alertView(_ alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.alertView?(alertView, didDismissWithButtonIndex: buttonIndex)
       self.alertView.strongDelegate = nil
     }
 
-    func alertViewShouldEnableFirstOtherButton(alertView: UIAlertView) -> Bool {
+    func alertViewShouldEnableFirstOtherButton(_ alertView: UIAlertView) -> Bool {
       return originalDelegate?.alertViewShouldEnableFirstOtherButton?(alertView) ?? false
     }
   }
 }
 
 // UIActionSheet is deprecated per iOS 8, however this extension is here for convenience
-@available(iOS, deprecated=8.3, message="'UIActionSheet' was deprecated in iOS 8.3: UIActionSheet is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleActionSheet instead")
+@available(iOS, deprecated: 8.3, message: "'UIActionSheet' was deprecated in iOS 8.3: UIActionSheet is deprecated. Use UIAlertController with a preferredStyle of UIAlertControllerStyleActionSheet instead")
 extension UIActionSheet {
   var strongDelegate: ActionSheetDelegate? {
     get {
@@ -169,12 +169,12 @@ extension UIActionSheet {
     }
   }
 
-  public func showInViewPromise(view: UIView!) -> Promise<Int, NoError> {
+  public func showPromise(in view: UIView) -> Promise<Int, NoError> {
     let source = PromiseSource<Int, NoError>()
     let originalDelegate = self.delegate
 
     self.delegate = ActionSheetDelegate(source: source, actionSheet: self, originalDelegate: originalDelegate)
-    self.showInView(view)
+    self.show(in: view)
 
     return source.promise
   }
@@ -194,31 +194,82 @@ extension UIActionSheet {
       self.actionSheet.strongDelegate = self
     }
 
-    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-      originalDelegate?.actionSheet?(actionSheet, clickedButtonAtIndex: buttonIndex)
+    func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
+      originalDelegate?.actionSheet?(actionSheet, clickedButtonAt: buttonIndex)
 
       source.resolve(buttonIndex)
     }
 
-    func actionSheetCancel(actionSheet: UIActionSheet) {
+    func actionSheetCancel(_ actionSheet: UIActionSheet) {
       originalDelegate?.actionSheetCancel?(actionSheet)
     }
 
-    func willPresentActionSheet(actionSheet: UIActionSheet) {
-      originalDelegate?.willPresentActionSheet?(actionSheet)
+    func willPresent(_ actionSheet: UIActionSheet) {
+      originalDelegate?.willPresent?(actionSheet)
     }
 
-    func didPresentActionSheet(actionSheet: UIActionSheet) {
-      originalDelegate?.didPresentActionSheet?(actionSheet)
+    func didPresent(_ actionSheet: UIActionSheet) {
+      originalDelegate?.didPresent?(actionSheet)
     }
 
-    func actionSheet(actionSheet: UIActionSheet, willDismissWithButtonIndex buttonIndex: Int) {
+    func actionSheet(_ actionSheet: UIActionSheet, willDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.actionSheet?(actionSheet, willDismissWithButtonIndex: buttonIndex)
     }
 
-    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+    func actionSheet(_ actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
       originalDelegate?.actionSheet?(actionSheet, didDismissWithButtonIndex: buttonIndex)
       self.actionSheet.strongDelegate = nil
     }
+  }
+}
+
+// Swift 3 renames
+extension UIView {
+  @available(*, unavailable, renamed: "animate(withDuration:delay:options:animations:)")
+  public class func animatePromise(duration: TimeInterval, delay: TimeInterval, options: UIViewAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "transition(with:duration:options:animations:)")
+  public class func transitionPromise(view: UIView, duration: TimeInterval, options: UIViewAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "transition(from:to:duration:options:)")
+  public class func transitionPromise(fromView: UIView, toView: UIView, duration: TimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "perform(_:on:options:animations:)")
+  public class func performSystemAnimationPromise(_ animation: UISystemAnimation, onViews views: [UIView], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "animateKeyframes(withDuration:delay:options:animations:)")
+  public class func animateKeyframesPromise(duration: TimeInterval, delay: TimeInterval, options: UIViewKeyframeAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "present(_:animated:)")
+  public func presentViewControllerPromise(_ viewControllerToPresent: UIViewController, animated flag: Bool) -> Promise<Void, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "dismiss(animated:)")
+  public func dismissViewControllerPromise(animated flag: Bool) -> Promise<Void, NoError> {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "transition(from:to:duration:options:animations:)")
+  public func transitionPromise(fromView fromViewController: UIViewController, toViewController: UIViewController, duration: TimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
+    fatalError()
+  }
+}
+
+extension UIActionSheet {
+
+  @available(*, unavailable, renamed: "showPromise(in:)")
+  public func showInViewPromise(view: UIView!) -> Promise<Int, NoError> {
+    fatalError()
   }
 }
