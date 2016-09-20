@@ -10,13 +10,18 @@ import AVFoundation
 
 
 extension AVCaptureDevice {
-  public static func requestAccessForMediaTypePromise(mediaType: String) -> Promise<Bool, NoError> {
+  public static func requestAccess(forMediaType mediaType: String) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.requestAccessForMediaType(mediaType) { granted in
+    self.requestAccess(forMediaType: mediaType) { granted in
       source.resolve(granted)
     }
 
     return source.promise
+  }
+
+  @available(*, unavailable, renamed: "requestAccess(forMediaType:)")
+  public static func requestAccessForMediaTypePromise(_ mediaType: String) -> Promise<Bool, NoError> {
+    fatalError()
   }
 }

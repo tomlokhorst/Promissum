@@ -221,6 +221,13 @@ extension UIActionSheet {
       self.actionSheet.strongDelegate = nil
     }
   }
+
+  // Swift 3 renames
+
+  @available(*, unavailable, renamed: "showPromise(in:)")
+  public func showInViewPromise(view: UIView!) -> Promise<Int, NoError> {
+    fatalError()
+  }
 }
 
 // Swift 3 renames
@@ -262,14 +269,6 @@ extension UIView {
 
   @available(*, unavailable, renamed: "transition(from:to:duration:options:animations:)")
   public func transitionPromise(fromView fromViewController: UIViewController, toViewController: UIViewController, duration: TimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
-    fatalError()
-  }
-}
-
-extension UIActionSheet {
-
-  @available(*, unavailable, renamed: "showPromise(in:)")
-  public func showInViewPromise(view: UIView!) -> Promise<Int, NoError> {
     fatalError()
   }
 }

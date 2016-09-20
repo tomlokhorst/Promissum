@@ -15,16 +15,18 @@ import PromissumExtensions
 class AlamofirePromiseTests: XCTestCase {
 
   func testAlamofire() {
-    let expectation = expectationWithDescription("Request not completed")
+    let exp = expectation(description: "Request not completed")
 
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
-    Alamofire.request(.GET, url).responseJSONPromise()
+    Alamofire.request(url)
+      .responseJSONPromise()
       .then { response in
         if let dict = response.result as? [String: AnyObject],
-          let name = dict["name"] as? String
-          where name == "Promissum" {
-          expectation.fulfill()
+          let name = dict["name"] as? String,
+          name == "Promissum"
+        {
+          exp.fulfill()
         }
       }
       .trap { e in
@@ -32,6 +34,6 @@ class AlamofirePromiseTests: XCTestCase {
       }
 
     // Wait for 1 second for the download to be cancelled
-    waitForExpectationsWithTimeout(5.0, handler: nil)
+    waitForExpectations(timeout: 5.0, handler: nil)
   }
 }
