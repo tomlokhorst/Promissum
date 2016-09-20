@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.summary      = "A promises library written in Swift featuring combinators like map, flatMap, whenAll, whenAny."
 
   s.description  = <<-DESC
-Promissum is a promise library written in Swift. It features some known functions from Function Programming like, `map` and `flatMap`.
+Promissum is a promise library written in Swift. It features some known functions from Functional Programming like, `map` and `flatMap`.
 
 It has useful combinators for working with promises like; `whenAll` for doing something when multiple promises complete, and `whenAny` for doing something when a single one of a list of promises completes. As well as their binary counterparts: `whenBoth` and `whenEither`.
 

@@ -1,7 +1,7 @@
 <img src="https://cloud.githubusercontent.com/assets/75655/5077599/2f2d9f8c-6ea5-11e4-98d2-cdb72f6686a8.png" width="170" alt="Promissum">
 <hr>
 
-Promissum is a promises library written in Swift. It features some known functions from Function Programming like, `map` and `flatMap`.
+Promissum is a promises library written in Swift. It features some known functions from Functional Programming like, `map` and `flatMap`.
 
 It has useful combinators for working with promises like; `whenAll` for doing something when multiple promises complete, and `whenAny` for doing something when a single one of a list of promises completes. As well as their binary counterparts: `whenBoth` and `whenEither`.
 
