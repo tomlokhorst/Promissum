@@ -22,7 +22,18 @@ public func flatten<Value, Error>(_ promise: Promise<Promise<Value, Error>, Erro
 ///
 /// If either of the two Promises fails, the returned Promise also fails.
 public func whenBoth<A, B, Error>(_ promiseA: Promise<A, Error>, _ promiseB: Promise<B, Error>) -> Promise<(A, B), Error> {
-  return promiseA.flatMap { valueA in promiseB.map { valueB in (valueA, valueB) } }
+  let source = PromiseSource<(A, B), Error>()
+
+  promiseA.trap(source.reject)
+  promiseB.trap(source.reject)
+
+  promiseA.then { valueA in
+    promiseB.then { valueB in
+      source.resolve((valueA, valueB))
+    }
+  }
+
+  return source.promise
 }
 
 
