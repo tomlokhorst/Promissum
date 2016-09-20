@@ -1,11 +1,11 @@
 PODS:
   - Alamofire (4.0.0)
-  - Promissum (0.5.0):
-    - Promissum/Core (= 0.5.0)
-  - Promissum/Alamofire (0.5.0):
+  - Promissum (1.0.0):
+    - Promissum/Core (= 1.0.0)
+  - Promissum/Alamofire (1.0.0):
     - Alamofire (~> 4.0)
     - Promissum/Core
-  - Promissum/Core (0.5.0)
+  - Promissum/Core (1.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
-  Promissum: d5cb1185866f70505d593763d7405a88416ee2f0
+  Promissum: 78ebc215aeab3a2d0d75682da2024f9a3afd4f38
 
 PODFILE CHECKSUM: a01b90ab2d5d8b3ed9b5bbf474a6683241399c66
 
