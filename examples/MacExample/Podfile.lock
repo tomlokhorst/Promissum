@@ -1,23 +1,25 @@
 PODS:
-  - Alamofire (3.1.5)
+  - Alamofire (4.0.0)
   - Promissum (0.5.0):
     - Promissum/Core (= 0.5.0)
   - Promissum/Alamofire (0.5.0):
-    - Alamofire (~> 3.0)
+    - Alamofire (~> 4.0)
     - Promissum/Core
   - Promissum/Core (0.5.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.0)
+  - Alamofire (~> 4.0)
   - Promissum (from `../../`)
   - Promissum/Alamofire (from `../../`)
 
 EXTERNAL SOURCES:
   Promissum:
-    :path: ../../
+    :path: "../../"
 
 SPEC CHECKSUMS:
-  Alamofire: 5f730ba29fd113b7ddd71c1e65d0c630acf5d7b0
-  Promissum: 5a19ac43911690a60ee4951c3da2c02c3894d722
+  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
+  Promissum: d5cb1185866f70505d593763d7405a88416ee2f0
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: a01b90ab2d5d8b3ed9b5bbf474a6683241399c66
+
+COCOAPODS: 1.1.0.rc.2

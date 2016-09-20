@@ -11,7 +11,7 @@ import Promissum
 
 extension NSAnimationContext {
 
-  public class func runAnimationGroupPromise(changes: (NSAnimationContext!) -> Void) -> Promise<Void, NoError> {
+  public class func runAnimationGroupPromise(_ changes: (NSAnimationContext!) -> Void) -> Promise<Void, NoError> {
     let source = PromiseSource<Void, NoError>()
 
     self.runAnimationGroup(changes, completionHandler: source.resolve)

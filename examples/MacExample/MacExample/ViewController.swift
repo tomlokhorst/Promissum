@@ -28,31 +28,31 @@ class ViewController: NSViewController {
     errorField.alphaValue = 0
   }
 
-  @IBAction func buttonAction(sender: NSButton) {
+  @IBAction func buttonAction(_ sender: NSButton) {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let jsonPromise = Alamofire.request(.GET, url)
+    let jsonPromise = Alamofire.request(url)
       .responseJSONPromise()
-      .mapErrorType()
+      .mapError()
 
     // Fade out the "load" button
-    self.loadButton.enabled = false
+    self.loadButton.isEnabled = false
     let fadeoutPromise = NSAnimationContext.runAnimationGroupPromise { context in
         context.duration = 0.5
         self.loadButton.animator().alphaValue = 0
       }
-      .mapErrorType()
+      .mapError()
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, fadeoutPromise)
-      .map { promise, _ in parseJson(promise.result) }
+      .map { promise, _ in parse(json: promise.result) }
       .delay(0.5)
       .then { project in
         self.nameField.stringValue = project.name
         self.descriptionField.stringValue = project.description
 
-        NSAnimationContext.runAnimationGroupPromise { context in
+        _ = NSAnimationContext.runAnimationGroupPromise { context in
           context.duration = 0.5
           self.detailsView.animator().alphaValue = 1
         }
@@ -64,10 +64,11 @@ class ViewController: NSViewController {
   }
 }
 
-func parseJson(json: AnyObject) -> (name: String, description: String) {
+func parse(json: Any) -> (name: String, description: String) {
 
-  let name = json["name"] as! String
-  let description = json["description"] as! String
+  let dict = json as AnyObject
+  let name = dict["name"] as! String
+  let description = dict["description"] as! String
 
   return (name, description)
 }
