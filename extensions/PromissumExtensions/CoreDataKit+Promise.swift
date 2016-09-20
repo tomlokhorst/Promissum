@@ -12,22 +12,32 @@ import CoreDataKit
 
 
 extension CDK {
-  public class func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
-    return sharedStack!.performBlockOnBackgroundContextPromise(block)
+  public class func performOnBackgroundContextPromise(block: @escaping PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    return sharedStack!.performOnBackgroundContextPromise(block: block)
+  }
+
+  @available(*, unavailable, renamed: "performOnBackgroundContextPromise(block:)")
+  public class func performBlockOnBackgroundContextPromise(_ block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    fatalError()
   }
 }
 
 extension CoreDataStack {
-  public func performBlockOnBackgroundContextPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
-    return backgroundContext.performBlockPromise(block)
+  public func performOnBackgroundContextPromise(block: @escaping PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    return backgroundContext.perform(block: block)
+  }
+
+  @available(*, unavailable, renamed: "performOnBackgroundContextPromise(block:)")
+  public func performBlockOnBackgroundContextPromise(_ block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    fatalError()
   }
 }
 
 extension NSManagedObjectContext {
-  public func performBlockPromise(block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+  public func perform(block: @escaping PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     let promiseSource = PromiseSource<CommitAction, CoreDataKitError>()
 
-    performBlock(block) { result in
+    perform(block: block) { result in
       do {
         let action = try result()
         promiseSource.resolve(action)
@@ -36,10 +46,15 @@ extension NSManagedObjectContext {
           promiseSource.reject(error)
       }
       catch let error {
-        promiseSource.reject(CoreDataKitError.UnknownError(description: "\(error)"))
+        promiseSource.reject(CoreDataKitError.unknownError(description: "\(error)"))
       }
     }
 
     return promiseSource.promise
+  }
+
+  @available(*, unavailable, renamed: "perform(block:)")
+  public func performBlockPromise(_ block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
+    fatalError()
   }
 }

@@ -32,36 +32,36 @@ class ViewController: UIViewController {
     errorView.alpha = 0
 
     // Give the button a border, so the fade shows up better
-    loadButton.layer.borderColor = loadButton.tintColor!.CGColor
+    loadButton.layer.borderColor = loadButton.tintColor!.cgColor
     loadButton.layer.borderWidth = 1.0;
     loadButton.layer.cornerRadius = 3;
   }
 
-  @IBAction func buttonTouchUp(sender: UIButton) {
+  @IBAction func buttonTouchUp(_ sender: UIButton) {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let jsonPromise = Alamofire.request(.GET, url)
+    let jsonPromise = Alamofire.request(url)
       .responseJSONPromise()
-      .mapErrorType()
+      .mapError()
 
     // Fade out the "load" button
-    let fadeoutPromise = UIView.animatePromise(duration: 0.5) {
+    let fadeoutPromise = UIView.animatePromise(withDuration: 0.5) {
         self.loadButton.alpha = 0
       }
-      .void()
-      .mapErrorType()
+      .mapVoid()
+      .mapError()
 
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, fadeoutPromise)
-      .map { response, _ in parseJson(response.result) }
+      .map { response, _ in parse(json: response.result) }
       .flatMap(storeInCoreData)
       .delay(0.5)
       .then { project in
         self.nameLabel.text = project.name
         self.descriptionLabel.text = project.descr
 
-        UIView.animatePromise(duration: 0.5) {
+        UIView.animate(withDuration: 0.5) {
           self.detailsView.alpha = 1
         }
       }
@@ -73,25 +73,26 @@ class ViewController: UIViewController {
   }
 }
 
-func parseJson(json: AnyObject) -> (name: String, description: String) {
+func parse(json: Any) -> (name: String, description: String) {
 
-  let name = json["name"] as! String
-  let description = json["description"] as! String
+  let dict = json as AnyObject
+  let name = dict["name"] as! String
+  let description = dict["description"] as! String
 
   return (name, description)
 }
 
-func storeInCoreData(result: (name: String, description: String)) -> Promise<Project, ErrorType> {
+func storeInCoreData(result: (name: String, description: String)) -> Promise<Project, Error> {
 
   var project: Project!
 
-  return CDK.performBlockOnBackgroundContextPromise { context in
+  return CDK.performOnBackgroundContextPromise { context in
       do {
         project = try context.create(Project.self)
         project.name = result.name
         project.descr = result.description
 
-        return .SaveToPersistentStore
+        return .saveToPersistentStore
       }
       catch {
         fatalError("Shouldn't happen")
@@ -105,5 +106,5 @@ func storeInCoreData(result: (name: String, description: String)) -> Promise<Pro
         fatalError("Shouldn't happen")
       }
     }
-    .mapErrorType()
+    .mapError()
 }

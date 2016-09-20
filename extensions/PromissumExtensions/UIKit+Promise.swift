@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-  public class func animate(duration: TimeInterval, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+  public class func animatePromise(withDuration duration: TimeInterval, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.animate(withDuration: duration, animations: animations, completion: source.resolve)

@@ -17,7 +17,7 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.social_media_url  = "https://twitter.com/tomlokhorst"
   s.homepage          = "https://github.com/tomlokhorst/Promissum"
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.10'
   s.tvos.deployment_target = '9.0'
 
@@ -32,14 +32,14 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.subspec "Alamofire" do |ss|
     ss.source_files = "extensions/PromissumExtensions/Alamofire+Promise.swift"
     ss.dependency "Promissum/Core"
-    ss.dependency "Alamofire", "~> 3.0"
+    ss.dependency "Alamofire", "~> 4.0"
   end
 
   s.subspec "CoreDataKit" do |ss|
     ss.ios.deployment_target = '8.0'
     ss.source_files = "extensions/PromissumExtensions/CoreDataKit+Promise.swift"
     ss.dependency "Promissum/Core"
-    ss.dependency "CoreDataKit", "~> 0.9"
+    ss.dependency "CoreDataKit", "~> 0.10"
   end
 
   s.subspec "UIKit" do |ss|

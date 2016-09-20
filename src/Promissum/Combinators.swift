@@ -153,12 +153,22 @@ extension Promise {
   public func mapVoid() -> Promise<Void, Error> {
     return self.map { _ in }
   }
+
+  @available(*, unavailable, renamed: "mapVoid")
+  public func void() -> Promise<Void, Error> {
+    fatalError()
+  }
 }
 
 extension Promise where Error : Swift.Error {
 
   /// Returns a Promise where the error is casted to an ErrorType.
-  public func mapErrorType() -> Promise<Value, Error> {
+  public func mapError() -> Promise<Value, Swift.Error> {
     return self.mapError { $0 }
+  }
+
+  @available(*, unavailable, renamed: "mapError")
+  public func mapErrorType() -> Promise<Value, Swift.Error> {
+    fatalError()
   }
 }

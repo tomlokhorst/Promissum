@@ -28,7 +28,7 @@ public struct SuccessResponse<Value> {
 
 /// Used to store all response data returned from a failed completed `Request`.
 /// Based on `Alamofire.Response`.
-public struct ErrorResponse {
+public struct ErrorResponse : Error {
   public var request: URLRequest?
   public var response: HTTPURLResponse?
   public var data: Data?
