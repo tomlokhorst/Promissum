@@ -24,8 +24,10 @@ extension State: CustomStringConvertible {
     switch self {
     case .unresolved:
       return "Unresolved"
+
     case .resolved(let value):
       return "Resolved(\(value))"
+
     case .rejected(let error):
       return "Rejected(\(error))"
     }

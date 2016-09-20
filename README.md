@@ -20,7 +20,7 @@ If both those succeed the result is shown to the user, if either of those fail, 
 
 ```swift
 let url = "https://api.github.com/repos/tomlokhorst/Promissum"
-Alamofire.request(.GET, url).responseJSONPromise()
+Alamofire.request(url).responseJSONPromise()
   .map(parseJson)
   .flatMap(storeInCoreData)
   .then { project in
@@ -29,7 +29,7 @@ Alamofire.request(.GET, url).responseJSONPromise()
     self.nameLabel.text = project.name
     self.descriptionLabel.text = project.descr
 
-    UIView.animateWithDuration(0.5) {
+    UIView.animate(withDuration: 0.5) {
       self.detailsView.alpha = 1
     }
   }
@@ -71,7 +71,7 @@ Listed below are some of the methods and functions provided this library. More d
 * `.flatMapError(transform: Error -> Promise<Value, NewError>)`  
   Returns the flattened result of mapping a function over the promise error.
 
-* `.dispatchOn(queue: dispatch_queue_t)`
+* `.dispatch(on: queue: DispatchQueue)`
   Returns a new promise that will execute all callbacks on the specified dispatch_queue. See [dispatch queues](#dispatch-queues)
 
 
@@ -106,8 +106,8 @@ However, it's easy to change the dispatch queue used by a promise. In one of two
 1. Set the dispatch queue when creating a PromiseSource, e.g.:
 
 ```swift
-let background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-let source = PromiseSource<Int, NoError>(dispatch: .OnQueue(background))
+let background = DispatchQueue.global(qos: .background)
+let source = PromiseSource<Int, NoError>(dispatch: .queue(background))
 source.promise
   .then { x in
     // Handler is called on background queue
@@ -117,9 +117,9 @@ source.promise
 2. Or, create a new promise using the `.dispatchOn` combinator:
 
 ```swift
-let background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+let background = DispatchQueue.global(qos: .background)
 somePromise()
-  .dispatchOn(background)
+  .dispatch(on: background)
   .then { x in
     // Handler is called on background queue
   }
@@ -128,9 +128,9 @@ somePromise()
 For convenience, there's also `.dispatchMain` to move back to the main queue, after doing some work on a background queue:
 
 ```swift
-let background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+let background = DispatchQueue.global(qos: .background)
 somePromise()
-  .dispatchOn(background)
+  .dispatch(on: background)
   .map { expensiveComputation($0) }
   .dispatchMain()
   .then { x in
@@ -154,9 +154,6 @@ $ gem install cocoapods
 To integrate Promissum into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
-
 pod 'Promissum'
 ```
 
@@ -170,6 +167,7 @@ $ pod install
 Releases
 --------
 
+ - **1.0.0** - 2016-09-20 - Swift 3 support, requires iOS 9 & OSX 10.11
  - **0.5.0** - 2016-01-19 - Add `dispatchOn` methods for dispatching on different queues
  - **0.4.0** - 2015-11-04 - Update Alamofire+Promise to Alamofire 3
  - **0.3.0** - 2015-09-11 - Swift 2 support, added custom error types

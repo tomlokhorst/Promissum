@@ -460,3 +460,13 @@ public struct Promise<Value, Error> {
     return resultSource.promise
   }
 }
+
+// Swift 3 renames
+extension Promise {
+
+  @available(*, unavailable, renamed: "dispatch(on:)")
+  public func dispatchOn(_ queue: DispatchQueue) -> Promise<Value, Error> {
+    fatalError()
+  }
+
+}
