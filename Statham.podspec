@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Statham"
-  s.version      = "0.6.2"
+  s.version      = "1.0.0"
   s.license      = "MIT"
 
   s.summary      = "Swift library for decoding Json. Used by JsonGen code generator."
@@ -26,8 +26,8 @@ Pod::Spec.new do |s|
     ss.source_files  = "Sources"
   end
 
-  s.subspec "NSDate-iso8601" do |ss|
-    ss.source_files = "extensions/NSDate+JsonGen.swift"
+  s.subspec "Date-iso8601" do |ss|
+    ss.source_files = "extensions/Date+JsonGen.swift"
     ss.dependency "Statham/Core"
   end
 end

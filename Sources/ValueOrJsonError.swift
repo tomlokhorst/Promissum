@@ -9,36 +9,36 @@
 import Foundation
 
 public enum ValueOrJsonError<Wrapped> {
-  case Value(Wrapped)
-  case Error(JsonDecodeError)
+  case value(Wrapped)
+  case error(JsonDecodeError)
 
   public var value: Wrapped? {
     switch self {
-    case .Value(let val):
+    case .value(let val):
       return val
 
-    case .Error:
+    case .error:
       return nil
     }
   }
 
-  public static func decodeJson(decodeWrapped: AnyObject throws -> Wrapped) -> AnyObject throws -> ValueOrJsonError<Wrapped> {
+  public static func decodeJson(decodeWrapped: @escaping (Any) throws -> Wrapped) -> (Any) throws -> ValueOrJsonError<Wrapped> {
     return { json in
       do {
-        return .Value(try decodeWrapped(json))
+        return .value(try decodeWrapped(json))
       }
       catch let error as JsonDecodeError {
-        return .Error(error)
+        return .error(error)
       }
     }
   }
 
-  public func encodeJson(encodeJsonWrapped: Wrapped -> AnyObject) -> AnyObject {
+  public func encodeJson(encodeJsonWrapped: (Wrapped) -> Any) -> Any {
     switch self {
-    case .Value(let val):
+    case .value(let val):
       return encodeJsonWrapped(val)
 
-    case .Error:
+    case .error:
       return NSNull()
     }
   }

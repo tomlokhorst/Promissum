@@ -8,89 +8,89 @@
 
 import Foundation
 
-public enum JsonDecodeError : ErrorType {
-  case MissingField
-  case WrongType(rawValue: AnyObject, expectedType: String)
-  case WrongEnumRawValue(rawValue: AnyObject, enumType: String)
-  case ArrayElementErrors([(Int, JsonDecodeError)])
-  case DictionaryErrors([(String, JsonDecodeError)])
-  case StructErrors(type: String, errors: [(String, JsonDecodeError)])
+public enum JsonDecodeError : Error {
+  case missingField
+  case wrongType(rawValue: Any, expectedType: String)
+  case wrongEnumRawValue(rawValue: Any, enumType: String)
+  case arrayElementErrors([(Int, JsonDecodeError)])
+  case dictionaryErrors([(String, JsonDecodeError)])
+  case structErrors(type: String, errors: [(String, JsonDecodeError)])
 }
 
 extension JsonDecodeError: CustomStringConvertible {
 
   public var description: String {
-    return multiline(Verbosity.Multiple).joinWithSeparator("\n")
+    return multiline(verbosity: .multiple).joined(separator: "\n")
   }
 
   public var fullDescription: String {
-    return multiline(Verbosity.Full).joinWithSeparator("\n")
+    return multiline(verbosity: .full).joined(separator: "\n")
   }
 
   private enum Verbosity {
-    case Full
-    case Multiple
-    case Single
+    case full
+    case multiple
+    case single
 
-    func to(other: Verbosity) -> Verbosity {
-      if case .Full = self { return .Full }
+    func to(_ other: Verbosity) -> Verbosity {
+      if case .full = self { return .full }
       return other
     }
   }
 
   private func multiline(verbosity: Verbosity) -> [String] {
     switch self {
-    case .MissingField, .WrongType, .WrongEnumRawValue:
+    case .missingField, .wrongType, .wrongEnumRawValue:
       return [self.line]
 
-    case .ArrayElementErrors(let errors):
+    case .arrayElementErrors(let errors):
       let errs = errors.map { (ix, err) in ("[\(ix)]", err) }
-      return JsonDecodeError.lines(verbosity, type: "array", errors: errs)
+      return JsonDecodeError.lines(verbosity: verbosity, type: "array", errors: errs)
 
-    case .DictionaryErrors(let errors):
+    case .dictionaryErrors(let errors):
       let errs = errors.map { (key, err) in ("\(key):", err) }
-      return JsonDecodeError.lines(verbosity, type: "dictionary", errors: errs)
+      return JsonDecodeError.lines(verbosity: verbosity, type: "dictionary", errors: errs)
 
-    case .StructErrors(let type, let errors):
+    case .structErrors(let type, let errors):
       let errs = errors.map { (key, err) in ("\(key):", err) }
-      return JsonDecodeError.lines(verbosity, type: "\(type) struct", errors: errs)
+      return JsonDecodeError.lines(verbosity: verbosity, type: "\(type) struct", errors: errs)
     }
   }
 
   private var line: String {
     switch self {
-    case .MissingField:
+    case .missingField:
       return "Field missing"
 
-    case let .WrongType(rawValue, expectedType):
+    case let .wrongType(rawValue, expectedType):
       return "Value is not of expected type \(expectedType): `\(rawValue)`"
 
-    case let .WrongEnumRawValue(rawValue, enumType):
+    case let .wrongEnumRawValue(rawValue, enumType):
       return "`\(rawValue)` is not a valid case in enum \(enumType)"
 
-    case let .ArrayElementErrors(errors):
+    case let .arrayElementErrors(errors):
       return errors.count == 1
         ? "(1 error in an array element)"
         : "(\(errors.count) errors in array elements)"
 
-    case let .DictionaryErrors(errors):
+    case let .dictionaryErrors(errors):
       return errors.count == 1
         ? "(1 error in dictionary)"
         : "(\(errors.count) errors in dictionary)"
 
-    case let .StructErrors(type, errors):
+    case let .structErrors(type, errors):
       return errors.count == 1
         ? "(1 error in nested \(type) struct)"
         : "(\(errors.count) errors in nested \(type) struct)"
     }
   }
 
-  private func listItem(collapsed collapsed: Bool) -> String {
+  private func listItem(collapsed: Bool) -> String {
     switch self {
-    case .MissingField, .WrongType, .WrongEnumRawValue:
+    case .missingField, .wrongType, .wrongEnumRawValue:
       return "-"
 
-    case .ArrayElementErrors, .DictionaryErrors, .StructErrors:
+    case .arrayElementErrors, .dictionaryErrors, .structErrors:
       return collapsed ? "▹" : "▿"
     }
   }
@@ -98,10 +98,10 @@ extension JsonDecodeError: CustomStringConvertible {
   private static func lines(verbosity: Verbosity, type: String, errors: [(String, JsonDecodeError)]) -> [String] {
     if errors.count == 0 { return [] }
 
-    func prefix(prefix: String, lines: [String]) -> [String] {
+    func prefix(_ prefix: String, lines: [String]) -> [String] {
       if let first = lines.first {
         let fst = ["\(prefix)\(first)"]
-        let rst = lines.suffixFrom(1).map { "   \($0)" }
+        let rst = lines.suffix(from: 1).map { "   \($0)" }
         return fst + rst
       }
 
@@ -117,11 +117,11 @@ extension JsonDecodeError: CustomStringConvertible {
     result.append(head)
 
     for (key, error) in errors {
-      if multiple && verbosity == .Single {
+      if multiple && verbosity == .single {
         result.append(" \(error.listItem(collapsed: true)) \(key) \(error.line)")
       }
       else {
-        let lines = error.multiline(verbosity.to(.Single))
+        let lines = error.multiline(verbosity: verbosity.to(.single))
         result = result + prefix(" \(error.listItem(collapsed: false)) \(key) ", lines: lines)
       }
     }

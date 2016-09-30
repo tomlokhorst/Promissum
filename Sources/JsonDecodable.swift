@@ -11,21 +11,20 @@ import Foundation
 public class JsonDecoder {
   public var errors: [(String, JsonDecodeError)] = []
 
-  private let dict: [String : AnyObject]
+  private let dict: [String : Any]
 
-  public init(json: AnyObject) throws {
+  public init(json: Any) throws {
 
-    guard let dict = json as? [String : AnyObject] else {
-      self.dict = [:] // Init field, for Swift 2.0
-      throw JsonDecodeError.WrongType(rawValue: json, expectedType: "Object")
+    guard let dict = json as? [String : Any] else {
+      throw JsonDecodeError.wrongType(rawValue: json, expectedType: "Object")
     }
 
     self.dict = dict
   }
 
-  public func decode<T>(name: String, decoder: AnyObject throws -> T) throws -> T? {
+  public func decode<T>(_ name: String, decoder: (Any) throws -> T) throws -> T? {
 
-    if let field: AnyObject = dict[name] {
+    if let field = dict[name] {
       do {
         return try decoder(field)
       }
@@ -34,15 +33,15 @@ public class JsonDecoder {
       }
     }
     else {
-      errors.append((name, JsonDecodeError.MissingField))
+      errors.append((name, JsonDecodeError.missingField))
     }
 
     return nil
   }
 
-  public func decode<T>(name: String, decoder: AnyObject throws -> T?) throws -> T?? {
+  public func decode<T>(_ name: String, decoder: (Any) throws -> T?) throws -> T?? {
 
-    if let field: AnyObject = dict[name] {
+    if let field = dict[name] {
       do {
         return try decoder(field)
       }
@@ -51,7 +50,7 @@ public class JsonDecoder {
       }
     }
     else {
-      return .Some(nil)
+      return .some(nil)
     }
 
     return nil

@@ -8,6 +8,6 @@
 
 import Foundation
 
-public typealias AnyJson = AnyObject
+public typealias AnyJson = Any
 public typealias JsonObject = [String: AnyJson]
 public typealias JsonArray = [AnyJson]
