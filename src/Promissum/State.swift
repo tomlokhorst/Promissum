@@ -9,7 +9,8 @@
 import Foundation
 
 /// Type used when there is no error possible.
-public enum NoError : Error {}
+@available(*, unavailable, renamed: "Never")
+public typealias NoError = Never
 
 /// State of a PromiseSource.
 public enum State<Value, Error> {

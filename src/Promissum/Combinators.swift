@@ -117,8 +117,8 @@ public func whenAny<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promis
 /// Creates a Promise that resolves when all provided Promises finalize.
 ///
 /// When called with an empty array of promises, this returns a Resolved Promise.
-public func whenAllFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
-  let source = PromiseSource<Void, NoError>()
+public func whenAllFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Void, Never> {
+  let source = PromiseSource<Void, Never>()
   var remaining = promises.count
 
   if remaining == 0 {
@@ -144,8 +144,8 @@ public func whenAllFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) 
 /// Creates a Promise that resolves when any of the provided Promises finalize.
 ///
 /// When called with an empty array of promises, this returns a Promise that will never resolve.
-public func whenAnyFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Void, NoError> {
-  let source = PromiseSource<Void, NoError>()
+public func whenAnyFinalized<Value, Error>(_ promises: [Promise<Value, Error>]) -> Promise<Void, Never> {
+  let source = PromiseSource<Void, Never>()
 
   for promise in promises {
 
