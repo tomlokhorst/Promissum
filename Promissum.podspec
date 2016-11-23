@@ -39,7 +39,7 @@ Promissum really shines when used to combine asynchronous operations from differ
     ss.ios.deployment_target = '8.0'
     ss.source_files = "extensions/PromissumExtensions/CoreDataKit+Promise.swift"
     ss.dependency "Promissum/Core"
-    ss.dependency "CoreDataKit", "~> 0.10"
+    ss.dependency "CoreDataKit", "~> 0.12"
   end
 
   s.subspec "UIKit" do |ss|
