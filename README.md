@@ -5,9 +5,9 @@ Promissum is a promises library written in Swift. It features some known functio
 
 It has useful combinators for working with promises like; `whenAll` for doing something when multiple promises complete, and `whenAny` for doing something when a single one of a list of promises completes. As well as their binary counterparts: `whenBoth` and `whenEither`.
 
-Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit, Alamofire and CoreDataKit, and contributions for extensions to other libraries are very welcome.
+Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit and Alamofire, contributions for extensions to other libraries are very welcome.
 
-This library has an extensive set of regression tests, documentation, and has been used for months in several high profile production apps at [Q42](http://q42.com/swift).
+This library has an extensive set of regression tests, documentation, and has been used in several high profile production apps at [Q42](http://q42.com/swift).
 
 
 Example
