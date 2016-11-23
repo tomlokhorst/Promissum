@@ -14,7 +14,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Promissum:
-    :path: "../../"
+    :path: ../../
 
 SPEC CHECKSUMS:
   Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
@@ -22,4 +22,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a01b90ab2d5d8b3ed9b5bbf474a6683241399c66
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.1.1

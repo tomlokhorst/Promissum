@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
   CoreDataKit:
     :git: https://github.com/mac-cain13/CoreDataKit.git
   Promissum:
-    :path: "../../"
+    :path: ../../
 
 CHECKOUT OPTIONS:
   CoreDataKit:
@@ -39,4 +39,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 352fb1524e3107caa6d828334e10a919157109cb
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.1.1
