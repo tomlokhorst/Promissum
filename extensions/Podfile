@@ -5,7 +5,7 @@ use_frameworks!
 # link_with "PromissumExtensions", "PromissumExtensionsTests"
 
 pod 'Alamofire', '~> 4.0'
-pod 'CoreDataKit', :git => 'https://github.com/mac-cain13/CoreDataKit.git', :branch => 'swift3'
+pod 'CoreDataKit', '~> 0.12'
 # pod 'Promissum', :path => '../' # All Promissum source files are manually included in project
 
 target 'PromissumExtensions'

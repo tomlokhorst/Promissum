@@ -1,25 +1,15 @@
 PODS:
   - Alamofire (4.0.0)
-  - CoreDataKit (0.10.0)
+  - CoreDataKit (0.12.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
-  - CoreDataKit (from `https://github.com/mac-cain13/CoreDataKit.git`, branch `swift3`)
-
-EXTERNAL SOURCES:
-  CoreDataKit:
-    :branch: swift3
-    :git: https://github.com/mac-cain13/CoreDataKit.git
-
-CHECKOUT OPTIONS:
-  CoreDataKit:
-    :commit: 91d206be640e48218a5319af457441c46aaa807a
-    :git: https://github.com/mac-cain13/CoreDataKit.git
+  - CoreDataKit (~> 0.12)
 
 SPEC CHECKSUMS:
   Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
-  CoreDataKit: 75f73e4ed6d6040f2c32073fec48397e907b8438
+  CoreDataKit: e400b0a438709312550b4847d09895fa49695a92
 
-PODFILE CHECKSUM: a191f00f2bd840b7eb7984faed66331749e206b1
+PODFILE CHECKSUM: 4cd95deeec6c13f3ac8e6449357ee8fcda82a660
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.1.1
