@@ -25,10 +25,13 @@ Specify Statham in your Podfile:
 pod 'Statham'
 ```
 
-Alternatively, if you also want the ISO8601 Date decoder, use this subspec:
+Alternatively, if you also want the ISO8601 Date decoder, or the Alamofire or Promissum extensions.
+Use any or multiple of these subspecs:
 
 ```ruby
 pod 'Statham/Date-iso8601'
+pod 'Statham/Alamofire'
+pod 'Statham/Alamofire+Promissum'
 ```
 
 Then, run the following command:
@@ -41,6 +44,7 @@ $ pod install
 Releases
 --------
 
+ - 1.1.0 - 2017-01-03 - Add `Alamofire` and `Alamofire+Promissum` subspecs
  - **1.0.0** - 2016-09-30 - Swift 3 support
  - 0.6.2 - 2016-09-03 - Add ValueOrJsonError enum
  - 0.6.1 - 2016-03-14 - Add JsonArray docodeJson & encodeJson
