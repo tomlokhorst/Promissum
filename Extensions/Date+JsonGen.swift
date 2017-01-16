@@ -11,7 +11,7 @@ import Foundation
 extension Date
 {
   private struct JsonGenDateFormatter {
-    static let withTimeZone : DateFormatter = {
+    static let withTimeZone: DateFormatter = {
       let formatter = DateFormatter()
       formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
       formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -20,7 +20,7 @@ extension Date
     }()
   }
 
-  public static func decodeJson(_ json : Any) throws -> Date {
+  public static func decodeJson(_ json: Any) throws -> Date {
     guard
       let str = json as? String,
       let result = JsonGenDateFormatter.withTimeZone.date(from: str)
