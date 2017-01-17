@@ -22,7 +22,7 @@ public enum ValueOrJsonError<Wrapped> {
     }
   }
 
-  public static func decodeJson(decodeWrapped: @escaping (Any) throws -> Wrapped) -> (Any) throws -> ValueOrJsonError<Wrapped> {
+  public static func decodeJson(_ decodeWrapped: @escaping (Any) throws -> Wrapped) -> (Any) throws -> ValueOrJsonError<Wrapped> {
     return { json in
       do {
         return .value(try decodeWrapped(json))
@@ -33,7 +33,7 @@ public enum ValueOrJsonError<Wrapped> {
     }
   }
 
-  public func encodeJson(encodeJsonWrapped: (Wrapped) -> Any) -> Any {
+  public func encodeJson(_ encodeJsonWrapped: (Wrapped) -> Any) -> Any {
     switch self {
     case .value(let val):
       return encodeJsonWrapped(val)
