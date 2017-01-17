@@ -44,6 +44,7 @@ $ pod install
 Releases
 --------
 
+ - 1.2.0 - 2017-01-17 - Fix `ValueOrJsonError` decoders for Swift 3
  - 1.1.0 - 2017-01-03 - Add `Alamofire` and `Alamofire+Promissum` subspecs
  - **1.0.0** - 2016-09-30 - Swift 3 support
  - 0.6.2 - 2016-09-03 - Add ValueOrJsonError enum

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Statham"
-  s.version      = "1.1.0"
+  s.version      = "1.2.0"
   s.license      = "MIT"
 
   s.summary      = "Swift library for decoding Json. Used by JsonGen code generator."
