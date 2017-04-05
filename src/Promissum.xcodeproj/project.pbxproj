@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3C9540E1E9587850081D460 /* DeinitWarningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C9540D1E9587850081D460 /* DeinitWarningTests.swift */; };
 		E204011D1C2B128700239770 /* XCTestCase+Expectation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E204011C1C2B128700239770 /* XCTestCase+Expectation.swift */; };
 		E204011F1C2B484900239770 /* DispatchUnspecifiedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E204011E1C2B484900239770 /* DispatchUnspecifiedTests.swift */; };
 		E20401211C2B4E3700239770 /* DispatchMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20401201C2B4E3700239770 /* DispatchMethod.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C3C9540D1E9587850081D460 /* DeinitWarningTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeinitWarningTests.swift; sourceTree = "<group>"; };
 		E204011C1C2B128700239770 /* XCTestCase+Expectation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Expectation.swift"; sourceTree = "<group>"; };
 		E204011E1C2B484900239770 /* DispatchUnspecifiedTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchUnspecifiedTests.swift; sourceTree = "<group>"; };
 		E20401201C2B4E3700239770 /* DispatchMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchMethod.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				E2DD5F121A54A6EB00A7A4BE /* SourceValueTests.swift */,
 				E204011C1C2B128700239770 /* XCTestCase+Expectation.swift */,
 				E21860F81A1A9BB3005B6047 /* Supporting Files */,
+				C3C9540D1E9587850081D460 /* DeinitWarningTests.swift */,
 			);
 			path = PromissumTests;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				E25726231BA8D3BC00ACE849 /* CombinatorTests.swift in Sources */,
 				E2DD5F0A1A548F2500A7A4BE /* InitialValueTests.swift in Sources */,
 				E2DD5F131A54A6EB00A7A4BE /* SourceValueTests.swift in Sources */,
+				C3C9540E1E9587850081D460 /* DeinitWarningTests.swift in Sources */,
 				E204011D1C2B128700239770 /* XCTestCase+Expectation.swift in Sources */,
 				E2DD5F0F1A549A3500A7A4BE /* InitialErrorTests.swift in Sources */,
 				E2DD5F151A54A85C00A7A4BE /* SourceErrorTests.swift in Sources */,
