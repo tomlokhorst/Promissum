@@ -79,35 +79,41 @@ public class PromiseSource<Value, Error> {
   /// Print a warning on deinit of an unresolved PromiseSource
   public var warnUnresolvedDeinit: Bool
 
+  /// Keep location of place where PromiseSource is initialized
+  private let fileLocation: String
+  private let fileLine: Int
+  
   // MARK: Initializers & deinit
 
-  internal convenience init(value: Value) {
-    self.init(state: .resolved(value), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
+  internal convenience init(value: Value, fileLocation: String = #file, fileLine: Int = #line) {
+    self.init(state: .resolved(value), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false, fileLocation: fileLocation, fileLine: fileLine)
   }
 
-  internal convenience init(error: Error) {
-    self.init(state: .rejected(error), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
+  internal convenience init(error: Error, fileLocation: String = #file, fileLine: Int = #line) {
+    self.init(state: .rejected(error), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false, fileLocation: fileLocation, fileLine: fileLine)
   }
 
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(dispatch dispatchMethod: DispatchMethod = .unspecified, warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .unresolved, dispatchKey: DispatchSpecificKey(), dispatchMethod: dispatchMethod, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(dispatch dispatchMethod: DispatchMethod = .unspecified, warnUnresolvedDeinit: Bool = true, fileLocation: String = #file, fileLine: Int = #line) {
+    self.init(state: .unresolved, dispatchKey: DispatchSpecificKey(), dispatchMethod: dispatchMethod, warnUnresolvedDeinit: warnUnresolvedDeinit, fileLocation: fileLocation, fileLine: fileLine)
   }
 
-  internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
+  internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool, fileLocation: String = #file, fileLine: Int = #line) {
     self.state = state
     self.dispatchKey = dispatchKey
     self.dispatchMethod = dispatchMethod
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
+    self.fileLocation = fileLocation
+    self.fileLine = fileLine
   }
 
   deinit {
     if warnUnresolvedDeinit {
       switch state {
       case .unresolved:
-        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
+        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object? Allocated at \(fileLocation):\(fileLine)")
       default:
         break
       }
