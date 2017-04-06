@@ -11,44 +11,44 @@ import XCTest
 import Promissum
 
 class DeinitWarningTests: XCTestCase {
-  
-  func testUnresolvedSourceDeinit() {
-    var deallocWarning = false
-    
-    makeUnresolvedPromise(deallocWarning: { _ in deallocWarning = true })
-    
-    XCTAssert(deallocWarning, "Dealloc warning callback should have been called")
-  }
-  
+
   func makeUnresolvedPromise(deallocWarning: @escaping ([SourceLocation]) -> Void) -> Promise<Int, NoError> {
     let source = PromiseSource<Int, NoError>()
     source.warnUnresolvedDeinit = Warning.callback(callstack: deallocWarning)
-    
+
     return source.promise
   }
-  
-  func testUnresolvedMapDeinit() {
-    var deallocWarning = false
-    
-    mappedPromise(deallocWarning: { _ in deallocWarning = true })
-    
-    XCTAssert(deallocWarning, "Dealloc warning callback should have been called")
-  }
-  
+
   func mappedPromise(deallocWarning: @escaping ([SourceLocation]) -> Void) -> Promise<Int, NoError> {
     return makeUnresolvedPromise(deallocWarning: deallocWarning).map { x in x * 2 }
   }
+
+  func testUnresolvedSourceDeinit() {
+    var callstack: [SourceLocation] = []
+
+    _ = makeUnresolvedPromise(deallocWarning: { callstack = $0 })
+
+    XCTAssertEqual(callstack.first?.function, "makeUnresolvedPromise(deallocWarning:)")
+  }
+  
+  func testUnresolvedMapDeinit() {
+    var callstack: [SourceLocation] = []
+    
+    _ = mappedPromise(deallocWarning: { callstack = $0 })
+
+    XCTAssertEqual(callstack.first?.function, "mappedPromise(deallocWarning:)")
+  }
   
   func testUnresolvedVariableDeinit() {
-    var deallocWarning = false
+    var callstack: [SourceLocation] = []
     
-    var promise: Promise<Int, NoError>? = makeUnresolvedPromise(deallocWarning: { _ in deallocWarning = true })
-    
-    promise?.map { $0 }
+    var promise: Promise<Int, NoError>? = makeUnresolvedPromise(deallocWarning: { callstack = $0 })
+
+    _ = promise?.map { $0 }
     
     // Explicitly reset promise to trigger ARC dealloc of source at this point
     promise = nil
-    
-    XCTAssert(deallocWarning, "Dealloc warning callback should have been called")
+
+    XCTAssertEqual(callstack.first?.function, "testUnresolvedVariableDeinit()")
   }
 }

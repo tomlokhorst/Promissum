@@ -266,11 +266,11 @@ public enum Warning {
 }
 
 public struct SourceLocation {
-  let file: String
-  let line: Int
-  let column: Int
-  let function: String
-  let name: String
+  public let file: String
+  public let line: Int
+  public let column: Int
+  public let function: String
+  public let name: String
 }
 
 internal protocol OriginalSource : class {
