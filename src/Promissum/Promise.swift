@@ -99,14 +99,26 @@ public struct Promise<Value, Error> {
   ///
   /// Example: `Promise<Int, NoError>(value: 42)`
   public init(value: Value) {
-    self.source = PromiseSource(value: value)
+    self.source = PromiseSource(
+      state: .resolved(value),
+      dispatchKey: DispatchSpecificKey(),
+      dispatchMethod: .unspecified,
+      warnUnresolvedDeinit: .dontWarn,
+      callstack: Callstack()
+    )
   }
 
   /// Initialize a rejected Promise with an error.
   ///
   /// Example: `Promise<Int, String>(error: "Oops")`
   public init(error: Error) {
-    self.source = PromiseSource(error: error)
+    self.source = PromiseSource(
+      state: .rejected(error),
+      dispatchKey: DispatchSpecificKey(),
+      dispatchMethod: .unspecified,
+      warnUnresolvedDeinit: .dontWarn,
+      callstack: Callstack()
+    )
   }
 
   internal init(source: PromiseSource<Value, Error>) {
@@ -305,9 +317,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: dispatchKey,
       dispatchMethod: dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     source.addOrCallResultHandler(resultSource.resolveResult)
@@ -332,9 +343,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -367,9 +377,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -406,9 +415,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -441,9 +449,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -479,9 +486,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -513,9 +519,8 @@ public struct Promise<Value, Error> {
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      originalSource: self.source.originalSource,
-      warnUnresolvedDeinit: self.source.warnUnresolvedDeinit,
-      sourceLocation: sourceLocation
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in

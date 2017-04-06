@@ -12,35 +12,38 @@ import Promissum
 
 class DeinitWarningTests: XCTestCase {
 
-  func makeUnresolvedPromise(deallocWarning: @escaping ([SourceLocation]) -> Void) -> Promise<Int, NoError> {
+  func makeUnresolvedPromise(deallocWarning: @escaping (Callstack) -> Void) -> Promise<Int, NoError> {
     let source = PromiseSource<Int, NoError>()
-    source.warnUnresolvedDeinit = Warning.callback(callstack: deallocWarning)
+    source.warnUnresolvedDeinit = Warning.callback(deallocWarning)
 
     return source.promise
   }
 
-  func mappedPromise(deallocWarning: @escaping ([SourceLocation]) -> Void) -> Promise<Int, NoError> {
+  func mappedPromise(deallocWarning: @escaping (Callstack) -> Void) -> Promise<Int, NoError> {
     return makeUnresolvedPromise(deallocWarning: deallocWarning).map { x in x * 2 }
   }
 
   func testUnresolvedSourceDeinit() {
-    var callstack: [SourceLocation] = []
+    var callstack: Callstack?
 
     _ = makeUnresolvedPromise(deallocWarning: { callstack = $0 })
 
-    XCTAssertEqual(callstack.first?.function, "makeUnresolvedPromise(deallocWarning:)")
+    XCTAssertEqual(callstack?.locations.count, 1)
+    XCTAssertEqual(callstack?.locations.first?.function, "makeUnresolvedPromise(deallocWarning:)")
   }
   
   func testUnresolvedMapDeinit() {
-    var callstack: [SourceLocation] = []
+    var callstack: Callstack?
     
     _ = mappedPromise(deallocWarning: { callstack = $0 })
 
-    XCTAssertEqual(callstack.first?.function, "mappedPromise(deallocWarning:)")
+    XCTAssertEqual(callstack?.locations.count, 2)
+    XCTAssertEqual(callstack?.locations.first?.function, "makeUnresolvedPromise(deallocWarning:)")
+    XCTAssertEqual(callstack?.locations.last?.function, "mappedPromise(deallocWarning:)")
   }
   
   func testUnresolvedVariableDeinit() {
-    var callstack: [SourceLocation] = []
+    var callstack: Callstack?
     
     var promise: Promise<Int, NoError>? = makeUnresolvedPromise(deallocWarning: { callstack = $0 })
 
@@ -49,6 +52,8 @@ class DeinitWarningTests: XCTestCase {
     // Explicitly reset promise to trigger ARC dealloc of source at this point
     promise = nil
 
-    XCTAssertEqual(callstack.first?.function, "testUnresolvedVariableDeinit()")
+    XCTAssertEqual(callstack?.locations.count, 2)
+    XCTAssertEqual(callstack?.locations.first?.function, "makeUnresolvedPromise(deallocWarning:)")
+    XCTAssertEqual(callstack?.locations.last?.function, "testUnresolvedVariableDeinit()")
   }
 }
