@@ -99,14 +99,26 @@ public struct Promise<Value, Error> {
   ///
   /// Example: `Promise<Int, NoError>(value: 42)`
   public init(value: Value) {
-    self.source = PromiseSource(value: value)
+    self.source = PromiseSource(
+      state: .resolved(value),
+      dispatchKey: DispatchSpecificKey(),
+      dispatchMethod: .unspecified,
+      warnUnresolvedDeinit: .dontWarn,
+      callstack: Callstack()
+    )
   }
 
   /// Initialize a rejected Promise with an error.
   ///
   /// Example: `Promise<Int, String>(error: "Oops")`
   public init(error: Error) {
-    self.source = PromiseSource(error: error)
+    self.source = PromiseSource(
+      state: .rejected(error),
+      dispatchKey: DispatchSpecificKey(),
+      dispatchMethod: .unspecified,
+      warnUnresolvedDeinit: .dontWarn,
+      callstack: Callstack()
+    )
   }
 
   internal init(source: PromiseSource<Value, Error>) {
@@ -280,24 +292,33 @@ public struct Promise<Value, Error> {
   // MARK: Dispatch methods
 
   /// Returns a Promise that dispatches its handlers on the specified dispatch queue.
-  public func dispatch(on queue: DispatchQueue) -> Promise<Value, Error> {
+  public func dispatch(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, on queue: DispatchQueue) -> Promise<Value, Error> {
     let key = DispatchSpecificKey<Void>()
     queue.setSpecific(key: key, value: ())
 
-    return dispatch(on: .queue(queue), dispatchKey: key)
+    return dispatch(file: file, line: line, column: column, function: function, on: .queue(queue), dispatchKey: key)
   }
-
+  
   /// Returns a Promise that dispatches its handlers on the main dispatch queue.
-  public func dispatchMain() -> Promise<Value, Error> {
-    return dispatch(on: .main)
+  public func dispatchMain(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) -> Promise<Value, Error> {
+    return dispatch(file: file, line: line, column: column, function: function, on: .main)
   }
-
-  private func dispatch(on dispatchMethod: DispatchMethod, dispatchKey: DispatchSpecificKey<Void>) -> Promise<Value, Error> {
+  
+  private func dispatch(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, on dispatchMethod: DispatchMethod, dispatchKey: DispatchSpecificKey<Void>) -> Promise<Value, Error> {
+    
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + map")
+    
     let resultSource = PromiseSource<Value, Error>(
       state: .unresolved,
       dispatchKey: dispatchKey,
       dispatchMethod: dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     source.addOrCallResultHandler(resultSource.resolveResult)
@@ -309,12 +330,21 @@ public struct Promise<Value, Error> {
   // MARK: - Value combinators
 
   /// Return a Promise containing the results of mapping `transform` over the value of `self`.
-  public func map<NewValue>(_ transform: @escaping (Value) -> NewValue) -> Promise<NewValue, Error> {
+  public func map<NewValue>(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, _ transform: @escaping (Value) -> NewValue) -> Promise<NewValue, Error> {
+
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + map")
+
     let resultSource = PromiseSource<NewValue, Error>(
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -334,12 +364,21 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the value of `self`.
-  public func flatMap<NewValue>(_ transform: @escaping (Value) -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
+  public func flatMap<NewValue>(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, _ transform: @escaping (Value) -> Promise<NewValue, Error>) -> Promise<NewValue, Error> {
+
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + flatMap")
+
     let resultSource = PromiseSource<NewValue, Error>(
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -363,12 +402,21 @@ public struct Promise<Value, Error> {
   // MARK: Error combinators
 
   /// Return a Promise containing the results of mapping `transform` over the error of `self`.
-  public func mapError<NewError>(_ transform: @escaping (Error) -> NewError) -> Promise<Value, NewError> {
+  public func mapError<NewError>(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, _ transform: @escaping (Error) -> NewError) -> Promise<Value, NewError> {
+
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + mapError")
+    
     let resultSource = PromiseSource<Value, NewError>(
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -388,12 +436,21 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the error of `self`.
-  public func flatMapError<NewError>(_ transform: @escaping (Error) -> Promise<Value, NewError>) -> Promise<Value, NewError> {
+  public func flatMapError<NewError>(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, _ transform: @escaping (Error) -> Promise<Value, NewError>) -> Promise<Value, NewError> {
+
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + flatMapError")
+    
     let resultSource = PromiseSource<Value, NewError>(
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -416,12 +473,21 @@ public struct Promise<Value, Error> {
   // MARK: Result combinators
 
   /// Return a Promise containing the results of mapping `transform` over the result of `self`.
-  public func mapResult<NewValue, NewError>(_ transform: @escaping (Result<Value, Error>) -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
+  public func mapResult<NewValue, NewError>(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, _ transform: @escaping (Result<Value, Error>) -> Result<NewValue, NewError>) -> Promise<NewValue, NewError> {
+
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + mapResult")
+    
     let resultSource = PromiseSource<NewValue, NewError>(
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in
@@ -440,12 +506,21 @@ public struct Promise<Value, Error> {
   }
 
   /// Returns the flattened result of mapping `transform` over the result of `self`.
-  public func flatMapResult<NewValue, NewError>(_ transform: @escaping (Result<Value, Error>) -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
+  public func flatMapResult<NewValue, NewError>(file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, _ transform: @escaping (Result<Value, Error>) -> Promise<NewValue, NewError>) -> Promise<NewValue, NewError> {
+
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name:  " + flatMapResult")
+    
     let resultSource = PromiseSource<NewValue, NewError>(
       state: .unresolved,
       dispatchKey: source.dispatchKey,
       dispatchMethod: source.dispatchMethod,
-      warnUnresolvedDeinit: true
+      warnUnresolvedDeinit: source.warnUnresolvedDeinit,
+      callstack: source.callstack.appending(sourceLocation)
     )
 
     let handler: (Result<Value, Error>) -> Void = { result in

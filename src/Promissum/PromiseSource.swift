@@ -77,40 +77,51 @@ public class PromiseSource<Value, Error> {
   private(set) public var state: State<Value, Error>
 
   /// Print a warning on deinit of an unresolved PromiseSource
-  public var warnUnresolvedDeinit: Bool
-
+  public var warnUnresolvedDeinit: Warning
+  internal let callstack: Callstack
+  
   // MARK: Initializers & deinit
-
-  internal convenience init(value: Value) {
-    self.init(state: .resolved(value), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
-  }
-
-  internal convenience init(error: Error) {
-    self.init(state: .rejected(error), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
-  }
 
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
-  public convenience init(dispatch dispatchMethod: DispatchMethod = .unspecified, warnUnresolvedDeinit: Bool = true) {
-    self.init(state: .unresolved, dispatchKey: DispatchSpecificKey(), dispatchMethod: dispatchMethod, warnUnresolvedDeinit: warnUnresolvedDeinit)
+  public convenience init(dispatch dispatchMethod: DispatchMethod = .unspecified, warnUnresolvedDeinit: Warning = Warning.print, file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
+    
+    let sourceLocation = SourceLocation(
+      file: file,
+      line: line,
+      column: column,
+      function: function,
+      name: "PromiseSource")
+    
+    self.init(state: .unresolved, dispatchKey: DispatchSpecificKey(), dispatchMethod: dispatchMethod, warnUnresolvedDeinit: warnUnresolvedDeinit, callstack: Callstack(source: sourceLocation))
   }
-
-  internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
+  
+  internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Warning, callstack: Callstack) {
     self.state = state
     self.dispatchKey = dispatchKey
     self.dispatchMethod = dispatchMethod
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
+    self.callstack = callstack
   }
-
+  
   deinit {
-    if warnUnresolvedDeinit {
-      switch state {
-      case .unresolved:
-        print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
-      default:
-        break
-      }
+    guard case .unresolved = state else { return }
+    guard !callstack.isEmpty else { return }
+    
+    let message = "Unresolved PromiseSource deallocated, maybe retain this object?\n"
+      + "Callstack for deallocated object:\n\(callstack)"
+    
+    switch warnUnresolvedDeinit {
+    case .print:
+      
+      print("WARNING: \(message)")
+    case .fatalError:
+      fatalError(message)
+    case .callback(let callback):
+      callback(callstack)
+    case .dontWarn:
+      break
     }
   }
 
