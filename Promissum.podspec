@@ -26,7 +26,7 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.default_subspec = "Core"
 
   s.subspec "Core" do |ss|
-    ss.source_files  = "src/Promissum"
+    ss.source_files  = "Sources/Promissum"
   end
 
   s.subspec "Alamofire" do |ss|
