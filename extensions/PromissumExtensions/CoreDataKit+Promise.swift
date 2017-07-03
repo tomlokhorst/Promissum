@@ -15,21 +15,11 @@ extension CDK {
   public class func performOnBackgroundContextPromise(block: @escaping PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     return sharedStack!.performOnBackgroundContextPromise(block: block)
   }
-
-  @available(*, unavailable, renamed: "performOnBackgroundContextPromise(block:)")
-  public class func performBlockOnBackgroundContextPromise(_ block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
-    fatalError()
-  }
 }
 
 extension CoreDataStack {
   public func performOnBackgroundContextPromise(block: @escaping PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
     return backgroundContext.perform(block: block)
-  }
-
-  @available(*, unavailable, renamed: "performOnBackgroundContextPromise(block:)")
-  public func performBlockOnBackgroundContextPromise(_ block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
-    fatalError()
   }
 }
 
@@ -51,10 +41,5 @@ extension NSManagedObjectContext {
     }
 
     return promiseSource.promise
-  }
-
-  @available(*, unavailable, renamed: "perform(block:)")
-  public func performBlockPromise(_ block: PerformBlock) -> Promise<CommitAction, CoreDataKitError> {
-    fatalError()
   }
 }

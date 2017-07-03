@@ -19,9 +19,4 @@ extension AVCaptureDevice {
 
     return source.promise
   }
-
-  @available(*, unavailable, renamed: "requestAccess(forMediaType:)")
-  public static func requestAccessForMediaTypePromise(_ mediaType: String) -> Promise<Bool, NoError> {
-    fatalError()
-  }
 }
