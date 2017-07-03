@@ -166,6 +166,12 @@ extension Promise {
   }
 }
 
+extension PromiseSource where Value == Void {
+  public func resolve() {
+    self.resolve(())
+  }
+}
+
 extension Promise where Error : Swift.Error {
 
   /// Returns a Promise where the error is casted to an ErrorType.
