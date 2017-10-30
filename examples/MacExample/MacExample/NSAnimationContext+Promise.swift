@@ -14,7 +14,7 @@ extension NSAnimationContext {
   public class func runAnimationGroupPromise(_ changes: (NSAnimationContext!) -> Void) -> Promise<Void, NoError> {
     let source = PromiseSource<Void, NoError>()
 
-    self.runAnimationGroup(changes, completionHandler: source.resolve)
+    self.runAnimationGroup(changes, completionHandler: { source.resolve() })
 
     return source.promise
   }
