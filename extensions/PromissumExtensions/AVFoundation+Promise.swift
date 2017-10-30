@@ -13,7 +13,7 @@ extension AVCaptureDevice {
   public static func requestAccess(forMediaType mediaType: String) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
-    self.requestAccess(forMediaType: mediaType) { granted in
+    AVCaptureDevice.requestAccess(for: AVMediaType(rawValue: mediaType)) { granted in
       source.resolve(granted)
     }
 

@@ -62,7 +62,7 @@ extension UIViewController {
   public func present(_ viewControllerToPresent: UIViewController, animated flag: Bool) -> Promise<Void, NoError> {
     let source = PromiseSource<Void, NoError>()
 
-    self.present(viewControllerToPresent, animated: flag, completion: source.resolve)
+    self.present(viewControllerToPresent, animated: flag, completion: { source.resolve() })
 
     return source.promise
   }
@@ -70,7 +70,7 @@ extension UIViewController {
   public func dismiss(animated flag: Bool) -> Promise<Void, NoError> {
     let source = PromiseSource<Void, NoError>()
 
-    self.dismiss(animated: flag, completion: source.resolve)
+    self.dismiss(animated: flag, completion: { source.resolve() })
 
     return source.promise
   }
