@@ -79,6 +79,34 @@ class DispatchOnTests: XCTestCase {
     }
   }
 
+  func testDispatchToMainQueue() {
+    var calls = 0
+
+    let source = PromiseSource<Int, NSError>.init(dispatch: DispatchMethod.queue(testQueue), warnUnresolvedDeinit: true)
+    let p = source.promise.dispatchMain()
+
+    expectationQueue(test1Queue) { ex in
+
+      XCTAssert(!Thread.isMainThread, "shouldn't be on main queue")
+
+      p.then { _ in
+        XCTAssert(Thread.isMainThread, "callback for queued dispatch method should be called on main queue")
+        calls += 1
+      }
+
+      source.resolve(42)
+
+      p.then { _ in
+        XCTAssert(Thread.isMainThread, "callback should be called on main queue")
+        calls += 1
+      }
+
+      self.dispatch(DispatchQueue.main, expectation: ex) {
+        XCTAssertEqual(calls, 2, "Calls should be 2")
+      }
+    }
+  }
+
   func testDispatchOnTestQueue() {
     var calls = 0
 
