@@ -69,6 +69,8 @@ Note that `PromiseSource.deinit` by default will log a warning when an unresolve
 public class PromiseSource<Value, Error> {
   typealias ResultHandler = (Result<Value, Error>) -> Void
 
+  private let lock = NSLock()
+
   private var handlers: [(Result<Value, Error>) -> Void] = []
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
@@ -129,7 +131,6 @@ public class PromiseSource<Value, Error> {
   ///
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func resolve(_ value: Value) {
-
     resolveResult(.value(value))
   }
 
@@ -138,34 +139,30 @@ public class PromiseSource<Value, Error> {
   ///
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func reject(_ error: Error) {
-
     resolveResult(.error(error))
   }
 
   internal func resolveResult(_ result: Result<Value, Error>) {
+    lock.lock(); defer { lock.unlock() }
 
     switch state {
     case .unresolved:
       state = result.state
 
-      executeResultHandlers(result)
+      // Call all previously scheduled handlers
+      callHandlers(result, handlers: handlers, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+
+      // Cleanup
+      handlers = []
     default:
       break
     }
   }
 
-  private func executeResultHandlers(_ result: Result<Value, Error>) {
-
-    // Call all previously scheduled handlers
-    callHandlers(result, handlers: handlers, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
-
-    // Cleanup
-    handlers = []
-  }
-
   // MARK: Adding result handlers
 
   internal func addOrCallResultHandler(_ handler: @escaping (Result<Value, Error>) -> Void) {
+    lock.lock(); defer { lock.unlock() }
 
     switch state {
     case .unresolved:
