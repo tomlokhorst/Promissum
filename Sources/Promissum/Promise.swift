@@ -121,7 +121,7 @@ public struct Promise<Value, Error> {
   ///
   /// In most situations it is recommended to register a handler with `then` method instead of directly using this property.
   public var value: Value? {
-    if case .resolved(let value) = source.state {
+    if case .resolved(let value) = source.readState() {
       return value
     }
 
@@ -133,7 +133,7 @@ public struct Promise<Value, Error> {
   ///
   /// In most situations it is recommended to register a handler with `trap` method instead of directly using this property.
   public var error: Error? {
-    if case .rejected(let error) = source.state {
+    if case .rejected(let error) = source.readState() {
       return error
     }
 
@@ -145,7 +145,7 @@ public struct Promise<Value, Error> {
   ///
   /// In most situations it is recommended to register a handler with `finallyResult` method instead of directly using this property.
   public var result: Result<Value, Error>? {
-    switch source.state {
+    switch source.readState() {
     case .resolved(let boxed):
       return .value(boxed)
 
