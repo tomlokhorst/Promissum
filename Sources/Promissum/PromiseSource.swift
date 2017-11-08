@@ -72,11 +72,17 @@ public class PromiseSource<Value, Error> {
   private let lock = NSLock()
 
   private var handlers: [(Result<Value, Error>) -> Void] = []
+  private var _state: State<Value, Error>
+
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
-  private(set) public var state: State<Value, Error>
+  public var state: State<Value, Error> {
+    lock.lock(); defer { lock.unlock() }
+
+    return _state
+  }
 
   /// Print a warning on deinit of an unresolved PromiseSource
   public var warnUnresolvedDeinit: Bool
@@ -99,7 +105,7 @@ public class PromiseSource<Value, Error> {
   }
 
   internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
-    self.state = state
+    self._state = state
     self.dispatchKey = dispatchKey
     self.dispatchMethod = dispatchMethod
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
@@ -107,7 +113,7 @@ public class PromiseSource<Value, Error> {
 
   deinit {
     if warnUnresolvedDeinit {
-      switch state {
+      switch _state {
       case .unresolved:
         print("PromiseSource.deinit: WARNING: Unresolved PromiseSource deallocated, maybe retain this object?")
       default:
@@ -145,9 +151,9 @@ public class PromiseSource<Value, Error> {
   internal func resolveResult(_ result: Result<Value, Error>) {
     lock.lock(); defer { lock.unlock() }
 
-    switch state {
+    switch _state {
     case .unresolved:
-      state = result.state
+      _state = result.state
 
       // Call all previously scheduled handlers
       callHandlers(result, handlers: handlers, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
@@ -164,7 +170,7 @@ public class PromiseSource<Value, Error> {
   internal func addOrCallResultHandler(_ handler: @escaping (Result<Value, Error>) -> Void) {
     lock.lock(); defer { lock.unlock() }
 
-    switch state {
+    switch _state {
     case .unresolved:
       // Save handler for later
       handlers.append(handler)
