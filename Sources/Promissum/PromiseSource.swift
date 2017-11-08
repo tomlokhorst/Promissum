@@ -72,10 +72,12 @@ public class PromiseSource<Value, Error> {
   private let lock = NSLock()
 
   private var handlers: [(Result<Value, Error>) -> Void] = []
-  private var state: State<Value, Error>
 
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
+
+  /// The current state of the PromiseSource
+  private(set) public var state: State<Value, Error>
 
   /// Print a warning on deinit of an unresolved PromiseSource
   public var warnUnresolvedDeinit: Bool
@@ -113,12 +115,6 @@ public class PromiseSource<Value, Error> {
         break
       }
     }
-  }
-
-  internal func readState() -> State<Value, Error> {
-    lock.lock(); defer { lock.unlock() }
-
-    return state
   }
 
 
