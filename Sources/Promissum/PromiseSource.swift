@@ -67,17 +67,62 @@ Note that `PromiseSource.deinit` by default will log a warning when an unresolve
 
 */
 public class PromiseSource<Value, Error> {
+  private class PromiseSourceState {
+    private let lock = NSLock()
+    private(set) var state: State<Value, Error>
+    private var handlers: [ResultHandler] = []
+
+    init(state: State<Value, Error>) {
+      self.state = state
+    }
+
+    internal func resolve(with result: Result<Value, Error>) -> (Result<Value, Error>, [ResultHandler]) {
+      lock.lock(); defer { lock.unlock() }
+      
+      let handlersToExecute: [ResultHandler]
+      
+      switch state {
+      case .unresolved:
+        state = result.state
+        handlersToExecute = handlers
+        handlers = []
+      default:
+        handlersToExecute = []
+      }
+      
+      return (result, handlersToExecute)
+    }
+
+    internal func addHandler(_ handler: @escaping ResultHandler) -> (Result<Value, Error>, [ResultHandler])? {
+      lock.lock(); defer { lock.unlock() }
+
+      switch state {
+      case .unresolved:
+        // Save handler for later
+        handlers.append(handler)
+        return nil
+
+      case .resolved(let value):
+        // Value is already available, call handler immediately
+        return (.value(value), [handler])
+
+      case .rejected(let error):
+        // Error is already available, call handler immediately
+        return (.error(error), [handler])
+      }
+    }
+  }
+
   typealias ResultHandler = (Result<Value, Error>) -> Void
-
-  private let lock = NSLock()
-
-  private var handlers: [(Result<Value, Error>) -> Void] = []
 
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
 
   /// The current state of the PromiseSource
-  private(set) public var state: State<Value, Error>
+  private let internalState: PromiseSourceState
+  public var state: State<Value, Error> {
+    return internalState.state
+  }
 
   /// Print a warning on deinit of an unresolved PromiseSource
   public var warnUnresolvedDeinit: Bool
@@ -100,7 +145,7 @@ public class PromiseSource<Value, Error> {
   }
 
   internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
-    self.state = state
+    self.internalState = PromiseSourceState(state: state)
     self.dispatchKey = dispatchKey
     self.dispatchMethod = dispatchMethod
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
@@ -144,39 +189,15 @@ public class PromiseSource<Value, Error> {
   }
 
   internal func resolveResult(_ result: Result<Value, Error>) {
-    lock.lock(); defer { lock.unlock() }
-
-    switch state {
-    case .unresolved:
-      state = result.state
-
-      // Call all previously scheduled handlers
-      callHandlers(result, handlers: handlers, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
-
-      // Cleanup
-      handlers = []
-    default:
-      break
-    }
+    let (result, handlersToCall) = internalState.resolve(with: result)
+    callHandlers(result, handlers: handlersToCall, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
   }
 
   // MARK: Adding result handlers
 
   internal func addOrCallResultHandler(_ handler: @escaping (Result<Value, Error>) -> Void) {
-    lock.lock(); defer { lock.unlock() }
-
-    switch state {
-    case .unresolved:
-      // Save handler for later
-      handlers.append(handler)
-
-    case .resolved(let value):
-      // Value is already available, call handler immediately
-      callHandlers(Result.value(value), handlers: [handler], dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
-
-    case .rejected(let error):
-      // Error is already available, call handler immediately
-      callHandlers(Result.error(error), handlers: [handler], dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+    if let (result, handlersToCall) = internalState.addHandler(handler) {
+      callHandlers(result, handlers: handlersToCall, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
     }
   }
 }
