@@ -10,9 +10,9 @@ import Foundation
 import XCTest
 import Promissum
 
-let testQueueLabel = "com.nonstrict.promissum.tests"
-let testQueue = DispatchQueue(label: testQueueLabel, attributes: [])
-let testQueueKey = DispatchSpecificKey<Void>()
+private let testQueueLabel = "com.nonstrict.promissum.tests"
+private let testQueue = DispatchQueue(label: testQueueLabel, attributes: [])
+private let testQueueKey = DispatchSpecificKey<Void>()
 
 class DispatchQueueTests: XCTestCase {
 
