@@ -73,7 +73,7 @@ public class PromiseSource<Value, Error> {
   /// The current state of the PromiseSource
   private let internalState: PromiseSourceState
   public var state: State<Value, Error> {
-    return internalState.state
+    return internalState.readState()
   }
 
   /// Print a warning on deinit of an unresolved PromiseSource
@@ -168,11 +168,17 @@ extension PromiseSource {
 
   fileprivate class PromiseSourceState {
     private let lock = NSLock()
-    private(set) var state: State<Value, Error>
+    private var state: State<Value, Error>
     private var handlers: [ResultHandler] = []
 
     init(state: State<Value, Error>) {
       self.state = state
+    }
+
+    internal func readState() -> State<Value, Error> {
+      lock.lock(); defer { lock.unlock() }
+
+      return state
     }
 
     internal func resolve(with result: Result<Value, Error>) -> PromiseSourceAction {
