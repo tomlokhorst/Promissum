@@ -101,6 +101,10 @@ public class PromiseSource<Value, Error> {
     self.dispatchKey = dispatchKey
     self.dispatchMethod = dispatchMethod
     self.warnUnresolvedDeinit = warnUnresolvedDeinit
+
+    if case .queue(let queue) = dispatchMethod {
+      queue.setSpecific(key: dispatchKey, value: ())
+    }
   }
 
   deinit {
