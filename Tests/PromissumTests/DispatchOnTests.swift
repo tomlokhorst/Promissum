@@ -10,17 +10,17 @@ import Foundation
 import XCTest
 import Promissum
 
-let test1QueueLabel = "com.nonstrict.promissum.test1"
-let test2QueueLabel = "com.nonstrict.promissum.test2"
-let test3QueueLabel = "com.nonstrict.promissum.test3"
+private let test1QueueLabel = "com.nonstrict.promissum.test1"
+private let test2QueueLabel = "com.nonstrict.promissum.test2"
+private let test3QueueLabel = "com.nonstrict.promissum.test3"
 
-let test1Queue = DispatchQueue(label: test1QueueLabel, attributes: [])
-let test2Queue = DispatchQueue(label: test2QueueLabel, attributes: [])
-let test3Queue = DispatchQueue(label: test3QueueLabel, attributes: [])
+private let test1Queue = DispatchQueue(label: test1QueueLabel, attributes: [])
+private let test2Queue = DispatchQueue(label: test2QueueLabel, attributes: [])
+private let test3Queue = DispatchQueue(label: test3QueueLabel, attributes: [])
 
-let test1QueueKey = DispatchSpecificKey<Void>()
-let test2QueueKey = DispatchSpecificKey<Void>()
-let test3QueueKey = DispatchSpecificKey<Void>()
+private let test1QueueKey = DispatchSpecificKey<Void>()
+private let test2QueueKey = DispatchSpecificKey<Void>()
+private let test3QueueKey = DispatchSpecificKey<Void>()
 
 class DispatchOnTests: XCTestCase {
 
