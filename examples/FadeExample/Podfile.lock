@@ -1,6 +1,6 @@
 PODS:
-  - Alamofire (4.0.0)
-  - CoreDataKit (0.12.0)
+  - Alamofire (4.5.1)
+  - CoreDataKit (0.13.0)
   - Promissum (1.0.0):
     - Promissum/Core (= 1.0.0)
   - Promissum/Alamofire (1.0.0):
@@ -29,12 +29,12 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   CoreDataKit:
-    :commit: 2bf520547828e1fb67e3c1da15d40c38251d4928
+    :commit: f2edbd9e484e84783202ca391314406294256431
     :git: https://github.com/mac-cain13/CoreDataKit.git
 
 SPEC CHECKSUMS:
-  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
-  CoreDataKit: e400b0a438709312550b4847d09895fa49695a92
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  CoreDataKit: d17bda6b68f0315f0ea779cd4c0a05a6339885ec
   Promissum: 8ecfdfb9129f053a74aa5fd8fda67b3534d356c8
 
 PODFILE CHECKSUM: 352fb1524e3107caa6d828334e10a919157109cb
