@@ -89,7 +89,7 @@ Note that it is often not needed to create a new Promise.
 If an existing Promise is available, transforming that using `map` or `flatMap` is often sufficient.
 
 */
-public struct Promise<Value, Error> {
+public class Promise<Value, Error> {
   private let source: PromiseSource<Value, Error>
 
 
