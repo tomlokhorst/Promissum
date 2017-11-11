@@ -98,6 +98,51 @@ extension DataRequest {
   }
 }
 
+// MARK: - Decode
+
+extension DataRequest {
+
+  public static func decodeResponseSerializer<T: Decodable>(_ type: T.Type) -> DataResponseSerializer<T>
+  {
+    let dataSerializer = DataRequest.dataResponseSerializer().serializeResponse
+
+    return DataResponseSerializer { request, response, data, error in
+      let result = dataSerializer(request, response, data, error)
+
+      switch result {
+      case .success(let data):
+        do {
+          let decoder = JSONDecoder()
+          let value = try decoder.decode(type, from: data)
+          return .success(value)
+        }
+        catch {
+          return .failure(error)
+        }
+      case .failure(let error):
+        return .failure(error)
+      }
+    }
+  }
+
+  public func responseDecode<T: Decodable>(_ type: T.Type, completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
+  {
+    return response(
+      responseSerializer: DataRequest.decodeResponseSerializer(type),
+      completionHandler: completionHandler
+    )
+  }
+
+}
+
+extension DataRequest {
+  public func responseDecodePromise<T: Decodable>(_ type: T.Type) -> Promise<SuccessResponse<T>, ErrorResponse>
+  {
+    return self.responsePromise(responseSerializer: DataRequest.decodeResponseSerializer(type))
+  }
+}
+
+
 // MARK: - Data
 
 extension DataRequest {
