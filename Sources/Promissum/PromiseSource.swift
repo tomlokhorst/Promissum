@@ -67,54 +67,6 @@ Note that `PromiseSource.deinit` by default will log a warning when an unresolve
 
 */
 public class PromiseSource<Value, Error> {
-  private class PromiseSourceState {
-    private let lock = NSLock()
-    private(set) var state: State<Value, Error>
-    private var handlers: [ResultHandler] = []
-
-    init(state: State<Value, Error>) {
-      self.state = state
-    }
-
-    internal func resolve(with result: Result<Value, Error>) -> (Result<Value, Error>, [ResultHandler]) {
-      lock.lock(); defer { lock.unlock() }
-      
-      let handlersToExecute: [ResultHandler]
-      
-      switch state {
-      case .unresolved:
-        state = result.state
-        handlersToExecute = handlers
-        handlers = []
-      default:
-        handlersToExecute = []
-      }
-      
-      return (result, handlersToExecute)
-    }
-
-    internal func addHandler(_ handler: @escaping ResultHandler) -> (Result<Value, Error>, [ResultHandler])? {
-      lock.lock(); defer { lock.unlock() }
-
-      switch state {
-      case .unresolved:
-        // Save handler for later
-        handlers.append(handler)
-        return nil
-
-      case .resolved(let value):
-        // Value is already available, call handler immediately
-        return (.value(value), [handler])
-
-      case .rejected(let error):
-        // Error is already available, call handler immediately
-        return (.error(error), [handler])
-      }
-    }
-  }
-
-  typealias ResultHandler = (Result<Value, Error>) -> Void
-
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
 
@@ -193,20 +145,75 @@ public class PromiseSource<Value, Error> {
   }
 
   internal func resolveResult(_ result: Result<Value, Error>) {
-    let (result, handlersToCall) = internalState.resolve(with: result)
-    callHandlers(result, handlers: handlersToCall, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+    let action = internalState.resolve(with: result)
+    callHandlers(action.handlers, with: action.result, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
   }
 
   // MARK: Adding result handlers
 
   internal func addOrCallResultHandler(_ handler: @escaping (Result<Value, Error>) -> Void) {
-    if let (result, handlersToCall) = internalState.addHandler(handler) {
-      callHandlers(result, handlers: handlersToCall, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+    if let action = internalState.addHandler(handler) {
+      callHandlers(action.handlers, with: action.result, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
     }
   }
 }
 
-internal func callHandlers<T>(_ value: T, handlers: [(T) -> Void], dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod) {
+extension PromiseSource {
+  typealias ResultHandler = (Result<Value, Error>) -> Void
+
+  fileprivate struct PromiseSourceAction {
+    let result: Result<Value, Error>
+    let handlers: [ResultHandler]
+  }
+
+  fileprivate class PromiseSourceState {
+    private let lock = NSLock()
+    private(set) var state: State<Value, Error>
+    private var handlers: [ResultHandler] = []
+
+    init(state: State<Value, Error>) {
+      self.state = state
+    }
+
+    internal func resolve(with result: Result<Value, Error>) -> PromiseSourceAction {
+      lock.lock(); defer { lock.unlock() }
+
+      let handlersToExecute: [ResultHandler]
+
+      switch state {
+      case .unresolved:
+        state = result.state
+        handlersToExecute = handlers
+        handlers = []
+      default:
+        handlersToExecute = []
+      }
+
+      return PromiseSourceAction(result: result, handlers: handlersToExecute)
+    }
+
+    internal func addHandler(_ handler: @escaping ResultHandler) -> PromiseSourceAction? {
+      lock.lock(); defer { lock.unlock() }
+
+      switch state {
+      case .unresolved:
+        // Save handler for later
+        handlers.append(handler)
+        return nil
+
+      case .resolved(let value):
+        // Value is already available, call handler immediately
+        return PromiseSourceAction(result: .value(value), handlers: [handler])
+
+      case .rejected(let error):
+        // Error is already available, call handler immediately
+        return PromiseSourceAction(result: .error(error), handlers: [handler])
+      }
+    }
+  }
+}
+
+internal func callHandlers<T>(_ handlers: [(T) -> Void], with value: T, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod) {
 
   for handler in handlers {
     switch dispatchMethod {
