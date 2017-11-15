@@ -102,7 +102,7 @@ extension DataRequest {
 
 extension DataRequest {
 
-  public static func decodeResponseSerializer<T: Decodable>(_ type: T.Type) -> DataResponseSerializer<T>
+  public static func decodeResponseSerializer<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> DataResponseSerializer<T>
   {
     let dataSerializer = DataRequest.dataResponseSerializer().serializeResponse
 
@@ -112,7 +112,6 @@ extension DataRequest {
       switch result {
       case .success(let data):
         do {
-          let decoder = JSONDecoder()
           let value = try decoder.decode(type, from: data)
           return .success(value)
         }
@@ -125,10 +124,10 @@ extension DataRequest {
     }
   }
 
-  public func responseDecode<T: Decodable>(_ type: T.Type, completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
+  public func responseDecode<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder(), completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
   {
     return response(
-      responseSerializer: DataRequest.decodeResponseSerializer(type),
+      responseSerializer: DataRequest.decodeResponseSerializer(type, decoder: decoder),
       completionHandler: completionHandler
     )
   }
@@ -136,9 +135,9 @@ extension DataRequest {
 }
 
 extension DataRequest {
-  public func responseDecodePromise<T: Decodable>(_ type: T.Type) -> Promise<SuccessResponse<T>, ErrorResponse>
+  public func responseDecodePromise<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse>
   {
-    return self.responsePromise(responseSerializer: DataRequest.decodeResponseSerializer(type))
+    return self.responsePromise(responseSerializer: DataRequest.decodeResponseSerializer(type, decoder: decoder))
   }
 }
 
