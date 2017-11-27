@@ -167,6 +167,7 @@ $ pod install
 Releases
 --------
 
+ - **2.0.0** - 2017-11-27 - Swift 4 support, threadsafe
  - **1.0.0** - 2016-09-20 - Swift 3 support, requires iOS 9 & OSX 10.11
  - **0.5.0** - 2016-01-19 - Add `dispatchOn` methods for dispatching on different queues
  - **0.4.0** - 2015-11-04 - Update Alamofire+Promise to Alamofire 3
