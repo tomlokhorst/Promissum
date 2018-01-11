@@ -7,7 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6165343EEBAEC0ADDE8E296A /* Pods_FadeExampleWatchOS_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330629D4D73C847F729F2BBB /* Pods_FadeExampleWatchOS_Extension.framework */; };
 		9C3E5DB305A61943CD20F070 /* Pods_FadeExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FDF1125F112D25641C02F4 /* Pods_FadeExample.framework */; };
+		C352B2E320080BB800C66CC9 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C352B2E120080BB800C66CC9 /* Interface.storyboard */; };
+		C352B2E520080BB800C66CC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C352B2E420080BB800C66CC9 /* Assets.xcassets */; };
+		C352B2EC20080BB800C66CC9 /* FadeExampleWatchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C352B2EB20080BB800C66CC9 /* FadeExampleWatchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C352B2F120080BB800C66CC9 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352B2F020080BB800C66CC9 /* InterfaceController.swift */; };
+		C352B2F320080BB800C66CC9 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352B2F220080BB800C66CC9 /* ExtensionDelegate.swift */; };
+		C352B2F520080BB800C66CC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C352B2F420080BB800C66CC9 /* Assets.xcassets */; };
+		C352B2F920080BB800C66CC9 /* FadeExampleWatchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = C352B2DF20080BB800C66CC9 /* FadeExampleWatchOS.app */; };
 		E2F97BDB1A729D9B00B9BDD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97BDA1A729D9B00B9BDD7 /* AppDelegate.swift */; };
 		E2F97BDD1A729D9B00B9BDD7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97BDC1A729D9B00B9BDD7 /* ViewController.swift */; };
 		E2F97BE01A729D9B00B9BDD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BDE1A729D9B00B9BDD7 /* Main.storyboard */; };
@@ -17,7 +25,46 @@
 		E2F97C501A75490600B9BDD7 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4F1A75490600B9BDD7 /* Project.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C352B2ED20080BB800C66CC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2F97BCD1A729D9A00B9BDD7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C352B2EA20080BB800C66CC9;
+			remoteInfo = "FadeExampleWatchOS Extension";
+		};
+		C352B2F720080BB800C66CC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2F97BCD1A729D9A00B9BDD7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C352B2DE20080BB800C66CC9;
+			remoteInfo = FadeExampleWatchOS;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		C352B2FF20080BB800C66CC9 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C352B2EC20080BB800C66CC9 /* FadeExampleWatchOS Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C352B30120080BB800C66CC9 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				C352B2F920080BB800C66CC9 /* FadeExampleWatchOS.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2F97C291A72A31F00B9BDD7 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -32,11 +79,24 @@
 
 /* Begin PBXFileReference section */
 		05BBC9183EE7970B93B1DA6C /* Pods-FadeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample.debug.xcconfig"; sourceTree = "<group>"; };
+		330629D4D73C847F729F2BBB /* Pods_FadeExampleWatchOS_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FadeExampleWatchOS_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E89E09CA6ABD6F3C24B3565 /* Pods-FadeExampleWatchOS Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExampleWatchOS Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		620EA3E2721BC0B1D5547548 /* Pods_FadeExampleWatchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FadeExampleWatchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66FDF1125F112D25641C02F4 /* Pods_FadeExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FadeExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D9996FB6C34D424F82C9BAA /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2CE7C6C4E6CBBBBC0DACDD4 /* Pods-FadeExamplePods-FadeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExamplePods-FadeExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExamplePods-FadeExample/Pods-FadeExamplePods-FadeExample.release.xcconfig"; sourceTree = "<group>"; };
 		AC19498D7A1FDC7218B3EFEE /* Pods-FadeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample.release.xcconfig"; sourceTree = "<group>"; };
 		B65BC19AB2658A3C8F144E90 /* Pods_FadeExamplePods_FadeExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FadeExamplePods_FadeExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8A7F825B0C2D6E9768EC0C1 /* Pods-FadeExampleWatchOS Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExampleWatchOS Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension.release.xcconfig"; sourceTree = "<group>"; };
+		C352B2DF20080BB800C66CC9 /* FadeExampleWatchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FadeExampleWatchOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C352B2E220080BB800C66CC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		C352B2E420080BB800C66CC9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C352B2E620080BB800C66CC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C352B2EB20080BB800C66CC9 /* FadeExampleWatchOS Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "FadeExampleWatchOS Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C352B2F020080BB800C66CC9 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		C352B2F220080BB800C66CC9 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		C352B2F420080BB800C66CC9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C352B2F620080BB800C66CC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2F97BD51A729D9A00B9BDD7 /* FadeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FadeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F97BD91A729D9B00B9BDD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2F97BDA1A729D9B00B9BDD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +113,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9BFF5918ED4D88333882E09B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C352B2E820080BB800C66CC9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6165343EEBAEC0ADDE8E296A /* Pods_FadeExampleWatchOS_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2F97BD21A729D9A00B9BDD7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -70,6 +145,8 @@
 				7D9996FB6C34D424F82C9BAA /* Pods.framework */,
 				B65BC19AB2658A3C8F144E90 /* Pods_FadeExamplePods_FadeExample.framework */,
 				66FDF1125F112D25641C02F4 /* Pods_FadeExample.framework */,
+				620EA3E2721BC0B1D5547548 /* Pods_FadeExampleWatchOS.framework */,
+				330629D4D73C847F729F2BBB /* Pods_FadeExampleWatchOS_Extension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -81,14 +158,39 @@
 				A2CE7C6C4E6CBBBBC0DACDD4 /* Pods-FadeExamplePods-FadeExample.release.xcconfig */,
 				05BBC9183EE7970B93B1DA6C /* Pods-FadeExample.debug.xcconfig */,
 				AC19498D7A1FDC7218B3EFEE /* Pods-FadeExample.release.xcconfig */,
+				3E89E09CA6ABD6F3C24B3565 /* Pods-FadeExampleWatchOS Extension.debug.xcconfig */,
+				B8A7F825B0C2D6E9768EC0C1 /* Pods-FadeExampleWatchOS Extension.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		C352B2E020080BB800C66CC9 /* FadeExampleWatchOS */ = {
+			isa = PBXGroup;
+			children = (
+				C352B2E120080BB800C66CC9 /* Interface.storyboard */,
+				C352B2E420080BB800C66CC9 /* Assets.xcassets */,
+				C352B2E620080BB800C66CC9 /* Info.plist */,
+			);
+			path = FadeExampleWatchOS;
+			sourceTree = "<group>";
+		};
+		C352B2EF20080BB800C66CC9 /* FadeExampleWatchOS Extension */ = {
+			isa = PBXGroup;
+			children = (
+				C352B2F020080BB800C66CC9 /* InterfaceController.swift */,
+				C352B2F220080BB800C66CC9 /* ExtensionDelegate.swift */,
+				C352B2F420080BB800C66CC9 /* Assets.xcassets */,
+				C352B2F620080BB800C66CC9 /* Info.plist */,
+			);
+			path = "FadeExampleWatchOS Extension";
 			sourceTree = "<group>";
 		};
 		E2F97BCC1A729D9A00B9BDD7 = {
 			isa = PBXGroup;
 			children = (
 				E2F97BD71A729D9A00B9BDD7 /* FadeExample */,
+				C352B2E020080BB800C66CC9 /* FadeExampleWatchOS */,
+				C352B2EF20080BB800C66CC9 /* FadeExampleWatchOS Extension */,
 				E2F97BD61A729D9A00B9BDD7 /* Products */,
 				9C5E8AC4879FAC25BD9473D1 /* Frameworks */,
 				B1009DD9FBD4515D8D4E56CB /* Pods */,
@@ -99,6 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				E2F97BD51A729D9A00B9BDD7 /* FadeExample.app */,
+				C352B2DF20080BB800C66CC9 /* FadeExampleWatchOS.app */,
+				C352B2EB20080BB800C66CC9 /* FadeExampleWatchOS Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +244,44 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C352B2DE20080BB800C66CC9 /* FadeExampleWatchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C352B30020080BB800C66CC9 /* Build configuration list for PBXNativeTarget "FadeExampleWatchOS" */;
+			buildPhases = (
+				C352B2DD20080BB800C66CC9 /* Resources */,
+				C352B2FF20080BB800C66CC9 /* Embed App Extensions */,
+				9BFF5918ED4D88333882E09B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C352B2EE20080BB800C66CC9 /* PBXTargetDependency */,
+			);
+			name = FadeExampleWatchOS;
+			productName = FadeExampleWatchOS;
+			productReference = C352B2DF20080BB800C66CC9 /* FadeExampleWatchOS.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		C352B2EA20080BB800C66CC9 /* FadeExampleWatchOS Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C352B2FE20080BB800C66CC9 /* Build configuration list for PBXNativeTarget "FadeExampleWatchOS Extension" */;
+			buildPhases = (
+				71DC8EE1209E774530C27C79 /* [CP] Check Pods Manifest.lock */,
+				C352B2E720080BB800C66CC9 /* Sources */,
+				C352B2E820080BB800C66CC9 /* Frameworks */,
+				C352B2E920080BB800C66CC9 /* Resources */,
+				05DA90A408FFEB4E177093BF /* [CP] Embed Pods Frameworks */,
+				B3AD6D78400016AC7ED5C209 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FadeExampleWatchOS Extension";
+			productName = "FadeExampleWatchOS Extension";
+			productReference = C352B2EB20080BB800C66CC9 /* FadeExampleWatchOS Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		E2F97BD41A729D9A00B9BDD7 /* FadeExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2F97BF41A729D9B00B9BDD7 /* Build configuration list for PBXNativeTarget "FadeExample" */;
@@ -151,10 +293,12 @@
 				E2F97C291A72A31F00B9BDD7 /* Copy Frameworks */,
 				9328A1B01637ED9D4FD928F1 /* [CP] Embed Pods Frameworks */,
 				B7AB9301A9FD224DF45F1986 /* [CP] Copy Pods Resources */,
+				C352B30120080BB800C66CC9 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C352B2F820080BB800C66CC9 /* PBXTargetDependency */,
 			);
 			name = FadeExample;
 			productName = FadeExample;
@@ -167,10 +311,18 @@
 		E2F97BCD1A729D9A00B9BDD7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Tom Lokhorst";
 				TargetAttributes = {
+					C352B2DE20080BB800C66CC9 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					C352B2EA20080BB800C66CC9 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					E2F97BD41A729D9A00B9BDD7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						LastSwiftMigration = 0900;
@@ -191,11 +343,30 @@
 			projectRoot = "";
 			targets = (
 				E2F97BD41A729D9A00B9BDD7 /* FadeExample */,
+				C352B2DE20080BB800C66CC9 /* FadeExampleWatchOS */,
+				C352B2EA20080BB800C66CC9 /* FadeExampleWatchOS Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C352B2DD20080BB800C66CC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C352B2E520080BB800C66CC9 /* Assets.xcassets in Resources */,
+				C352B2E320080BB800C66CC9 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C352B2E920080BB800C66CC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C352B2F520080BB800C66CC9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2F97BD31A729D9A00B9BDD7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -209,6 +380,44 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		05DA90A408FFEB4E177093BF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire-watchOS/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Promissum.common/Promissum.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Promissum.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		71DC8EE1209E774530C27C79 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FadeExampleWatchOS Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9328A1B01637ED9D4FD928F1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -216,9 +425,9 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CoreDataKit/CoreDataKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Promissum/Promissum.framework",
+				"${BUILT_PRODUCTS_DIR}/Promissum.common-CoreDataKit-UIKit/Promissum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -229,6 +438,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B3AD6D78400016AC7ED5C209 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B7AB9301A9FD224DF45F1986 /* [CP] Copy Pods Resources */ = {
@@ -267,6 +491,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C352B2E720080BB800C66CC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C352B2F320080BB800C66CC9 /* ExtensionDelegate.swift in Sources */,
+				C352B2F120080BB800C66CC9 /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2F97BD11A729D9A00B9BDD7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -280,7 +513,28 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C352B2EE20080BB800C66CC9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C352B2EA20080BB800C66CC9 /* FadeExampleWatchOS Extension */;
+			targetProxy = C352B2ED20080BB800C66CC9 /* PBXContainerItemProxy */;
+		};
+		C352B2F820080BB800C66CC9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C352B2DE20080BB800C66CC9 /* FadeExampleWatchOS */;
+			targetProxy = C352B2F720080BB800C66CC9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		C352B2E120080BB800C66CC9 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C352B2E220080BB800C66CC9 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		E2F97BDE1A729D9B00B9BDD7 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -300,6 +554,110 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C352B2FA20080BB800C66CC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = FadeExampleWatchOS_Extension;
+				INFOPLIST_FILE = FadeExampleWatchOS/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nonstrict.FadeExample.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Debug;
+		};
+		C352B2FB20080BB800C66CC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = FadeExampleWatchOS_Extension;
+				INFOPLIST_FILE = FadeExampleWatchOS/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nonstrict.FadeExample.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Release;
+		};
+		C352B2FC20080BB800C66CC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E89E09CA6ABD6F3C24B3565 /* Pods-FadeExampleWatchOS Extension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "FadeExampleWatchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nonstrict.FadeExample.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Debug;
+		};
+		C352B2FD20080BB800C66CC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8A7F825B0C2D6E9768EC0C1 /* Pods-FadeExampleWatchOS Extension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "FadeExampleWatchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nonstrict.FadeExample.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Release;
+		};
 		E2F97BF21A729D9B00B9BDD7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -428,6 +786,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C352B2FE20080BB800C66CC9 /* Build configuration list for PBXNativeTarget "FadeExampleWatchOS Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C352B2FC20080BB800C66CC9 /* Debug */,
+				C352B2FD20080BB800C66CC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C352B30020080BB800C66CC9 /* Build configuration list for PBXNativeTarget "FadeExampleWatchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C352B2FA20080BB800C66CC9 /* Debug */,
+				C352B2FB20080BB800C66CC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E2F97BD01A729D9A00B9BDD7 /* Build configuration list for PBXProject "FadeExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -1,11 +1,22 @@
-platform :ios, '9.0'
-use_frameworks!
 
-pod 'Alamofire', '~> 4.0'
-pod 'CoreDataKit', :git => 'https://github.com/mac-cain13/CoreDataKit.git'
-pod 'Promissum', :path => '../../'
-pod 'Promissum/Alamofire', :path => '../../'
-pod 'Promissum/CoreDataKit', :path => '../../'
-pod 'Promissum/UIKit', :path => '../../'
+target 'FadeExample' do
+	platform :ios, '9.0'
+	use_frameworks!
 
-target 'FadeExample'
+	pod 'Alamofire', '~> 4.0'
+	pod 'CoreDataKit', :git => 'https://github.com/mac-cain13/CoreDataKit.git'
+	pod 'Promissum', :path => '../../'
+	pod 'Promissum/Alamofire', :path => '../../'
+	pod 'Promissum/CoreDataKit', :path => '../../'
+	pod 'Promissum/UIKit', :path => '../../'
+
+end
+
+target 'FadeExampleWatchOS Extension' do
+	platform :watchos, '3.0'
+	use_frameworks!
+	
+	pod 'Alamofire', '~> 4.0'
+	pod 'Promissum/Alamofire', :path => '../../'
+	pod 'Promissum', :path => '../../'
+end
