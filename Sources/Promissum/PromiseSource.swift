@@ -116,6 +116,10 @@ public class PromiseSource<Value, Error> {
         break
       }
     }
+
+    if case .queue(let queue) = dispatchMethod {
+      queue.setSpecific(key: dispatchKey, value: nil)
+    }
   }
 
 
