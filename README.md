@@ -167,6 +167,7 @@ $ pod install
 Releases
 --------
 
+ - 2.2.0 - 2018-02-09 - Fix occasional "execute on wrong queue" issue
  - 2.1.0 - 2018-01-12 - watchOS support
  - **2.0.0** - 2017-11-27 - Swift 4 support, threadsafe
  - **1.0.0** - 2016-09-20 - Swift 3 support, requires iOS 9 & OSX 10.11
