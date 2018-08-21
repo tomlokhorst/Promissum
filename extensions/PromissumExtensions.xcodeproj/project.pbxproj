@@ -260,6 +260,7 @@
 					E2406AF81A5BBB8D000E5C78 = {
 						CreatedOnToolsVersion = 6.1.1;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -575,6 +576,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0F67910883604DA865A9B26D /* Pods-PromissumExtensionsTests.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -587,6 +590,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -595,6 +599,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F005CBFC227ADB2DFB1DE952 /* Pods-PromissumExtensionsTests.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -603,6 +609,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

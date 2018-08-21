@@ -271,7 +271,6 @@
 				C352B2E820080BB800C66CC9 /* Frameworks */,
 				C352B2E920080BB800C66CC9 /* Resources */,
 				05DA90A408FFEB4E177093BF /* [CP] Embed Pods Frameworks */,
-				B3AD6D78400016AC7ED5C209 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -292,7 +291,6 @@
 				E2F97BD31A729D9A00B9BDD7 /* Resources */,
 				E2F97C291A72A31F00B9BDD7 /* Copy Frameworks */,
 				9328A1B01637ED9D4FD928F1 /* [CP] Embed Pods Frameworks */,
-				B7AB9301A9FD224DF45F1986 /* [CP] Copy Pods Resources */,
 				C352B30120080BB800C66CC9 /* Embed Watch Content */,
 			);
 			buildRules = (
@@ -323,12 +321,13 @@
 					C352B2EA20080BB800C66CC9 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = BQF78J8BF9;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					E2F97BD41A729D9A00B9BDD7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = BQF78J8BF9;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -441,36 +440,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B3AD6D78400016AC7ED5C209 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B7AB9301A9FD224DF45F1986 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C8AC5C3C1C83A4BBFA7B3AB1 /* [CP] Check Pods Manifest.lock */ = {
@@ -632,7 +601,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 4.2;
 			};
@@ -659,7 +628,7 @@
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 4.2;
 			};
@@ -774,7 +743,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -788,7 +757,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
