@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreData
-import CoreDataKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,12 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-    // Initialize CoreData stack
-    if let persistentStoreCoordinator = NSPersistentStoreCoordinator(automigrating: true, deleteOnMismatch: true) {
-      CDK.sharedStack = CoreDataStack(persistentStoreCoordinator: persistentStoreCoordinator)
-    }
-
     return true
   }
 

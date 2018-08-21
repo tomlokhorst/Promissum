@@ -1,24 +1,18 @@
 PODS:
-  - Alamofire (4.5.1)
-  - CoreDataKit (0.13.0)
+  - Alamofire (4.7.3)
   - Promissum (2.2.0):
     - Promissum/Core (= 2.2.0)
   - Promissum/Alamofire (2.2.0):
     - Alamofire (~> 4.0)
     - Promissum/Core
   - Promissum/Core (2.2.0)
-  - Promissum/CoreDataKit (2.2.0):
-    - CoreDataKit (~> 0.12)
-    - Promissum/Core
   - Promissum/UIKit (2.2.0):
     - Promissum/Core
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
-  - CoreDataKit (from `https://github.com/mac-cain13/CoreDataKit.git`)
   - Promissum (from `../../`)
   - Promissum/Alamofire (from `../../`)
-  - Promissum/CoreDataKit (from `../../`)
   - Promissum/UIKit (from `../../`)
 
 SPEC REPOS:
@@ -26,21 +20,13 @@ SPEC REPOS:
     - Alamofire
 
 EXTERNAL SOURCES:
-  CoreDataKit:
-    :git: https://github.com/mac-cain13/CoreDataKit.git
   Promissum:
     :path: "../../"
 
-CHECKOUT OPTIONS:
-  CoreDataKit:
-    :commit: f2edbd9e484e84783202ca391314406294256431
-    :git: https://github.com/mac-cain13/CoreDataKit.git
-
 SPEC CHECKSUMS:
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
-  CoreDataKit: d17bda6b68f0315f0ea779cd4c0a05a6339885ec
-  Promissum: 60c485cd55f1ff40b098df145cb65683efa8c3c5
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  Promissum: bec35b9632c7ae8c784bea21490da967da1c4746
 
-PODFILE CHECKSUM: 50116d4a7b75aecc0167d3da3e724bf2a7c8e9a1
+PODFILE CHECKSUM: ae4d75d4f65983a3c5271256f77ed743176e685f
 
 COCOAPODS: 1.5.3

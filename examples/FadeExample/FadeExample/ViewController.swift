@@ -9,7 +9,6 @@
 import UIKit
 
 import Alamofire
-import CoreDataKit
 import Promissum
 
 class ViewController: UIViewController {
@@ -55,11 +54,10 @@ class ViewController: UIViewController {
     // When both fade out and JSON loading complete, continue on
     whenBoth(jsonPromise, fadeoutPromise)
       .map { response, _ in parse(json: response.result) }
-      .flatMap(storeInCoreData)
       .delay(0.5)
       .then { project in
         self.nameLabel.text = project.name
-        self.descriptionLabel.text = project.descr
+        self.descriptionLabel.text = project.description
 
         UIView.animate(withDuration: 0.5) {
           self.detailsView.alpha = 1
@@ -73,38 +71,16 @@ class ViewController: UIViewController {
   }
 }
 
-func parse(json: Any) -> (name: String, description: String) {
+struct Project: Decodable {
+  let name: String
+  let description: String
+}
+
+func parse(json: Any) -> Project {
 
   let dict = json as AnyObject
   let name = dict["name"] as! String
   let description = dict["description"] as! String
 
-  return (name, description)
-}
-
-func storeInCoreData(result: (name: String, description: String)) -> Promise<Project, Error> {
-
-  var project: Project!
-
-  return CDK.performOnBackgroundContextPromise { context in
-      do {
-        project = try context.create(Project.self)
-        project.name = result.name
-        project.descr = result.description
-
-        return .saveToPersistentStore
-      }
-      catch {
-        fatalError("Shouldn't happen")
-      }
-    }
-    .map { _ -> Project in
-      do {
-        return try CDK.backgroundContext.find(Project.self, managedObjectID: project.objectID)
-      }
-      catch {
-        fatalError("Shouldn't happen")
-      }
-    }
-    .mapError()
+  return Project(name: name, description: description)
 }

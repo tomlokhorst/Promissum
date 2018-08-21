@@ -22,7 +22,6 @@
 		E2F97BE21A729D9B00B9BDD7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BE11A729D9B00B9BDD7 /* Images.xcassets */; };
 		E2F97BE51A729D9B00B9BDD7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BE31A729D9B00B9BDD7 /* LaunchScreen.xib */; };
 		E2F97C4E1A75488A00B9BDD7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4C1A75488A00B9BDD7 /* Model.xcdatamodeld */; };
-		E2F97C501A75490600B9BDD7 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4F1A75490600B9BDD7 /* Project.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,7 +107,6 @@
 		E2F97C2F1A72ACEC00B9BDD7 /* CoreDataKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CoreDataKit+Promise.swift"; path = "../../../extensions/PromissumExtensions/CoreDataKit+Promise.swift"; sourceTree = "<group>"; };
 		E2F97C441A72B61800B9BDD7 /* UIKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIKit+Promise.swift"; path = "../../../extensions/PromissumExtensions/UIKit+Promise.swift"; sourceTree = "<group>"; };
 		E2F97C4D1A75488A00B9BDD7 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		E2F97C4F1A75490600B9BDD7 /* Project.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		F0C7F152AE61524EEC50AB48 /* Pods-FadeExamplePods-FadeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExamplePods-FadeExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExamplePods-FadeExample/Pods-FadeExamplePods-FadeExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -212,7 +210,6 @@
 			children = (
 				E2F97BDE1A729D9B00B9BDD7 /* Main.storyboard */,
 				E2F97C4C1A75488A00B9BDD7 /* Model.xcdatamodeld */,
-				E2F97C4F1A75490600B9BDD7 /* Project.swift */,
 				E2F97C2D1A72ACC400B9BDD7 /* PromissumExtensions */,
 				E2F97BD81A729D9B00B9BDD7 /* Supporting Files */,
 				E2F97BDC1A729D9B00B9BDD7 /* ViewController.swift */,
@@ -428,13 +425,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CoreDataKit/CoreDataKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Promissum.common-CoreDataKit-UIKit/Promissum.framework",
+				"${BUILT_PRODUCTS_DIR}/Promissum.common-UIKit/Promissum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreDataKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Promissum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +473,6 @@
 			files = (
 				E2F97BDD1A729D9B00B9BDD7 /* ViewController.swift in Sources */,
 				E2F97BDB1A729D9B00B9BDD7 /* AppDelegate.swift in Sources */,
-				E2F97C501A75490600B9BDD7 /* Project.swift in Sources */,
 				E2F97C4E1A75488A00B9BDD7 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
