@@ -22,7 +22,6 @@
 		E2F97BE21A729D9B00B9BDD7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BE11A729D9B00B9BDD7 /* Images.xcassets */; };
 		E2F97BE51A729D9B00B9BDD7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2F97BE31A729D9B00B9BDD7 /* LaunchScreen.xib */; };
 		E2F97C4E1A75488A00B9BDD7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4C1A75488A00B9BDD7 /* Model.xcdatamodeld */; };
-		E2F97C501A75490600B9BDD7 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F97C4F1A75490600B9BDD7 /* Project.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,7 +107,6 @@
 		E2F97C2F1A72ACEC00B9BDD7 /* CoreDataKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CoreDataKit+Promise.swift"; path = "../../../extensions/PromissumExtensions/CoreDataKit+Promise.swift"; sourceTree = "<group>"; };
 		E2F97C441A72B61800B9BDD7 /* UIKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIKit+Promise.swift"; path = "../../../extensions/PromissumExtensions/UIKit+Promise.swift"; sourceTree = "<group>"; };
 		E2F97C4D1A75488A00B9BDD7 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		E2F97C4F1A75490600B9BDD7 /* Project.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		F0C7F152AE61524EEC50AB48 /* Pods-FadeExamplePods-FadeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FadeExamplePods-FadeExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FadeExamplePods-FadeExample/Pods-FadeExamplePods-FadeExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -212,7 +210,6 @@
 			children = (
 				E2F97BDE1A729D9B00B9BDD7 /* Main.storyboard */,
 				E2F97C4C1A75488A00B9BDD7 /* Model.xcdatamodeld */,
-				E2F97C4F1A75490600B9BDD7 /* Project.swift */,
 				E2F97C2D1A72ACC400B9BDD7 /* PromissumExtensions */,
 				E2F97BD81A729D9B00B9BDD7 /* Supporting Files */,
 				E2F97BDC1A729D9B00B9BDD7 /* ViewController.swift */,
@@ -271,7 +268,6 @@
 				C352B2E820080BB800C66CC9 /* Frameworks */,
 				C352B2E920080BB800C66CC9 /* Resources */,
 				05DA90A408FFEB4E177093BF /* [CP] Embed Pods Frameworks */,
-				B3AD6D78400016AC7ED5C209 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -292,7 +288,6 @@
 				E2F97BD31A729D9A00B9BDD7 /* Resources */,
 				E2F97C291A72A31F00B9BDD7 /* Copy Frameworks */,
 				9328A1B01637ED9D4FD928F1 /* [CP] Embed Pods Frameworks */,
-				B7AB9301A9FD224DF45F1986 /* [CP] Copy Pods Resources */,
 				C352B30120080BB800C66CC9 /* Embed Watch Content */,
 			);
 			buildRules = (
@@ -323,12 +318,13 @@
 					C352B2EA20080BB800C66CC9 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = BQF78J8BF9;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					E2F97BD41A729D9A00B9BDD7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = BQF78J8BF9;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -429,48 +425,16 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CoreDataKit/CoreDataKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Promissum.common-CoreDataKit-UIKit/Promissum.framework",
+				"${BUILT_PRODUCTS_DIR}/Promissum.common-UIKit/Promissum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreDataKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Promissum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B3AD6D78400016AC7ED5C209 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B7AB9301A9FD224DF45F1986 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C8AC5C3C1C83A4BBFA7B3AB1 /* [CP] Check Pods Manifest.lock */ = {
@@ -509,7 +473,6 @@
 			files = (
 				E2F97BDD1A729D9B00B9BDD7 /* ViewController.swift in Sources */,
 				E2F97BDB1A729D9B00B9BDD7 /* AppDelegate.swift in Sources */,
-				E2F97C501A75490600B9BDD7 /* Project.swift in Sources */,
 				E2F97C4E1A75488A00B9BDD7 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -632,7 +595,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 4.2;
 			};
@@ -659,7 +622,7 @@
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 4.2;
 			};
@@ -774,7 +737,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -788,7 +751,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

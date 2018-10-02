@@ -21,7 +21,6 @@
 		E2857EF91B8DC09E00A9B97C /* PromiseSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */; };
 		E2857EFA1B8DC09E00A9B97C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF31B8DC09E00A9B97C /* Result.swift */; };
 		E2857EFB1B8DC09E00A9B97C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF41B8DC09E00A9B97C /* State.swift */; };
-		E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +68,6 @@
 		E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseSource.swift; sourceTree = "<group>"; };
 		E2857EF31B8DC09E00A9B97C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		E2857EF41B8DC09E00A9B97C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
-		E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreDataKit+Promise.swift"; sourceTree = "<group>"; };
 		F005CBFC227ADB2DFB1DE952 /* Pods-PromissumExtensionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PromissumExtensionsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,7 +139,6 @@
 			children = (
 				E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */,
 				E22010F31B88EC4800FAF379 /* AVFoundation+Promise.swift */,
-				E28B567E1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift */,
 				E2406AF11A5BBB8D000E5C78 /* Supporting Files */,
 				E2218CD11A642966009FE208 /* UIKit+Promise.swift */,
 			);
@@ -211,7 +208,6 @@
 				E2406AEB1A5BBB8D000E5C78 /* Headers */,
 				E2406AEC1A5BBB8D000E5C78 /* Resources */,
 				E2406B201A5BBDA7000E5C78 /* Embeded Frameworks */,
-				07801DA2A54518089BE32AB7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -231,7 +227,6 @@
 				E2406AF61A5BBB8D000E5C78 /* Frameworks */,
 				E2406AF71A5BBB8D000E5C78 /* Resources */,
 				48F8BABC1117E14A14D40582 /* [CP] Embed Pods Frameworks */,
-				C1C457CE995573AFA1BFE69C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -250,16 +245,17 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Tom Lokhorst";
 				TargetAttributes = {
 					E2406AED1A5BBB8D000E5C78 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 					};
 					E2406AF81A5BBB8D000E5C78 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -299,21 +295,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		07801DA2A54518089BE32AB7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PromissumExtensions/Pods-PromissumExtensions-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		48F8BABC1117E14A14D40582 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -322,12 +303,10 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CoreDataKit/CoreDataKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreDataKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -350,21 +329,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C1C457CE995573AFA1BFE69C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E640CE83643D9392DBB2474A /* [CP] Check Pods Manifest.lock */ = {
@@ -401,7 +365,6 @@
 				E2857EF61B8DC09E00A9B97C /* Delay+Promise.swift in Sources */,
 				E2857EF51B8DC09E00A9B97C /* Combinators.swift in Sources */,
 				E2857EFA1B8DC09E00A9B97C /* Result.swift in Sources */,
-				E28B567F1A5C92A900F2D6B0 /* CoreDataKit+Promise.swift in Sources */,
 				E2857EF81B8DC09E00A9B97C /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,12 +400,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -492,12 +457,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -546,7 +513,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -567,7 +534,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -575,19 +542,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0F67910883604DA865A9B26D /* Pods-PromissumExtensionsTests.debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = PromissumExtensionsTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -595,15 +560,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F005CBFC227ADB2DFB1DE952 /* Pods-PromissumExtensionsTests.release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = PromissumExtensionsTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

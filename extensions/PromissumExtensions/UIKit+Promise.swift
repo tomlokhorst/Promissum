@@ -17,7 +17,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func animate(withDuration duration: TimeInterval, delay: TimeInterval, options: UIViewAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+  public class func animate(withDuration duration: TimeInterval, delay: TimeInterval, options: UIView.AnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: source.resolve)
@@ -25,7 +25,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func transition(with view: UIView, duration: TimeInterval, options: UIViewAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+  public class func transition(with view: UIView, duration: TimeInterval, options: UIView.AnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.transition(with: view, duration: duration, options: options, animations: animations, completion: source.resolve)
@@ -33,7 +33,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func transition(from fromView: UIView, to toView: UIView, duration: TimeInterval, options: UIViewAnimationOptions) -> Promise<Bool, NoError> {
+  public class func transition(from fromView: UIView, to toView: UIView, duration: TimeInterval, options: UIView.AnimationOptions) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.transition(from: fromView, to: toView, duration: duration, options: options, completion: source.resolve)
@@ -41,7 +41,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func perform(_ animation: UISystemAnimation, onViews views: [UIView], options: UIViewAnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
+  public class func perform(_ animation: UIView.SystemAnimation, onViews views: [UIView], options: UIView.AnimationOptions, animations parallelAnimations: (() -> Void)?) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.perform(animation, on: views, options: options, animations: parallelAnimations, completion: source.resolve)
@@ -49,7 +49,7 @@ extension UIView {
     return source.promise
   }
 
-  public class func animateKeyframes(withDuration duration: TimeInterval, delay: TimeInterval, options: UIViewKeyframeAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
+  public class func animateKeyframes(withDuration duration: TimeInterval, delay: TimeInterval, options: UIView.KeyframeAnimationOptions, animations: @escaping () -> Void) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.animateKeyframes(withDuration: duration, delay: delay, options: options, animations: animations, completion: source.resolve)
@@ -75,7 +75,7 @@ extension UIViewController {
     return source.promise
   }
 
-  public func transition(from fromViewController: UIViewController, to toViewController: UIViewController, duration: TimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
+  public func transition(from fromViewController: UIViewController, to toViewController: UIViewController, duration: TimeInterval, options: UIView.AnimationOptions, animations: (() -> Void)?) -> Promise<Bool, NoError> {
     let source = PromiseSource<Bool, NoError>()
 
     self.transition(from: fromViewController, to: toViewController, duration: duration, options: options, animations: animations, completion: source.resolve)
@@ -102,8 +102,10 @@ extension UIAlertView {
   public func showPromise() -> Promise<Int, NoError> {
     let source = PromiseSource<Int, NoError>()
     let originalDelegate = self.delegate as? UIAlertViewDelegate
+    let delegate = AlertViewDelegate(source: source, alertView: self, originalDelegate: originalDelegate)
 
-    self.delegate = AlertViewDelegate(source: source, alertView: self, originalDelegate: originalDelegate)
+    self.strongDelegate = delegate
+    self.delegate = delegate
     self.show()
 
     return source.promise
@@ -120,8 +122,6 @@ extension UIAlertView {
       self.originalDelegate = originalDelegate
 
       super.init()
-
-      self.alertView.strongDelegate = self
     }
 
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
@@ -172,8 +172,10 @@ extension UIActionSheet {
   public func showPromise(in view: UIView) -> Promise<Int, NoError> {
     let source = PromiseSource<Int, NoError>()
     let originalDelegate = self.delegate
+    let delegate = ActionSheetDelegate(source: source, actionSheet: self, originalDelegate: originalDelegate)
 
-    self.delegate = ActionSheetDelegate(source: source, actionSheet: self, originalDelegate: originalDelegate)
+    self.strongDelegate = delegate
+    self.delegate = delegate
     self.show(in: view)
 
     return source.promise
@@ -190,8 +192,6 @@ extension UIActionSheet {
       self.originalDelegate = originalDelegate
 
       super.init()
-
-      self.actionSheet.strongDelegate = self
     }
 
     func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
