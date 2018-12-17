@@ -1,12 +1,12 @@
 PODS:
-  - Alamofire (4.7.3)
-  - Promissum (2.2.0):
-    - Promissum/Core (= 2.2.0)
-  - Promissum/Alamofire (2.2.0):
+  - Alamofire (4.8.0)
+  - Promissum (3.1.0):
+    - Promissum/Core (= 3.1.0)
+  - Promissum/Alamofire (3.1.0):
     - Alamofire (~> 4.0)
     - Promissum/Core
-  - Promissum/Core (2.2.0)
-  - Promissum/UIKit (2.2.0):
+  - Promissum/Core (3.1.0)
+  - Promissum/UIKit (3.1.0):
     - Promissum/Core
 
 DEPENDENCIES:
@@ -24,8 +24,8 @@ EXTERNAL SOURCES:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
-  Promissum: bec35b9632c7ae8c784bea21490da967da1c4746
+  Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
+  Promissum: 697e469cdcc4efa4bd7f0136ca0fa94862b7e152
 
 PODFILE CHECKSUM: ae4d75d4f65983a3c5271256f77ed743176e685f
 

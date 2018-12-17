@@ -32,8 +32,8 @@ class ViewController: NSViewController {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let jsonPromise = Alamofire.request(url)
-      .responseJSONPromise()
+    let projectResponsePromise = Alamofire.request(url)
+      .responseDecodePromise(Project.self)
       .mapError()
 
     // Fade out the "load" button
@@ -45,8 +45,8 @@ class ViewController: NSViewController {
       .mapError()
 
     // When both fade out and JSON loading complete, continue on
-    whenBoth(jsonPromise, fadeoutPromise)
-      .map { promise, _ in parse(json: promise.result) }
+    whenBoth(projectResponsePromise, fadeoutPromise)
+      .map { response, _ in response.result }
       .delay(0.5)
       .then { project in
         self.nameField.stringValue = project.name
@@ -64,11 +64,7 @@ class ViewController: NSViewController {
   }
 }
 
-func parse(json: Any) -> (name: String, description: String) {
-
-  let dict = json as AnyObject
-  let name = dict["name"] as! String
-  let description = dict["description"] as! String
-
-  return (name, description)
+struct Project: Decodable {
+  let name: String
+  let description: String
 }
