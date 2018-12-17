@@ -167,6 +167,7 @@ $ pod install
 Releases
 --------
 
+ - 3.1.0 - 2018-11-17 - Allow for use in extensions
  - **3.0.0** - 2018-10-02 - Swift 4.2 support, removed CoreDataKit extension
  - 2.2.0 - 2018-02-09 - Fix occasional "execute on wrong queue" issue
  - 2.1.0 - 2018-01-12 - watchOS support
