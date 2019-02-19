@@ -9,6 +9,7 @@
 import Foundation
 
 /// Wrapper around `dispatch_after`, with a seconds parameter.
+@available(*, deprecated, message: "Use DispatchQueue.main.asyncAfter instead")
 public func delay(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue.main, execute: @escaping () -> Void) {
   let when = DispatchTime.now() + seconds
 
@@ -19,7 +20,7 @@ public func delay(_ seconds: TimeInterval, queue: DispatchQueue! = DispatchQueue
 public func delayPromise<Value, Error>(_ seconds: TimeInterval, value: Value, queue: DispatchQueue! = DispatchQueue.main) -> Promise<Value, Error> {
   let source = PromiseSource<Value, Error>()
 
-  delay(seconds, queue: queue) {
+  queue.asyncAfter(deadline: .now() + seconds) {
     source.resolve(value)
   }
 
@@ -30,7 +31,7 @@ public func delayPromise<Value, Error>(_ seconds: TimeInterval, value: Value, qu
 public func delayErrorPromise<Value, Error>(_ seconds: TimeInterval, error: Error, queue: DispatchQueue! = DispatchQueue.main) -> Promise<Value, Error> {
   let source = PromiseSource<Value, Error>()
 
-  delay(seconds, queue: queue) {
+  queue.asyncAfter(deadline: .now() + seconds) {
     source.reject(error)
   }
 
