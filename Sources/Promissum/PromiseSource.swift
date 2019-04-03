@@ -66,7 +66,7 @@ In that case, you must manually retain the PromiseSource, or the Promise will ne
 Note that `PromiseSource.deinit` by default will log a warning when an unresolved PromiseSource is deallocated.
 
 */
-public class PromiseSource<Value, Error> {
+public class PromiseSource<Value, Error> where Error: Swift.Error {
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
 
@@ -137,7 +137,7 @@ public class PromiseSource<Value, Error> {
   ///
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func resolve(_ value: Value) {
-    resolveResult(.value(value))
+    resolveResult(.success(value))
   }
 
 
@@ -145,7 +145,7 @@ public class PromiseSource<Value, Error> {
   ///
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func reject(_ error: Error) {
-    resolveResult(.error(error))
+    resolveResult(.failure(error))
   }
 
   internal func resolveResult(_ result: Result<Value, Error>) {
@@ -213,11 +213,11 @@ extension PromiseSource {
 
       case .resolved(let value):
         // Value is already available, call handler immediately
-        return PromiseSourceAction(result: .value(value), handlers: [handler])
+        return PromiseSourceAction(result: .success(value), handlers: [handler])
 
       case .rejected(let error):
         // Error is already available, call handler immediately
-        return PromiseSourceAction(result: .error(error), handlers: [handler])
+        return PromiseSourceAction(result: .failure(error), handlers: [handler])
       }
     }
   }

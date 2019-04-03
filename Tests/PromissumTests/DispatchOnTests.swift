@@ -379,7 +379,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return Result.error(NSError(code: result.value! + 1))
+        return Result.failure(NSError(code: result.value! + 1))
       }
       .dispatch(on: test2Queue)
       .mapResult { result -> Result<Int, NSError> in
@@ -388,7 +388,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return Result.value(result.error!.code + 1)
+        return Result.success(result.error!.code + 1)
       }
       .dispatch(on: test3Queue)
       .mapResult { result -> Result<Int, NSError> in
@@ -397,7 +397,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return Result.value(result.value! + 1)
+        return Result.success(result.value! + 1)
       }
 
     source.resolve(40)

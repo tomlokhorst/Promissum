@@ -89,7 +89,7 @@ Note that it is often not needed to create a new Promise.
 If an existing Promise is available, transforming that using `map` or `flatMap` is often sufficient.
 
 */
-public class Promise<Value, Error> {
+public class Promise<Value, Error> where Error: Swift.Error {
   private let source: PromiseSource<Value, Error>
 
 
@@ -104,7 +104,7 @@ public class Promise<Value, Error> {
 
   /// Initialize a rejected Promise with an error.
   ///
-  /// Example: `Promise<Int, String>(error: "Oops")`
+  /// Example: `Promise<Int, Error>(error: MyError(message: "Oops"))`
   public init(error: Error) {
     self.source = PromiseSource(error: error)
   }
@@ -147,10 +147,10 @@ public class Promise<Value, Error> {
   public var result: Result<Value, Error>? {
     switch source.state {
     case .resolved(let boxed):
-      return .value(boxed)
+      return .success(boxed)
 
     case .rejected(let boxed):
-      return .error(boxed)
+      return .failure(boxed)
 
     default:
       return nil
@@ -179,10 +179,10 @@ public class Promise<Value, Error> {
 
     let resultHandler: (Result<Value, Error>) -> Void = { result in
       switch result {
-      case .value(let value):
+      case .success(let value):
         handler(value)
 
-      case .error:
+      case .failure:
         break
       }
     }
@@ -211,10 +211,10 @@ public class Promise<Value, Error> {
 
     let resultHandler: (Result<Value, Error>) -> Void = { result in
       switch result {
-      case .value:
+      case .success:
         break
 
-      case .error(let error):
+      case .failure(let error):
         handler(error)
       }
     }
@@ -319,11 +319,11 @@ public class Promise<Value, Error> {
 
     let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
-      case .value(let value):
+      case .success(let value):
         let transformed = transform(value)
         resultSource.resolve(transformed)
 
-      case .error(let error):
+      case .failure(let error):
         resultSource.reject(error)
       }
     }
@@ -344,12 +344,12 @@ public class Promise<Value, Error> {
 
     let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
-      case .value(let value):
+      case .success(let value):
         let transformedPromise = transform(value)
         transformedPromise
           .then(resultSource.resolve)
           .trap(resultSource.reject)
-      case .error(let error):
+      case .failure(let error):
         resultSource.reject(error)
       }
     }
@@ -373,10 +373,10 @@ public class Promise<Value, Error> {
 
     let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
-      case .value(let value):
+      case .success(let value):
         resultSource.resolve(value)
 
-      case .error(let error):
+      case .failure(let error):
         let transformed = transform(error)
         resultSource.reject(transformed)
       }
@@ -398,9 +398,9 @@ public class Promise<Value, Error> {
 
     let handler: (Result<Value, Error>) -> Void = { result in
       switch result {
-      case .value(let value):
+      case .success(let value):
         resultSource.resolve(value)
-      case .error(let error):
+      case .failure(let error):
         let transformedPromise = transform(error)
         transformedPromise
           .then(resultSource.resolve)
@@ -426,10 +426,10 @@ public class Promise<Value, Error> {
 
     let handler: (Result<Value, Error>) -> Void = { result in
       switch transform(result) {
-      case .value(let value):
+      case .success(let value):
         resultSource.resolve(value)
 
-      case .error(let error):
+      case .failure(let error):
         resultSource.reject(error)
       }
     }

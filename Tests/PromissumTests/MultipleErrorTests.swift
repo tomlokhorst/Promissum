@@ -43,7 +43,7 @@ class MultipleErrorTests: XCTestCase {
     }
 
     let q = p
-      .mapError { $0.code + 1 }
+      .mapError { NSError(code: $0.code + 1) }
       .trap { _ in
         calls += 1
       }
@@ -66,7 +66,7 @@ class MultipleErrorTests: XCTestCase {
     }
 
     let q = p
-      .flatMapError { Promise<Int, String>(value: $0.code + 1) }
+      .flatMapError { Promise<Int, NSError>(value: $0.code + 1) }
       .then { _ in
         calls += 1
       }
@@ -89,7 +89,7 @@ class MultipleErrorTests: XCTestCase {
     }
 
     let q = p
-      .flatMapError { Promise<Int, String>(error: "\($0.code + 1)")  }
+      .flatMapError { Promise<Int, NSError>(error: NSError(code: $0.code + 1))  }
       .trap { _ in
         calls += 1
       }

@@ -9,52 +9,35 @@
 import Foundation
 
 /// The Result type is used for Promises that are Resolved or Rejected.
-public enum Result<TValue, TError> {
-  case value(TValue)
-  case error(TError)
+extension Result {
 
   /// Optional value, set when Result is Value.
-  public var value: TValue? {
+  public var value: Success? {
     switch self {
-    case .value(let value):
+    case .success(let value):
       return value
-
-    case .error:
+    case .failure:
       return nil
     }
   }
 
   /// Optional error, set when Result is Error.
-  public var error: TError? {
+  public var error: Failure? {
     switch self {
-    case .error(let error):
+    case .failure(let error):
       return error
-
-    case .value:
+    case .success:
       return nil
     }
   }
 
-  internal var state: State<TValue, TError> {
+  internal var state: State<Success, Failure> {
     switch self {
-    case .value(let boxed):
+    case .success(let boxed):
       return .resolved(boxed)
 
-    case .error(let error):
+    case .failure(let error):
       return .rejected(error)
-    }
-  }
-}
-
-extension Result: CustomStringConvertible {
-
-  public var description: String {
-    switch self {
-    case .value(let value):
-      return "value(\(value))"
-
-    case .error(let error):
-      return "error(\(error))"
     }
   }
 }
