@@ -330,7 +330,7 @@
 			};
 			buildConfigurationList = E2F97BD01A729D9A00B9BDD7 /* Build configuration list for PBXProject "FadeExample" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -385,7 +385,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-watchOS/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Promissum.common/Promissum.framework",
 			);
@@ -396,7 +396,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FadeExampleWatchOS Extension/Pods-FadeExampleWatchOS Extension-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		71DC8EE1209E774530C27C79 /* [CP] Check Pods Manifest.lock */ = {
@@ -423,7 +423,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Promissum.common-UIKit/Promissum.framework",
 			);
@@ -434,7 +434,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FadeExample/Pods-FadeExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C8AC5C3C1C83A4BBFA7B3AB1 /* [CP] Check Pods Manifest.lock */ = {
@@ -632,6 +632,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -687,6 +688,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
