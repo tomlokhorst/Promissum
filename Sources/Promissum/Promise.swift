@@ -63,7 +63,7 @@ The full type `Promise<Value, Error>` has two type arguments, for both the value
 For example; the type `Promise<String, NSError>` represents a future value of type `String` that can potentially fail with a `NSError`.
 When creating a Promise yourself, it is recommended to use a custom enum to represent the possible errors cases.
 
-In cases where an error is not applicable, you can use the `NoError` type.
+In cases where an error is not applicable, you can use the `Never` type.
 
 
 ## Transforming a Promise value
@@ -73,8 +73,8 @@ Similar to `Array`, a Promise has a `map` method to apply a transform the value 
 In this example an age (Promise of int) is transformed to a future isAdult boolean:
 
 ```
-// agePromise has type Promise<Int, NoError>
-// isAdultPromise has type Promise<Bool, NoError>
+// agePromise has type Promise<Int, Never>
+// isAdultPromise has type Promise<Bool, Never>
 let isAdultPromise = agePromise.map { age in age >= 18 }
 
 ```
@@ -97,7 +97,7 @@ public class Promise<Value, Error> {
 
   /// Initialize a resolved Promise with a value.
   ///
-  /// Example: `Promise<Int, NoError>(value: 42)`
+  /// Example: `Promise<Int, Never>(value: 42)`
   public init(value: Value) {
     self.source = PromiseSource(value: value)
   }
