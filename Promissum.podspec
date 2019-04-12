@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Promissum"
-  s.version      = "3.2.0"
+  s.version      = "4.0.0"
   s.license      = "MIT"
 
   s.summary      = "A promises library written in Swift featuring combinators like map, flatMap, whenAll, whenAny."
@@ -27,7 +27,7 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.source          = { :git => "https://github.com/tomlokhorst/Promissum.git", :tag => s.version }
   s.requires_arc    = true
   s.default_subspec = "Core"
-  s.swift_version   = '4.2'
+  s.swift_version   = "5.0"
 
   s.subspec "Core" do |ss|
     ss.source_files  = "Sources/Promissum"

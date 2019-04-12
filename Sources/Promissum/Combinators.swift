@@ -172,7 +172,7 @@ extension PromiseSource where Value == Void {
   }
 }
 
-extension Promise where Error : Swift.Error {
+extension Promise {
 
   /// Returns a Promise where the error is casted to an ErrorType.
   public func mapError() -> Promise<Value, Swift.Error> {
