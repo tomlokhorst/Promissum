@@ -65,7 +65,7 @@ class SourceResultTests: XCTestCase {
     var value: Int?
 
     let source = PromiseSource<Int, NSError>()
-    let p: Promise<Int, NoError> = source.promise
+    let p: Promise<Int, Never> = source.promise
       .mapResult { result in
         switch result {
         case .failure(let error):
@@ -92,7 +92,7 @@ class SourceResultTests: XCTestCase {
     var value: Int?
 
     let source = PromiseSource<Int, NSError>()
-    let p: Promise<Int, NoError> = source.promise
+    let p: Promise<Int, Never> = source.promise
       .mapResult { result in
         switch result {
         case .success(let value):

@@ -107,7 +107,7 @@ However, it's easy to change the dispatch queue used by a promise. In one of two
 
 ```swift
 let background = DispatchQueue.global(qos: .background)
-let source = PromiseSource<Int, NoError>(dispatch: .queue(background))
+let source = PromiseSource<Int, Never>(dispatch: .queue(background))
 source.promise
   .then { x in
     // Handler is called on background queue
