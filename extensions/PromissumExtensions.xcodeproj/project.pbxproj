@@ -245,26 +245,27 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Tom Lokhorst";
 				TargetAttributes = {
 					E2406AED1A5BBB8D000E5C78 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 					};
 					E2406AF81A5BBB8D000E5C78 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 				};
 			};
 			buildConfigurationList = E2406AE81A5BBB8D000E5C78 /* Build configuration list for PBXProject "PromissumExtensions" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = E2406AE41A5BBB8D000E5C78;
 			productRefGroup = E2406AEF1A5BBB8D000E5C78 /* Products */;
@@ -301,7 +302,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -310,7 +311,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		51DCE08E65B814C3BAF6B758 /* [CP] Check Pods Manifest.lock */ = {
@@ -392,6 +393,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -449,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -513,7 +516,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -534,7 +537,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -552,7 +555,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -566,7 +569,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nonstrict.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

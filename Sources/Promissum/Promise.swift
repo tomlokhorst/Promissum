@@ -459,4 +459,38 @@ public class Promise<Value, Error> where Error: Swift.Error {
 
     return resultSource.promise
   }
+
+  /// Return a Promise with the resolve or reject delayed by the specified number of seconds.
+  public func delay(_ seconds: TimeInterval, queue: DispatchQueue? = nil) -> Promise<Value, Error> {
+    let dispatchQueue = queue ?? source.dispatchMethod.queue
+
+    return self
+      .flatMapResult { result in
+        let source = PromiseSource<Value, Error>()
+
+        dispatchQueue.asyncAfter(deadline: .now() + seconds) {
+          switch result {
+          case .value(let value):
+            source.resolve(value)
+          case .error(let error):
+            source.reject(error)
+          }
+        }
+
+        return source.promise
+    }
+  }
+}
+
+private extension DispatchMethod {
+  var queue: DispatchQueue {
+    switch self {
+    case .unspecified:
+      return DispatchQueue.main
+    case .synchronous:
+      return DispatchQueue.main
+    case .queue(let queue):
+      return queue
+    }
+  }
 }
