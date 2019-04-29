@@ -160,7 +160,7 @@ extension PromiseSource {
   }
 
   fileprivate class PromiseSourceState {
-    private let lock = NSLock()
+    private let queue = DispatchQueue(label: "PromiseSource internal state queue")
     private var state: State<Value, Error>
     private var handlers: [ResultHandler] = []
 
@@ -169,42 +169,43 @@ extension PromiseSource {
     }
 
     internal func readState() -> State<Value, Error> {
-      lock.lock(); defer { lock.unlock() }
-
-      return state
+      return queue.sync {
+        return state
+      }
     }
 
     internal func resolve(with result: Result<Value, Error>) -> PromiseSourceAction? {
-      lock.lock(); defer { lock.unlock() }
+      return queue.sync {
+        switch state {
+        case .unresolved:
+          state = result.state
+          let handlersToExecute = handlers
+          handlers = []
 
-      switch state {
-      case .unresolved:
-        state = result.state
-        let handlersToExecute = handlers
-        handlers = []
+          return PromiseSourceAction(result: result, handlers: handlersToExecute)
 
-        return PromiseSourceAction(result: result, handlers: handlersToExecute)
-      default:
-        return nil
+        default:
+          return nil
+        }
       }
     }
 
     internal func addHandler(_ handler: @escaping ResultHandler) -> PromiseSourceAction? {
-      lock.lock(); defer { lock.unlock() }
+      return queue.sync {
+        switch state {
+        case .unresolved:
+          // Save handler for later
+          handlers.append(handler)
+          return nil
 
-      switch state {
-      case .unresolved:
-        // Save handler for later
-        handlers.append(handler)
-        return nil
+        case .resolved(let value):
+          // Value is already available, call handler immediately
+          return PromiseSourceAction(result: .success(value), handlers: [handler])
 
-      case .resolved(let value):
-        // Value is already available, call handler immediately
-        return PromiseSourceAction(result: .success(value), handlers: [handler])
-
-      case .rejected(let error):
-        // Error is already available, call handler immediately
-        return PromiseSourceAction(result: .failure(error), handlers: [handler])
+        case .rejected(let error):
+          // Error is already available, call handler immediately
+          return PromiseSourceAction(result: .failure(error), handlers: [handler])
+        }
       }
     }
   }
