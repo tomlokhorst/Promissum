@@ -56,7 +56,7 @@ class DispatchQueueTests: XCTestCase {
 
     // Check assertions
     let expectation = self.expectation(description: "Promise didn't finish")
-    delay(0.02) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
       XCTAssert(Thread.isMainThread, "callback for unspecified dispatch method should be called on main queue")
       q.then { _ in
         XCTAssertNotNil(DispatchQueue.getSpecific(key: testQueueKey), "callback for queued dispatch method should be called on specified queue")

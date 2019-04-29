@@ -256,7 +256,7 @@ class CombinatorTests: XCTestCase {
         error = e
       }
 
-    let p: Promise<Void, NSError> = delayPromise(0.001)
+    let p: Promise<Void, NSError> = Promise(value: ()).delay(0.001)
 
     expectation(p) {
       XCTAssert(value == nil, "Value shouldn't be set")

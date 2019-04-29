@@ -101,7 +101,7 @@ class DispatchOnTests: XCTestCase {
         calls += 1
       }
 
-      delay(0.02) {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
         XCTAssertEqual(calls, 2, "Calls should be 2")
         ex.fulfill()
       }
@@ -128,7 +128,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.02) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
       XCTAssertEqual(calls, 2, "Calls should be 2")
       ex.fulfill()
     }
@@ -174,7 +174,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.02) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
@@ -195,7 +195,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayPromise(0.01, value: x + 1)
+        return Promise(value: x + 1).delay(0.01)
       }
       .dispatch(on: test2Queue)
       .flatMap { x -> Promise<Int, NSError> in
@@ -204,7 +204,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayPromise(0.01, value: x + 1)
+        return Promise(value: x + 1).delay(0.01)
       }
       .dispatch(on: test3Queue)
       .flatMap { x -> Promise<Int, NSError> in
@@ -220,7 +220,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.3) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
@@ -241,7 +241,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayPromise(0.01, value: x + 1, queue: test2Queue)
+        return Promise(value: x + 1).dispatch(on: test2Queue).delay(0.01)
       }
       .dispatch(on: test2Queue)
       .flatMap { x -> Promise<Int, NSError> in
@@ -250,7 +250,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayPromise(0.01, value: x + 1, queue: test1Queue)
+        return Promise(value: x + 1).dispatch(on: test1Queue).delay(0.01)
       }
       .dispatch(on: test3Queue)
       .flatMap { x -> Promise<Int, NSError> in
@@ -266,7 +266,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.3) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
@@ -312,7 +312,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.02) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
@@ -333,7 +333,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayErrorPromise(0.01, error: NSError(code: error.code + 1))
+        return Promise(error: NSError(code: error.code + 1)).delay(0.01)
       }
       .dispatch(on: test2Queue)
       .flatMapError { error -> Promise<Int, NSError> in
@@ -342,7 +342,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayErrorPromise(0.01, error: NSError(code: error.code + 1))
+        return Promise(error: NSError(code: error.code + 1)).delay(0.01)
       }
       .dispatch(on: test3Queue)
       .flatMapError { error -> Promise<Int, NSError> in
@@ -358,7 +358,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.3) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
@@ -404,7 +404,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.02) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }
@@ -425,7 +425,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayErrorPromise(0.01, error: NSError(code: result.value! + 1))
+        return Promise(error: NSError(code: result.value! + 1)).delay(0.01)
       }
       .dispatch(on: test2Queue)
       .flatMapResult { result -> Promise<Int, NSError> in
@@ -434,7 +434,7 @@ class DispatchOnTests: XCTestCase {
 
         calls += 1
 
-        return delayPromise(0.01, value: result.error!.code + 1)
+        return Promise(value: result.error!.code + 1).delay(0.01)
       }
       .dispatch(on: test3Queue)
       .flatMapResult { result -> Promise<Int, NSError> in
@@ -450,7 +450,7 @@ class DispatchOnTests: XCTestCase {
 
     let ex = self.expectation(description: "Dispatch queue")
 
-    delay(0.3) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       XCTAssertEqual(calls, 3, "Calls should be 3")
       ex.fulfill()
     }

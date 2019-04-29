@@ -470,9 +470,9 @@ public class Promise<Value, Error> where Error: Swift.Error {
 
         dispatchQueue.asyncAfter(deadline: .now() + seconds) {
           switch result {
-          case .value(let value):
+          case .success(let value):
             source.resolve(value)
-          case .error(let error):
+          case .failure(let error):
             source.reject(error)
           }
         }
