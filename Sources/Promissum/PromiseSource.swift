@@ -79,16 +79,6 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
   /// Print a warning on deinit of an unresolved PromiseSource
   public var warnUnresolvedDeinit: Bool
 
-  // MARK: Initializers & deinit
-
-  internal convenience init(value: Value) {
-    self.init(state: .resolved(value), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
-  }
-
-  internal convenience init(error: Error) {
-    self.init(state: .rejected(error), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
-  }
-
   /// Initialize a new Unresolved PromiseSource
   ///
   /// - parameter warnUnresolvedDeinit: Print a warning on deinit of an unresolved PromiseSource
@@ -137,7 +127,9 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
   ///
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func resolve(_ value: Value) {
-    resolveResult(.success(value))
+    if let action = internalState.resolve(with: .success(value)) {
+      callHandlers(action.handlers, with: action.result, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+    }
   }
 
 
@@ -145,12 +137,9 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
   ///
   /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func reject(_ error: Error) {
-    resolveResult(.failure(error))
-  }
-
-  internal func resolveResult(_ result: Result<Value, Error>) {
-    let action = internalState.resolve(with: result)
-    callHandlers(action.handlers, with: action.result, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+    if let action = internalState.resolve(with: .failure(error)) {
+      callHandlers(action.handlers, with: action.result, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
+    }
   }
 
   // MARK: Adding result handlers
@@ -185,21 +174,19 @@ extension PromiseSource {
       return state
     }
 
-    internal func resolve(with result: Result<Value, Error>) -> PromiseSourceAction {
+    internal func resolve(with result: Result<Value, Error>) -> PromiseSourceAction? {
       lock.lock(); defer { lock.unlock() }
-
-      let handlersToExecute: [ResultHandler]
 
       switch state {
       case .unresolved:
         state = result.state
-        handlersToExecute = handlers
+        let handlersToExecute = handlers
         handlers = []
-      default:
-        handlersToExecute = []
-      }
 
-      return PromiseSourceAction(result: result, handlers: handlersToExecute)
+        return PromiseSourceAction(result: result, handlers: handlersToExecute)
+      default:
+        return nil
+      }
     }
 
     internal func addHandler(_ handler: @escaping ResultHandler) -> PromiseSourceAction? {
@@ -240,7 +227,6 @@ internal func callHandlers<T>(_ handlers: [(T) -> Void], with value: T, dispatch
       }
 
     case .synchronous:
-
       handler(value)
 
     case .queue(let targetQueue):
