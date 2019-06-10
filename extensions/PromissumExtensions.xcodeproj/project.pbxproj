@@ -7,20 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		807AD3BD849EF74069C4DEC2 /* Pods_PromissumExtensionsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D87A931F8AAF0AB90F41BEA /* Pods_PromissumExtensionsTests.framework */; };
-		8AB580272F22137DEDC43C8D /* Pods_PromissumExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A015F5F9C4197860C2DD626B /* Pods_PromissumExtensions.framework */; };
-		E20401271C2C05E600239770 /* DispatchMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20401261C2C05E600239770 /* DispatchMethod.swift */; };
-		E22010F41B88EC4800FAF379 /* AVFoundation+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22010F31B88EC4800FAF379 /* AVFoundation+Promise.swift */; };
-		E2218CD21A642966009FE208 /* UIKit+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2218CD11A642966009FE208 /* UIKit+Promise.swift */; };
 		E2406AFA1A5BBB8D000E5C78 /* PromissumExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2406AEE1A5BBB8D000E5C78 /* PromissumExtensions.framework */; };
 		E2406B011A5BBB8D000E5C78 /* AlamofirePromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2406B001A5BBB8D000E5C78 /* AlamofirePromiseTests.swift */; };
-		E2406B1F1A5BBD6E000E5C78 /* Alamofire+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */; };
-		E2857EF51B8DC09E00A9B97C /* Combinators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EEE1B8DC09E00A9B97C /* Combinators.swift */; };
-		E2857EF61B8DC09E00A9B97C /* Delay+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */; };
-		E2857EF81B8DC09E00A9B97C /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF11B8DC09E00A9B97C /* Promise.swift */; };
-		E2857EF91B8DC09E00A9B97C /* PromiseSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */; };
-		E2857EFA1B8DC09E00A9B97C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF31B8DC09E00A9B97C /* Result.swift */; };
-		E2857EFB1B8DC09E00A9B97C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2857EF41B8DC09E00A9B97C /* State.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,28 +35,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0F67910883604DA865A9B26D /* Pods-PromissumExtensionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PromissumExtensionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5E6CC1C6B4D883A36C4F959D /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D87A931F8AAF0AB90F41BEA /* Pods_PromissumExtensionsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PromissumExtensionsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A015F5F9C4197860C2DD626B /* Pods_PromissumExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PromissumExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ACA165BAAE3FE22EB66668BD /* Pods-PromissumExtensions.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PromissumExtensions.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PromissumExtensions/Pods-PromissumExtensions.debug.xcconfig"; sourceTree = "<group>"; };
-		B0709F79EAA29D8CBA1E958C /* Pods-PromissumExtensions.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PromissumExtensions.release.xcconfig"; path = "Pods/Target Support Files/Pods-PromissumExtensions/Pods-PromissumExtensions.release.xcconfig"; sourceTree = "<group>"; };
-		E20401261C2C05E600239770 /* DispatchMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchMethod.swift; sourceTree = "<group>"; };
-		E22010F31B88EC4800FAF379 /* AVFoundation+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVFoundation+Promise.swift"; sourceTree = "<group>"; };
-		E2218CD11A642966009FE208 /* UIKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+Promise.swift"; sourceTree = "<group>"; };
 		E2406AEE1A5BBB8D000E5C78 /* PromissumExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromissumExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2406AF21A5BBB8D000E5C78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2406AF91A5BBB8D000E5C78 /* PromissumExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromissumExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2406AFF1A5BBB8D000E5C78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2406B001A5BBB8D000E5C78 /* AlamofirePromiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofirePromiseTests.swift; sourceTree = "<group>"; };
-		E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Promise.swift"; sourceTree = "<group>"; };
-		E2857EEE1B8DC09E00A9B97C /* Combinators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Combinators.swift; sourceTree = "<group>"; };
-		E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Delay+Promise.swift"; sourceTree = "<group>"; };
-		E2857EF11B8DC09E00A9B97C /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
-		E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseSource.swift; sourceTree = "<group>"; };
-		E2857EF31B8DC09E00A9B97C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		E2857EF41B8DC09E00A9B97C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
-		F005CBFC227ADB2DFB1DE952 /* Pods-PromissumExtensionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PromissumExtensionsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +48,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AB580272F22137DEDC43C8D /* Pods_PromissumExtensions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,30 +56,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2406AFA1A5BBB8D000E5C78 /* PromissumExtensions.framework in Frameworks */,
-				807AD3BD849EF74069C4DEC2 /* Pods_PromissumExtensionsTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4FB06B37C4D01B3ED3AD795D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				ACA165BAAE3FE22EB66668BD /* Pods-PromissumExtensions.debug.xcconfig */,
-				B0709F79EAA29D8CBA1E958C /* Pods-PromissumExtensions.release.xcconfig */,
-				0F67910883604DA865A9B26D /* Pods-PromissumExtensionsTests.debug.xcconfig */,
-				F005CBFC227ADB2DFB1DE952 /* Pods-PromissumExtensionsTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		8E937B5F5271990EBDA35E96 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				5E6CC1C6B4D883A36C4F959D /* Pods.framework */,
-				A015F5F9C4197860C2DD626B /* Pods_PromissumExtensions.framework */,
-				9D87A931F8AAF0AB90F41BEA /* Pods_PromissumExtensionsTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -116,12 +73,10 @@
 		E2406AE41A5BBB8D000E5C78 = {
 			isa = PBXGroup;
 			children = (
-				E2857EED1B8DC09E00A9B97C /* Promissum */,
 				E2406AF01A5BBB8D000E5C78 /* PromissumExtensions */,
 				E2406AFD1A5BBB8D000E5C78 /* PromissumExtensionsTests */,
 				E2406AEF1A5BBB8D000E5C78 /* Products */,
 				8E937B5F5271990EBDA35E96 /* Frameworks */,
-				4FB06B37C4D01B3ED3AD795D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,10 +92,7 @@
 		E2406AF01A5BBB8D000E5C78 /* PromissumExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				E2406B1E1A5BBD6E000E5C78 /* Alamofire+Promise.swift */,
-				E22010F31B88EC4800FAF379 /* AVFoundation+Promise.swift */,
 				E2406AF11A5BBB8D000E5C78 /* Supporting Files */,
-				E2218CD11A642966009FE208 /* UIKit+Promise.swift */,
 			);
 			path = PromissumExtensions;
 			sourceTree = "<group>";
@@ -170,21 +122,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E2857EED1B8DC09E00A9B97C /* Promissum */ = {
-			isa = PBXGroup;
-			children = (
-				E20401261C2C05E600239770 /* DispatchMethod.swift */,
-				E2857EEE1B8DC09E00A9B97C /* Combinators.swift */,
-				E2857EEF1B8DC09E00A9B97C /* Delay+Promise.swift */,
-				E2857EF11B8DC09E00A9B97C /* Promise.swift */,
-				E2857EF21B8DC09E00A9B97C /* PromiseSource.swift */,
-				E2857EF31B8DC09E00A9B97C /* Result.swift */,
-				E2857EF41B8DC09E00A9B97C /* State.swift */,
-			);
-			name = Promissum;
-			path = ../Sources/Promissum;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -202,7 +139,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2406B041A5BBB8D000E5C78 /* Build configuration list for PBXNativeTarget "PromissumExtensions" */;
 			buildPhases = (
-				51DCE08E65B814C3BAF6B758 /* [CP] Check Pods Manifest.lock */,
 				E2406AE91A5BBB8D000E5C78 /* Sources */,
 				E2406AEA1A5BBB8D000E5C78 /* Frameworks */,
 				E2406AEB1A5BBB8D000E5C78 /* Headers */,
@@ -222,11 +158,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2406B071A5BBB8D000E5C78 /* Build configuration list for PBXNativeTarget "PromissumExtensionsTests" */;
 			buildPhases = (
-				E640CE83643D9392DBB2474A /* [CP] Check Pods Manifest.lock */,
 				E2406AF51A5BBB8D000E5C78 /* Sources */,
 				E2406AF61A5BBB8D000E5C78 /* Frameworks */,
 				E2406AF71A5BBB8D000E5C78 /* Resources */,
-				48F8BABC1117E14A14D40582 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -295,78 +229,11 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		48F8BABC1117E14A14D40582 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PromissumExtensionsTests/Pods-PromissumExtensionsTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		51DCE08E65B814C3BAF6B758 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PromissumExtensions-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E640CE83643D9392DBB2474A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PromissumExtensionsTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		E2406AE91A5BBB8D000E5C78 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2218CD21A642966009FE208 /* UIKit+Promise.swift in Sources */,
-				E2406B1F1A5BBD6E000E5C78 /* Alamofire+Promise.swift in Sources */,
-				E22010F41B88EC4800FAF379 /* AVFoundation+Promise.swift in Sources */,
-				E20401271C2C05E600239770 /* DispatchMethod.swift in Sources */,
-				E2857EFB1B8DC09E00A9B97C /* State.swift in Sources */,
-				E2857EF91B8DC09E00A9B97C /* PromiseSource.swift in Sources */,
-				E2857EF61B8DC09E00A9B97C /* Delay+Promise.swift in Sources */,
-				E2857EF51B8DC09E00A9B97C /* Combinators.swift in Sources */,
-				E2857EFA1B8DC09E00A9B97C /* Result.swift in Sources */,
-				E2857EF81B8DC09E00A9B97C /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,7 +367,6 @@
 		};
 		E2406B051A5BBB8D000E5C78 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ACA165BAAE3FE22EB66668BD /* Pods-PromissumExtensions.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -522,7 +388,6 @@
 		};
 		E2406B061A5BBB8D000E5C78 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0709F79EAA29D8CBA1E958C /* Pods-PromissumExtensions.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -543,7 +408,6 @@
 		};
 		E2406B081A5BBB8D000E5C78 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0F67910883604DA865A9B26D /* Pods-PromissumExtensionsTests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
@@ -561,7 +425,6 @@
 		};
 		E2406B091A5BBB8D000E5C78 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F005CBFC227ADB2DFB1DE952 /* Pods-PromissumExtensionsTests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";

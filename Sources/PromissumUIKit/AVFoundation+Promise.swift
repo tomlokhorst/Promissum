@@ -7,7 +7,7 @@
 //
 
 import AVFoundation
-
+import Promissum
 
 extension AVCaptureDevice {
   public static func requestAccess(forMediaType mediaType: String) -> Promise<Bool, Never> {

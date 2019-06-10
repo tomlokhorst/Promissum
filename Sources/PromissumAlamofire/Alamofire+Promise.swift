@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import Promissum
 
 /// Used to store all response data returned from a successfully completed `Request`.
 /// Based on `Alamofire.Response`.
