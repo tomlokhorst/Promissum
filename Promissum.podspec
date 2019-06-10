@@ -25,7 +25,7 @@ Promissum really shines when used to combine asynchronous operations from differ
   s.source          = { :git => "https://github.com/tomlokhorst/Promissum.git", :tag => s.version }
   s.requires_arc    = true
   s.default_subspec = "Core"
-  s.swift_version   = "5.0"
+  s.swift_version   = "5.1"
 
   s.subspec "Core" do |ss|
     ss.source_files  = "Sources/Promissum"
