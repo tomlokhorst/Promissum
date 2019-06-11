@@ -167,6 +167,7 @@ $ pod install
 Releases
 --------
 
+ - **4.0.0** - 2019-06-10 - Swift 5.1 support, use build-in Result type
  - 3.2.0 - 2019-04-03 - Deprecate `delay` and related functions
  - 3.1.0 - 2018-11-17 - Allow for use in extensions
  - **3.0.0** - 2018-10-02 - Swift 4.2 support, removed CoreDataKit extension
