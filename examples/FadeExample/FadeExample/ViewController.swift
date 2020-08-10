@@ -40,8 +40,8 @@ class ViewController: UIViewController {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
     // Start loading the JSON
-    let projectResponsePromise = Alamofire.request(url)
-      .responseDecodePromise(Project.self)
+    let projectResponsePromise = AF.request(url)
+      .responseDecodablePromise(of: Project.self)
       .mapError()
 
     // Fade out the "load" button
