@@ -29,13 +29,13 @@ public struct SuccessResponse<Value> {
 
 /// Used to store all response data returned from a failed completed `Request`.
 /// Based on `Alamofire.Response`.
-public struct ErrorResponse : Error {
+public struct ErrorResponse: Error {
   public var request: URLRequest?
   public var response: HTTPURLResponse?
   public var data: Data?
-  public var result: Error
+  public var result: AFError
 
-  public init(request: URLRequest?, response: HTTPURLResponse?, data: Data?, result: Error) {
+  public init(request: URLRequest?, response: HTTPURLResponse?, data: Data?, result: AFError) {
     self.request = request
     self.response = response
     self.data = data
@@ -50,7 +50,7 @@ extension DataRequest {
   {
     let source = PromiseSource<SuccessResponse<Data?>, ErrorResponse>()
 
-    self.response(queue: queue) { response in
+    self.response(queue: queue ?? .main) { response in
       if let error = response.error {
         source.reject(ErrorResponse(
           request: response.request,
@@ -77,7 +77,7 @@ extension DataRequest {
   {
     let source = PromiseSource<SuccessResponse<T.SerializedObject>, ErrorResponse>()
 
-    self.response(queue: queue, responseSerializer: responseSerializer) { response in
+    self.response(queue: queue ?? .main, responseSerializer: responseSerializer) { response in
       switch response.result {
       case .success(let value):
         source.resolve(SuccessResponse(
@@ -99,49 +99,45 @@ extension DataRequest {
   }
 }
 
-// MARK: - Decode
+// MARK: - Decodable
 
 extension DataRequest {
 
-  public static func decodeResponseSerializer<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> DataResponseSerializer<T>
+  // For 5.x
+  @available(*, unavailable, renamed: "responseDecodable(of:)")
+  public func responseDecode<Success: Decodable>(_ type: Success.Type, decoder: JSONDecoder = JSONDecoder(), completionHandler: @escaping (DataResponse<Success, Error>) -> Void) -> Self {
+    fatalError()
+  }
+
+  @available(*, unavailable, renamed: "responseDecodablePromise(of:)")
+  public func responseDecodePromise<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse> {
+    fatalError()
+  }
+
+  public func responseDecodablePromise<T: Decodable>(of type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse>
   {
-    let dataSerializer = DataRequest.dataResponseSerializer().serializeResponse
+    let source = PromiseSource<SuccessResponse<T>, ErrorResponse>()
+    self.responseDecodable(of: type) { response in
+      switch response.result {
+      case .success(let value):
+        source.resolve(SuccessResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: value))
 
-    return DataResponseSerializer { request, response, data, error in
-      let result = dataSerializer(request, response, data, error)
-
-      switch result {
-      case .success(let data):
-        do {
-          let value = try decoder.decode(type, from: data)
-          return .success(value)
-        }
-        catch {
-          return .failure(error)
-        }
       case .failure(let error):
-        return .failure(error)
+        source.reject(ErrorResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: error))
       }
     }
-  }
 
-  public func responseDecode<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder(), completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
-  {
-    return response(
-      responseSerializer: DataRequest.decodeResponseSerializer(type, decoder: decoder),
-      completionHandler: completionHandler
-    )
-  }
-
-}
-
-extension DataRequest {
-  public func responseDecodePromise<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse>
-  {
-    return self.responsePromise(responseSerializer: DataRequest.decodeResponseSerializer(type, decoder: decoder))
+    return source.promise
   }
 }
-
 
 // MARK: - Data
 
@@ -149,7 +145,26 @@ extension DataRequest {
   public func responseDataPromise()
     -> Promise<SuccessResponse<Data>, ErrorResponse>
   {
-    return self.responsePromise(responseSerializer: DataRequest.dataResponseSerializer())
+    let source = PromiseSource<SuccessResponse<Data>, ErrorResponse>()
+    self.responseData { response in
+      switch response.result {
+      case .success(let value):
+        source.resolve(SuccessResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: value))
+
+      case .failure(let error):
+        source.reject(ErrorResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: error))
+      }
+    }
+
+    return source.promise
   }
 }
 
@@ -160,7 +175,26 @@ extension DataRequest {
     encoding: String.Encoding? = nil)
     -> Promise<SuccessResponse<String>, ErrorResponse>
   {
-    return self.responsePromise(responseSerializer: DataRequest.stringResponseSerializer(encoding: encoding))
+    let source = PromiseSource<SuccessResponse<String>, ErrorResponse>()
+    self.responseString { response in
+      switch response.result {
+      case .success(let value):
+        source.resolve(SuccessResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: value))
+
+      case .failure(let error):
+        source.reject(ErrorResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: error))
+      }
+    }
+
+    return source.promise
   }
 }
 
@@ -171,17 +205,38 @@ extension DataRequest {
     options: JSONSerialization.ReadingOptions = .allowFragments)
     -> Promise<SuccessResponse<Any>, ErrorResponse>
   {
-    return self.responsePromise(responseSerializer: DataRequest.jsonResponseSerializer(options: options))
+    let source = PromiseSource<SuccessResponse<Any>, ErrorResponse>()
+    self.responseJSON { response in
+      switch response.result {
+      case .success(let value):
+        source.resolve(SuccessResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: value))
+
+      case .failure(let error):
+        source.reject(ErrorResponse(
+          request: response.request,
+          response: response.response,
+          data: response.data,
+          result: error))
+      }
+    }
+
+    return source.promise
   }
 }
 
 // MARK: - Property List
 
 extension DataRequest {
+  // For 5.x
+  @available(*, unavailable)
   public func responsePropertyListPromise(
     options: PropertyListSerialization.ReadOptions = [])
     -> Promise<SuccessResponse<Any>, ErrorResponse>
   {
-    return self.responsePromise(responseSerializer: DataRequest.propertyListResponseSerializer(options: options))
+    fatalError()
   }
 }

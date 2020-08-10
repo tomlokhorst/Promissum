@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E23CD71024E1C9FD00B33A6E /* PromissumUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E23CD70F24E1C9FD00B33A6E /* PromissumUIKit */; };
+		E23CD71224E1C9FD00B33A6E /* Promissum in Frameworks */ = {isa = PBXBuildFile; productRef = E23CD71124E1C9FD00B33A6E /* Promissum */; };
+		E23CD71424E1C9FD00B33A6E /* PromissumAlamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E23CD71324E1C9FD00B33A6E /* PromissumAlamofire */; };
 		E2AF3BDD22AEA5A10094E740 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF3BDC22AEA5A10094E740 /* AppDelegate.swift */; };
 		E2AF3BDF22AEA5A10094E740 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF3BDE22AEA5A10094E740 /* SceneDelegate.swift */; };
 		E2AF3BE122AEA5A10094E740 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF3BE022AEA5A10094E740 /* ViewController.swift */; };
 		E2AF3BE422AEA5A10094E740 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2AF3BE222AEA5A10094E740 /* Main.storyboard */; };
 		E2AF3BE622AEA5A30094E740 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2AF3BE522AEA5A30094E740 /* Assets.xcassets */; };
 		E2AF3BE922AEA5A30094E740 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2AF3BE722AEA5A30094E740 /* LaunchScreen.storyboard */; };
-		E2AF3BF222AEA6530094E740 /* PromissumUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E2AF3BF122AEA6530094E740 /* PromissumUIKit */; };
-		E2AF3BF422AEA6530094E740 /* Promissum in Frameworks */ = {isa = PBXBuildFile; productRef = E2AF3BF322AEA6530094E740 /* Promissum */; };
-		E2AF3BF622AEA6530094E740 /* PromissumAlamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E2AF3BF522AEA6530094E740 /* PromissumAlamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,20 +34,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2AF3BF622AEA6530094E740 /* PromissumAlamofire in Frameworks */,
-				E2AF3BF422AEA6530094E740 /* Promissum in Frameworks */,
-				E2AF3BF222AEA6530094E740 /* PromissumUIKit in Frameworks */,
+				E23CD71424E1C9FD00B33A6E /* PromissumAlamofire in Frameworks */,
+				E23CD71224E1C9FD00B33A6E /* Promissum in Frameworks */,
+				E23CD71024E1C9FD00B33A6E /* PromissumUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E23CD70924E1B01300B33A6E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E2AF3BD022AEA5A10094E740 = {
 			isa = PBXGroup;
 			children = (
 				E2AF3BDB22AEA5A10094E740 /* FadeExample */,
 				E2AF3BDA22AEA5A10094E740 /* Products */,
+				E23CD70924E1B01300B33A6E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,9 +98,9 @@
 			);
 			name = FadeExample;
 			packageProductDependencies = (
-				E2AF3BF122AEA6530094E740 /* PromissumUIKit */,
-				E2AF3BF322AEA6530094E740 /* Promissum */,
-				E2AF3BF522AEA6530094E740 /* PromissumAlamofire */,
+				E23CD70F24E1C9FD00B33A6E /* PromissumUIKit */,
+				E23CD71124E1C9FD00B33A6E /* Promissum */,
+				E23CD71324E1C9FD00B33A6E /* PromissumAlamofire */,
 			);
 			productName = FadeExample;
 			productReference = E2AF3BD922AEA5A10094E740 /* FadeExample.app */;
@@ -122,7 +130,7 @@
 			);
 			mainGroup = E2AF3BD022AEA5A10094E740;
 			packageReferences = (
-				E2AF3BF022AEA6530094E740 /* XCRemoteSwiftPackageReference "Promissum" */,
+				E23CD70E24E1C9FD00B33A6E /* XCRemoteSwiftPackageReference "Promissum" */,
 			);
 			productRefGroup = E2AF3BDA22AEA5A10094E740 /* Products */;
 			projectDirPath = "";
@@ -353,9 +361,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E2AF3BF022AEA6530094E740 /* XCRemoteSwiftPackageReference "Promissum" */ = {
+		E23CD70E24E1C9FD00B33A6E /* XCRemoteSwiftPackageReference "Promissum" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tomlokhorst/Promissum.git";
+			repositoryURL = "https://github.com/tomlokhorst/Promissum";
 			requirement = {
 				branch = "separate-targets";
 				kind = branch;
@@ -364,19 +372,19 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E2AF3BF122AEA6530094E740 /* PromissumUIKit */ = {
+		E23CD70F24E1C9FD00B33A6E /* PromissumUIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E2AF3BF022AEA6530094E740 /* XCRemoteSwiftPackageReference "Promissum" */;
+			package = E23CD70E24E1C9FD00B33A6E /* XCRemoteSwiftPackageReference "Promissum" */;
 			productName = PromissumUIKit;
 		};
-		E2AF3BF322AEA6530094E740 /* Promissum */ = {
+		E23CD71124E1C9FD00B33A6E /* Promissum */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E2AF3BF022AEA6530094E740 /* XCRemoteSwiftPackageReference "Promissum" */;
+			package = E23CD70E24E1C9FD00B33A6E /* XCRemoteSwiftPackageReference "Promissum" */;
 			productName = Promissum;
 		};
-		E2AF3BF522AEA6530094E740 /* PromissumAlamofire */ = {
+		E23CD71324E1C9FD00B33A6E /* PromissumAlamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E2AF3BF022AEA6530094E740 /* XCRemoteSwiftPackageReference "Promissum" */;
+			package = E23CD70E24E1C9FD00B33A6E /* XCRemoteSwiftPackageReference "Promissum" */;
 			productName = PromissumAlamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
