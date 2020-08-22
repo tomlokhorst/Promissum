@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Promissum
 
 extension UIView {
   public class func animatePromise(withDuration duration: TimeInterval, animations: @escaping () -> Void) -> Promise<Bool, Never> {

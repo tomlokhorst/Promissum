@@ -26,4 +26,5 @@ Pods/
 
 # SPM
 .build
+.swiftpm
 Promissum.xcodeproj

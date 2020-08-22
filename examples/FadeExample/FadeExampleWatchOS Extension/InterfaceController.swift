@@ -24,7 +24,7 @@ class InterfaceController: WKInterfaceController {
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
     
     // Start loading the JSON
-    Alamofire.request(url)
+    AF.request(url)
       .responseJSONPromise()
       .map { self.parse($0.result) }
       .then { [weak label] p in

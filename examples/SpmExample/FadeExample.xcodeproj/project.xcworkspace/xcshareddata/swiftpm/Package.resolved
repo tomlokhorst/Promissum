@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "becd9a729a37bdbef5bc39dc3c702b99f9e3d046",
+          "version": "5.2.2"
+        }
+      },
+      {
+        "package": "Promissum",
+        "repositoryURL": "https://github.com/tomlokhorst/Promissum",
+        "state": {
+          "branch": "separate-targets",
+          "revision": "2e43de1db4f1df5aec400eca047410594d33094b",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

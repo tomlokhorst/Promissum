@@ -10,6 +10,8 @@ import UIKit
 
 import Alamofire
 import Promissum
+import PromissumAlamofire
+import PromissumUIKit
 
 class ViewController: UIViewController {
 
@@ -32,8 +34,8 @@ class ViewController: UIViewController {
 
     // Give the button a border, so the fade shows up better
     loadButton.layer.borderColor = loadButton.tintColor!.cgColor
-    loadButton.layer.borderWidth = 1.0;
-    loadButton.layer.cornerRadius = 3;
+    loadButton.layer.borderWidth = 1.0
+    loadButton.layer.cornerRadius = 3
   }
 
   @IBAction func buttonTouchUp(_ sender: UIButton) {
