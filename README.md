@@ -167,7 +167,7 @@ $ pod install
 Releases
 --------
 
-- 5.0.1 - 2020-10-07 - Pass promise method options to Alamofire
+ - 5.0.1 - 2020-10-07 - Pass promise method options to Alamofire
  - **5.0.0** - 2020-08-22 - Update Alamofire+Promise to Alamofire 5, requires iOS 10
  - **4.0.0** - 2019-06-10 - Swift 5.1 support, use build-in Result type
  - 3.2.0 - 2019-04-03 - Deprecate `delay` and related functions
