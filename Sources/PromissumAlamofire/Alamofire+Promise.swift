@@ -117,7 +117,7 @@ extension DataRequest {
   public func responseDecodablePromise<T: Decodable>(of type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse>
   {
     let source = PromiseSource<SuccessResponse<T>, ErrorResponse>()
-    self.responseDecodable(of: type) { response in
+    self.responseDecodable(of: type, decoder: decoder) { response in
       switch response.result {
       case .success(let value):
         source.resolve(SuccessResponse(
@@ -176,7 +176,7 @@ extension DataRequest {
     -> Promise<SuccessResponse<String>, ErrorResponse>
   {
     let source = PromiseSource<SuccessResponse<String>, ErrorResponse>()
-    self.responseString { response in
+    self.responseString(encoding: encoding) { response in
       switch response.result {
       case .success(let value):
         source.resolve(SuccessResponse(
@@ -206,7 +206,7 @@ extension DataRequest {
     -> Promise<SuccessResponse<Any>, ErrorResponse>
   {
     let source = PromiseSource<SuccessResponse<Any>, ErrorResponse>()
-    self.responseJSON { response in
+    self.responseJSON(options: options) { response in
       switch response.result {
       case .success(let value):
         source.resolve(SuccessResponse(

@@ -19,7 +19,7 @@ class AlamofirePromiseTests: XCTestCase {
 
     let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 
-    Alamofire.request(url)
+    AF.request(url)
       .responseJSONPromise()
       .then { response in
         if let dict = response.result as? [String: AnyObject],
