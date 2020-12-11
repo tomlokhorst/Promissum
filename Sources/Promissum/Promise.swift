@@ -99,14 +99,14 @@ public class Promise<Value, Error> where Error: Swift.Error {
   ///
   /// Example: `Promise<Int, Never>(value: 42)`
   public init(value: Value) {
-    self.source = PromiseSource(value: value)
+    self.source = PromiseSource(state: .resolved(value), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
   }
 
   /// Initialize a rejected Promise with an error.
   ///
   /// Example: `Promise<Int, Error>(error: MyError(message: "Oops"))`
   public init(error: Error) {
-    self.source = PromiseSource(error: error)
+    self.source = PromiseSource(state: .rejected(error), dispatchKey: DispatchSpecificKey(), dispatchMethod: .unspecified, warnUnresolvedDeinit: false)
   }
 
   internal init(source: PromiseSource<Value, Error>) {
@@ -300,7 +300,17 @@ public class Promise<Value, Error> where Error: Swift.Error {
       warnUnresolvedDeinit: true
     )
 
-    source.addOrCallResultHandler(resultSource.resolveResult)
+    let handler: (Result<Value, Error>) -> Void = { result in
+      switch result {
+      case .success(let value):
+        resultSource.resolve(value)
+
+      case .failure(let error):
+        resultSource.reject(error)
+      }
+    }
+
+    source.addOrCallResultHandler(handler)
 
     return resultSource.promise
   }
@@ -478,7 +488,7 @@ public class Promise<Value, Error> where Error: Swift.Error {
         }
 
         return source.promise
-    }
+      }
   }
 }
 
