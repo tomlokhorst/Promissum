@@ -77,9 +77,6 @@ Listed below are some of the methods and functions provided this library. More d
 
 ### Functions for dealing with Promises
 
-* `flatten(promise: Promise<Promise<Value, Error>, Error>)`  
-  Flattens a nested Promise of Promise into a single Promise.
-
 * `whenBoth(promiseA: Promise<A, Error>, _ promiseB: Promise<B, Error>)`  
   Creates a Promise that resolves when both arguments to `whenBoth` resolve.
 

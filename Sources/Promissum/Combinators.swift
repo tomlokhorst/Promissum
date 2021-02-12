@@ -11,6 +11,7 @@ import Foundation
 /// Flattens a nested Promise of Promise into a single Promise.
 ///
 /// The returned Promise resolves (or rejects) when the nested Promise resolves.
+@available(*, deprecated, message: "migrate to: promise.flatMap { $0 }")
 public func flatten<Value, Error>(_ promise: Promise<Promise<Value, Error>, Error>) -> Promise<Value, Error> {
   return promise.flatMap { $0 }
 }
