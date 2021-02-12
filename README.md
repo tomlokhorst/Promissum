@@ -13,16 +13,16 @@ This library has an extensive set of regression tests, documentation, and has be
 Example
 -------
 
-This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
+This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/Alamofire%2BPromise.swift) extension.
 
-In this example, JSON data is loaded from the Github API. It is then parsed, and stored into CoreData.
+In this example, JSON data is loaded from the Github API. It is then parsed, and stored into a local cache.
 If both those succeed the result is shown to the user, if either of those fail, a description of the error is shown to the user.
 
 ```swift
 let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 Alamofire.request(url).responseJSONPromise()
   .map(parseJson)
-  .flatMap(storeInCoreData)
+  .flatMap(storeInLocalCache)
   .then { project in
 
     // Show project name and description
@@ -35,7 +35,7 @@ Alamofire.request(url).responseJSONPromise()
   }
   .trap { e in
 
-    // Either an Alamofire error or a CoreData error occured
+    // Either an Alamofire error or a LocalCache error occured
     self.errorLabel.text = e.localizedDescription
     self.errorView.alpha = 1
   }
@@ -71,7 +71,7 @@ Listed below are some of the methods and functions provided this library. More d
 * `.flatMapError(transform: Error -> Promise<Value, NewError>)`  
   Returns the flattened result of mapping a function over the promise error.
 
-* `.dispatch(on: queue: DispatchQueue)`
+* `.dispatch(on queue: DispatchQueue)`
   Returns a new promise that will execute all callbacks on the specified dispatch_queue. See [dispatch queues](#dispatch-queues)
 
 
