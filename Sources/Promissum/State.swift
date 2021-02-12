@@ -8,10 +8,6 @@
 
 import Foundation
 
-/// Type used when there is no error possible.
-@available(*, deprecated, renamed: "Never", message: "Use the Never type instead")
-public enum NoError : Error {}
-
 /// State of a PromiseSource.
 public enum State<Value, Error> {
   case unresolved

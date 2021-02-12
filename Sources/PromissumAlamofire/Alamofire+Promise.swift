@@ -103,17 +103,6 @@ extension DataRequest {
 
 extension DataRequest {
 
-  // For 5.x
-  @available(*, unavailable, renamed: "responseDecodable(of:)")
-  public func responseDecode<Success: Decodable>(_ type: Success.Type, decoder: JSONDecoder = JSONDecoder(), completionHandler: @escaping (DataResponse<Success, Error>) -> Void) -> Self {
-    fatalError()
-  }
-
-  @available(*, unavailable, renamed: "responseDecodablePromise(of:)")
-  public func responseDecodePromise<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse> {
-    fatalError()
-  }
-
   public func responseDecodablePromise<T: Decodable>(of type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> Promise<SuccessResponse<T>, ErrorResponse>
   {
     let source = PromiseSource<SuccessResponse<T>, ErrorResponse>()
@@ -225,18 +214,5 @@ extension DataRequest {
     }
 
     return source.promise
-  }
-}
-
-// MARK: - Property List
-
-extension DataRequest {
-  // For 5.x
-  @available(*, unavailable)
-  public func responsePropertyListPromise(
-    options: PropertyListSerialization.ReadOptions = [])
-    -> Promise<SuccessResponse<Any>, ErrorResponse>
-  {
-    fatalError()
   }
 }
