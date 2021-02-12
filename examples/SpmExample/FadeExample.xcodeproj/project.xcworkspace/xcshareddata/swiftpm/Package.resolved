@@ -12,11 +12,11 @@
       },
       {
         "package": "Promissum",
-        "repositoryURL": "https://github.com/tomlokhorst/Promissum",
+        "repositoryURL": "https://github.com/tomlokhorst/Promissum.git",
         "state": {
-          "branch": "separate-targets",
-          "revision": "2e43de1db4f1df5aec400eca047410594d33094b",
-          "version": null
+          "branch": null,
+          "revision": "143ec366cd4468446a7db4a56381767fcdbb383d",
+          "version": "5.0.1"
         }
       }
     ]

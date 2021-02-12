@@ -1,12 +1,12 @@
 PODS:
   - Alamofire (5.2.2)
-  - Promissum (5.0.0):
-    - Promissum/Core (= 5.0.0)
-  - Promissum/Alamofire (5.0.0):
+  - Promissum (5.0.1):
+    - Promissum/Core (= 5.0.1)
+  - Promissum/Alamofire (5.0.1):
     - Alamofire (~> 5.0)
     - Promissum/Core
-  - Promissum/Core (5.0.0)
-  - Promissum/UIKit (5.0.0):
+  - Promissum/Core (5.0.1)
+  - Promissum/UIKit (5.0.1):
     - Promissum/Core
 
 DEPENDENCIES:
@@ -25,8 +25,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  Promissum: 65cb05986c933050145692f99a53026177df27a3
+  Promissum: 0fc7a86befe8a974c142dfd0f53d6f70d17fe9d7
 
 PODFILE CHECKSUM: deb117e47f4facf0b487a216eb48d86019228c19
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1
