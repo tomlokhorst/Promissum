@@ -168,6 +168,10 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
     resolveResult(.failure(error))
   }
 
+  public func result(_ result: Result<Value, Error>) {
+    resolveResult(result)
+  }
+
   internal func resolveResult(_ result: Result<Value, Error>) {
     let action = internalState.resolve(with: result)
     callHandlers(action.handlers, with: action.result, dispatchKey: dispatchKey, dispatchMethod: dispatchMethod)
