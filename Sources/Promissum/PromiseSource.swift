@@ -168,6 +168,9 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
     resolveResult(.failure(error))
   }
 
+  /// Resolve or reject an Unresolved PromiseSource with supplied result
+  ///
+  /// When called on a PromiseSource that is already Resolved or Rejected, the call is ignored.
   public func result(_ result: Result<Value, Error>) {
     resolveResult(result)
   }
