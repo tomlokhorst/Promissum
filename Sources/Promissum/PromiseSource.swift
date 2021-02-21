@@ -70,9 +70,29 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
   internal let dispatchKey: DispatchSpecificKey<Void>
   internal let dispatchMethod: DispatchMethod
 
+  /// State of a PromiseSource.
+  public enum State: CustomStringConvertible {
+    case unresolved
+    case resolved(Value)
+    case rejected(Error)
+
+    public var description: String {
+      switch self {
+      case .unresolved:
+        return "unresolved"
+
+      case .resolved(let value):
+        return "resolved(\(value))"
+
+      case .rejected(let error):
+        return "rejected(\(error))"
+      }
+    }
+  }
+
   /// The current state of the PromiseSource
   private let internalState: PromiseSourceState
-  public var state: State<Value, Error> {
+  public var state: State {
     return internalState.readState()
   }
 
@@ -96,7 +116,7 @@ public class PromiseSource<Value, Error> where Error: Swift.Error {
     self.init(state: .unresolved, dispatchKey: DispatchSpecificKey(), dispatchMethod: dispatchMethod, warnUnresolvedDeinit: warnUnresolvedDeinit)
   }
 
-  internal init(state: State<Value, Error>, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
+  internal init(state: State, dispatchKey: DispatchSpecificKey<Void>, dispatchMethod: DispatchMethod, warnUnresolvedDeinit: Bool) {
     self.internalState = PromiseSourceState(state: state)
     self.dispatchKey = dispatchKey
     self.dispatchMethod = dispatchMethod
@@ -172,14 +192,14 @@ extension PromiseSource {
 
   fileprivate class PromiseSourceState {
     private let lock = NSLock()
-    private var state: State<Value, Error>
+    private var state: State
     private var handlers: [ResultHandler] = []
 
-    init(state: State<Value, Error>) {
+    init(state: State) {
       self.state = state
     }
 
-    internal func readState() -> State<Value, Error> {
+    internal func readState() -> State {
       lock.lock(); defer { lock.unlock() }
 
       return state
@@ -254,6 +274,18 @@ internal func callHandlers<T>(_ handlers: [(T) -> Void], with value: T, dispatch
           handler(value)
         }
       }
+    }
+  }
+}
+
+extension Result {
+  internal var state: PromiseSource<Success, Failure>.State {
+    switch self {
+    case .success(let boxed):
+      return .resolved(boxed)
+
+    case .failure(let error):
+      return .rejected(error)
     }
   }
 }
