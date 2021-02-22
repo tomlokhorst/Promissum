@@ -13,16 +13,16 @@ This library has an extensive set of regression tests, documentation, and has be
 Example
 -------
 
-This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/Alamofire%2BPromise.swift) and [CoreDataKit+Promise](https://github.com/tomlokhorst/Promissum/blob/develop/extensions/PromissumExtensions/CoreDataKit%2BPromise.swift) extensions.
+This example demonstrates the [Alamofire+Promise](https://github.com/tomlokhorst/PromissumAlamofire) extension.
 
-In this example, JSON data is loaded from the Github API. It is then parsed, and stored into CoreData.
+In this example, JSON data is loaded from the Github API. It is then parsed, and stored into a local cache.
 If both those succeed the result is shown to the user, if either of those fail, a description of the error is shown to the user.
 
 ```swift
 let url = "https://api.github.com/repos/tomlokhorst/Promissum"
 Alamofire.request(url).responseJSONPromise()
   .map(parseJson)
-  .flatMap(storeInCoreData)
+  .flatMap(storeInLocalCache)
   .then { project in
 
     // Show project name and description
@@ -35,13 +35,13 @@ Alamofire.request(url).responseJSONPromise()
   }
   .trap { e in
 
-    // Either an Alamofire error or a CoreData error occured
+    // Either an Alamofire error or a LocalCache error occured
     self.errorLabel.text = e.localizedDescription
     self.errorView.alpha = 1
   }
 ```
 
-See [FadeExample/ViewController.swift](https://github.com/tomlokhorst/Promissum/blob/develop/examples/FadeExample/FadeExample/ViewController.swift) for an extended version of this example.
+See [FadeExample/ViewController.swift](https://github.com/tomlokhorst/PromissumAlamofire/blob/develop/examples/FadeExample/FadeExample/ViewController.swift) for an extended version of this example.
 
 
 Cancellation
@@ -71,14 +71,11 @@ Listed below are some of the methods and functions provided this library. More d
 * `.flatMapError(transform: Error -> Promise<Value, NewError>)`  
   Returns the flattened result of mapping a function over the promise error.
 
-* `.dispatch(on: queue: DispatchQueue)`
+* `.dispatch(on queue: DispatchQueue)`
   Returns a new promise that will execute all callbacks on the specified dispatch_queue. See [dispatch queues](#dispatch-queues)
 
 
 ### Functions for dealing with Promises
-
-* `flatten(promise: Promise<Promise<Value, Error>, Error>)`  
-  Flattens a nested Promise of Promise into a single Promise.
 
 * `whenBoth(promiseA: Promise<A, Error>, _ promiseB: Promise<B, Error>)`  
   Creates a Promise that resolves when both arguments to `whenBoth` resolve.
@@ -142,31 +139,27 @@ somePromise()
 Installation
 ------------
 
-### CocoaPods
+### Swift Package Manager
 
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
-You can install it with the following command:
+[SPM](https://swift.org/package-manager/) is a dependency manager for Swift projects.
 
-```bash
-$ gem install cocoapods
+Once you have SPM setup, add a dependency using Xcode or by editing Package.swift:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/tomlokhorst/Promissum.git", from: "6.0.0"),
+]
 ```
 
-To integrate Promissum into your Xcode project using CocoaPods, specify it in your `Podfile`:
-
-```ruby
-pod 'Promissum'
-```
-
-Then, run the following command:
-
-```bash
-$ pod install
-```
+**Note:**
+Previous versions of Promissum supported CocoaPods, this is no longer supported.
+If you still need pods support, you can use the 5.x.x versions of this package, while those still work. 
 
 
 Releases
 --------
 
+ - **6.0.0** - 2021-02-21 - Move public State struct into PromiseSource. Remove CocoaPods support
  - 5.0.1 - 2020-10-07 - Pass promise method options to Alamofire
  - **5.0.0** - 2020-08-22 - Update Alamofire+Promise to Alamofire 5, requires iOS 10
  - **4.0.0** - 2019-06-10 - Swift 5.1 support, use build-in Result type

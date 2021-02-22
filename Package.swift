@@ -8,18 +8,14 @@ let package = Package(
   ],
   products: [
     .library(name: "Promissum", targets: ["Promissum"]),
-    .library(name: "PromissumAlamofire", targets: ["PromissumAlamofire"]),
     .library(name: "PromissumUIKit", targets: ["PromissumUIKit"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.1.0")
   ],
   targets: [
     .target(name: "Promissum"),
-    .target(name: "PromissumAlamofire", dependencies: ["Promissum", "Alamofire"]),
     .target(name: "PromissumUIKit", dependencies: ["Promissum"]),
     .testTarget(name: "PromissumTests", dependencies: ["Promissum"]),
-    .testTarget(name: "PromissumAlamofireTests", dependencies: ["PromissumAlamofire"]),
   ],
   swiftLanguageVersions: [.v5]
 )

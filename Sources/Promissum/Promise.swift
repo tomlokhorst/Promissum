@@ -109,6 +109,21 @@ public class Promise<Value, Error> where Error: Swift.Error {
     self.source = PromiseSource(error: error)
   }
 
+  /// Initialize a Promise using a closure taking a Promise Source.
+  ///
+  /// Example:
+  /// ```
+  /// Promise { source in
+  ///   asyncFunction(completion: { source.resolve() })
+  /// }
+  /// ```
+  public init(_ completion: (PromiseSource<Value, Error>) -> Void) {
+    let source = PromiseSource<Value, Error>()
+    self.source = source
+
+    completion(source)
+  }
+
   internal init(source: PromiseSource<Value, Error>) {
     self.source = source
   }
