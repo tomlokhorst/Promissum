@@ -8,10 +8,11 @@
 
 import Foundation
 
-///// The Result type is used for Promises that are Resolved or Rejected.
+/// The Result type is used for Promises that are Resolved or Rejected.
 extension Result {
 
   /// Optional value, set when Result is Value.
+//  @available(*, deprecated, message: "migrate to: promise.get()")
   public var value: Success? {
     switch self {
     case .success(let value):
@@ -22,6 +23,7 @@ extension Result {
   }
 
   /// Optional error, set when Result is Error.
+//  @available(*, deprecated, message: "migrate to: promise.get()")
   public var error: Failure? {
     switch self {
     case .failure(let error):

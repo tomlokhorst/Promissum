@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Tom Lokhorst. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 import Promissum
 
@@ -84,3 +85,4 @@ extension UIViewController {
     return source.promise
   }
 }
+#endif
