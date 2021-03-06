@@ -63,6 +63,71 @@ class AsyncAwaitTests: XCTestCase {
     }
   }
 
+  func testGetResultSuccess() {
+    withExpectiation(timeout: 0.1) {
+      let r = await getFourPromise().getResult()
+      XCTAssertEqual(r.value, 4)
+    }
+  }
+
+  func testGetResultError() {
+    withExpectiation(timeout: 0.1) {
+      let r = await getErrorPromise().getResult()
+      XCTAssertNotNil(r.error)
+    }
+  }
+
+  func testAsyncInit() throws {
+    var value: Int?
+
+    let p = Promise {
+      await getFourAsync()
+    }
+
+    p.then { x in
+        value = x
+      }
+
+    XCTAssertNil(value)
+    expectation(p) {
+      XCTAssertEqual(value, 4)
+    }
+  }
+
+  func testAsyncErrorInit() throws {
+    var error: Error?
+
+    let p = Promise {
+      try await getErrorPromise().get()
+    }
+
+    p.trap { e in
+        error = e
+      }
+
+    XCTAssertNil(error)
+    expectation(p) {
+      XCTAssertEqual((error as NSError?)?.code, 3)
+    }
+  }
+
+  func testAsyncPotentialErrorInit() throws {
+    var value: Int?
+
+    let p = Promise {
+      try await getFourErrorPromise().get()
+    }
+
+    p.then { x in
+        value = x
+      }
+
+    XCTAssertNil(value)
+    expectation(p) {
+      XCTAssertEqual(value, 4)
+    }
+  }
+
   func withExpectiation(timeout: TimeInterval, operation: @escaping () async -> Void) {
     let ex = self.expectation(description: "Async call")
     makeCallback(operation: operation) {
@@ -105,38 +170,6 @@ private func getErrorPromise() -> Promise<Void, NSError> {
   Promise { source in
     DispatchQueue.main.async {
       source.reject(NSError(code: 3))
-    }
-  }
-}
-
-extension Promise {
-  func get() async throws -> Value {
-    try await withUnsafeThrowingContinuation { continuation in
-      self.finallyResult { result in
-        continuation.resume(with: result)
-      }
-    }
-  }
-
-  func getResult() async -> Result<Value, Error> {
-    await withUnsafeContinuation { continuation in
-      self.finallyResult { result in
-        continuation.resume(returning: result)
-      }
-    }
-  }
-
-//  convenience init(block: () async throws -> Value) {
-//    fatalError()
-//  }
-}
-
-extension Promise where Error == Never {
-  func get() async -> Value {
-    await withUnsafeContinuation { continuation in
-      self.finallyResult { result in
-        continuation.resume(with: result)
-      }
     }
   }
 }
