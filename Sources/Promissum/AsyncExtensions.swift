@@ -31,7 +31,7 @@ extension Promise where Error == Swift.Error {
     let source = PromiseSource<Value, Error>()
     self.init(source: source)
 
-    runAsync {
+    Task.runDetached {
       do {
         let value = try await block()
         source.resolve(value)
@@ -55,7 +55,7 @@ extension Promise where Error == Never {
     let source = PromiseSource<Value, Never>()
     self.init(source: source)
 
-    runAsync {
+    Task.runDetached {
       let value = await block()
       source.resolve(value)
     }
@@ -63,6 +63,6 @@ extension Promise where Error == Never {
 
 }
 
-@asyncHandler private func runAsync(operation: @escaping () async -> Void) {
-  await operation()
-}
+//@asyncHandler private func runAsync(operation: @escaping () async -> Void) {
+//  await operation()
+//}
