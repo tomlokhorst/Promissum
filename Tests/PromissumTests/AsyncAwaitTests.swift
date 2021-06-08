@@ -32,19 +32,19 @@ class AsyncAwaitTests: XCTestCase {
   }
 
   func testGetNoError() async {
-    let value = await getFourPromise().get()
+    let value = await getFourPromise().asyncValue
 
     XCTAssertEqual(value, 4)
   }
 
   func testGetPotentialError() async throws {
-    let value = try await getFourErrorPromise().get()
+    let value = try await getFourErrorPromise().asyncValue
     XCTAssertEqual(value, 4)
   }
 
   func testThrowGet() async {
     do {
-      try await getErrorPromise().get()
+      try await getErrorPromise().asyncValue
       XCTFail()
     } catch {
       XCTAssertNotNil(error)
@@ -52,12 +52,12 @@ class AsyncAwaitTests: XCTestCase {
   }
 
   func testGetResultSuccess() async {
-    let r = await getFourPromise().getResult()
+    let r = await getFourPromise().asyncResult
     XCTAssertEqual(r.value, 4)
   }
 
   func testGetResultError() async {
-    let r = await getErrorPromise().getResult()
+    let r = await getErrorPromise().asyncResult
     XCTAssertNotNil(r.error)
   }
 
@@ -82,7 +82,7 @@ class AsyncAwaitTests: XCTestCase {
     var error: Error?
 
     let p = Promise {
-      try await getErrorPromise().get()
+      try await getErrorPromise().asyncValue
     }
 
     p.trap { e in
@@ -99,7 +99,7 @@ class AsyncAwaitTests: XCTestCase {
     var value: Int?
 
     let p = Promise {
-      try await getFourErrorPromise().get()
+      try await getFourErrorPromise().asyncValue
     }
 
     p.then { x in

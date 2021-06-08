@@ -9,18 +9,22 @@ import Foundation
 
 @available(macOS 12.0, *)
 extension Promise {
-  public func get() async throws -> Value {
-    try await withUnsafeThrowingContinuation { continuation in
-      self.finallyResult { result in
-        continuation.resume(with: result)
+  public var asyncValue: Value {
+    get async throws {
+      try await withUnsafeThrowingContinuation { continuation in
+        self.finallyResult { result in
+          continuation.resume(with: result)
+        }
       }
     }
   }
 
-  public func getResult() async -> Result<Value, Error> {
-    await withUnsafeContinuation { continuation in
-      self.finallyResult { result in
-        continuation.resume(returning: result)
+  public var asyncResult: Result<Value, Error> {
+    get async {
+      await withUnsafeContinuation { continuation in
+        self.finallyResult { result in
+          continuation.resume(returning: result)
+        }
       }
     }
   }
@@ -45,10 +49,12 @@ extension Promise where Error == Swift.Error {
 
 @available(macOS 12.0, *)
 extension Promise where Error == Never {
-  public func get() async -> Value {
-    await withUnsafeContinuation { continuation in
-      self.finallyResult { result in
-        continuation.resume(with: result)
+  public var asyncValue: Value {
+    get async {
+      await withUnsafeContinuation { continuation in
+        self.finallyResult { result in
+          continuation.resume(with: result)
+        }
       }
     }
   }
