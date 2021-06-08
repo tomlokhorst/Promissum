@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import _Concurrency
 
+@available(macOS 12.0, *)
 extension Promise {
   public func get() async throws -> Value {
     try await withUnsafeThrowingContinuation { continuation in
@@ -26,12 +26,13 @@ extension Promise {
   }
 }
 
+@available(macOS 12.0, *)
 extension Promise where Error == Swift.Error {
   public convenience init(block: @escaping () async throws -> Value) {
     let source = PromiseSource<Value, Error>()
     self.init(source: source)
 
-    Task.runDetached {
+    async {
       do {
         let value = try await block()
         source.resolve(value)
@@ -42,6 +43,7 @@ extension Promise where Error == Swift.Error {
   }
 }
 
+@available(macOS 12.0, *)
 extension Promise where Error == Never {
   public func get() async -> Value {
     await withUnsafeContinuation { continuation in
@@ -55,14 +57,10 @@ extension Promise where Error == Never {
     let source = PromiseSource<Value, Never>()
     self.init(source: source)
 
-    Task.runDetached {
+    async {
       let value = await block()
       source.resolve(value)
     }
   }
 
 }
-
-//@asyncHandler private func runAsync(operation: @escaping () async -> Void) {
-//  await operation()
-//}

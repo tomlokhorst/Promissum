@@ -7,8 +7,8 @@
 
 import XCTest
 import Promissum
-import _Concurrency
 
+@available(macOS 12.0, *)
 class AsyncAwaitTests: XCTestCase {
 
   func testThen() throws {
@@ -130,18 +130,15 @@ class AsyncAwaitTests: XCTestCase {
 
   func withExpectiation(timeout: TimeInterval, operation: @escaping () async -> Void) {
     let ex = self.expectation(description: "Async call")
-    makeCallback(operation: operation) {
+    async {
+      await operation()
       ex.fulfill()
     }
     waitForExpectations(timeout: timeout)
   }
-
-  @asyncHandler func makeCallback<T>(operation: @escaping () async -> T, completion: @escaping (T) -> Void) {
-    let value = await operation()
-    completion(value)
-  }
 }
 
+@available(macOS 12.0, *)
 private func getFourAsync() async -> Int {
   await withUnsafeContinuation { continuation in
     DispatchQueue.main.async {
