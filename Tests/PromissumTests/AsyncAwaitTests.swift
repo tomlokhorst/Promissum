@@ -25,56 +25,40 @@ class AsyncAwaitTests: XCTestCase {
     }
   }
 
-  func testAsync() {
-    withExpectiation(timeout: 0.1) {
-      let value = await getFourAsync()
+  func testAsync() async {
+    let value = await getFourAsync()
 
-      XCTAssertEqual(value, 4)
+    XCTAssertEqual(value, 4)
+  }
+
+  func testGetNoError() async {
+    let value = await getFourPromise().get()
+
+    XCTAssertEqual(value, 4)
+  }
+
+  func testGetPotentialError() async throws {
+    let value = try await getFourErrorPromise().get()
+    XCTAssertEqual(value, 4)
+  }
+
+  func testThrowGet() async {
+    do {
+      try await getErrorPromise().get()
+      XCTFail()
+    } catch {
+      XCTAssertNotNil(error)
     }
   }
 
-  func testGetNoError() {
-    withExpectiation(timeout: 0.1) {
-      let value = await getFourPromise().get()
-
-      XCTAssertEqual(value, 4)
-    }
+  func testGetResultSuccess() async {
+    let r = await getFourPromise().getResult()
+    XCTAssertEqual(r.value, 4)
   }
 
-  func testGetPotentialError() {
-    withExpectiation(timeout: 0.1) {
-      do {
-        let value = try await getFourErrorPromise().get()
-        XCTAssertEqual(value, 4)
-      } catch {
-        XCTFail()
-      }
-    }
-  }
-
-  func testThrowGet() {
-    withExpectiation(timeout: 0.1) {
-      do {
-        try await getErrorPromise().get()
-        XCTFail()
-      } catch {
-        XCTAssertNotNil(error)
-      }
-    }
-  }
-
-  func testGetResultSuccess() {
-    withExpectiation(timeout: 0.1) {
-      let r = await getFourPromise().getResult()
-      XCTAssertEqual(r.value, 4)
-    }
-  }
-
-  func testGetResultError() {
-    withExpectiation(timeout: 0.1) {
-      let r = await getErrorPromise().getResult()
-      XCTAssertNotNil(r.error)
-    }
+  func testGetResultError() async {
+    let r = await getErrorPromise().getResult()
+    XCTAssertNotNil(r.error)
   }
 
   func testAsyncInit() throws {
@@ -126,15 +110,6 @@ class AsyncAwaitTests: XCTestCase {
     expectation(p) {
       XCTAssertEqual(value, 4)
     }
-  }
-
-  func withExpectiation(timeout: TimeInterval, operation: @escaping () async -> Void) {
-    let ex = self.expectation(description: "Async call")
-    async {
-      await operation()
-      ex.fulfill()
-    }
-    waitForExpectations(timeout: timeout)
   }
 }
 
