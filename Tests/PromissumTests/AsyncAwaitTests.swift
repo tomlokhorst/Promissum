@@ -8,7 +8,7 @@
 import XCTest
 import Promissum
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 class AsyncAwaitTests: XCTestCase {
 
   func testThen() throws {
@@ -113,7 +113,7 @@ class AsyncAwaitTests: XCTestCase {
   }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 private func getFourAsync() async -> Int {
   await withUnsafeContinuation { continuation in
     DispatchQueue.main.async {

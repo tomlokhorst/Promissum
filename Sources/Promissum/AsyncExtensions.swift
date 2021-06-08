@@ -7,7 +7,7 @@
 
 import Foundation
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise {
   public var asyncValue: Value {
     get async throws {
@@ -30,7 +30,7 @@ extension Promise {
   }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise where Error == Swift.Error {
   public convenience init(block: @escaping () async throws -> Value) {
     let source = PromiseSource<Value, Error>()
@@ -47,7 +47,7 @@ extension Promise where Error == Swift.Error {
   }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise where Error == Never {
   public var asyncValue: Value {
     get async {
