@@ -36,7 +36,7 @@ extension Promise where Error == Swift.Error {
     let source = PromiseSource<Value, Error>()
     self.init(source: source)
 
-    async {
+    Task {
       do {
         let value = try await block()
         source.resolve(value)
@@ -63,7 +63,7 @@ extension Promise where Error == Never {
     let source = PromiseSource<Value, Never>()
     self.init(source: source)
 
-    async {
+    Task {
       let value = await block()
       source.resolve(value)
     }
