@@ -5,29 +5,35 @@
 //  Created by Tom Lokhorst on 2021-03-06.
 //
 
-#if canImport(_Concurrency)
-
 import Foundation
 
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise {
   public var asyncValue: Value {
     get async throws {
+#if canImport(_Concurrency)
       try await withUnsafeThrowingContinuation { continuation in
         self.finallyResult { result in
           continuation.resume(with: result)
         }
       }
+#else
+      fatalError()
+#endif
     }
   }
 
   public var asyncResult: Result<Value, Error> {
     get async {
+#if canImport(_Concurrency)
       await withUnsafeContinuation { continuation in
         self.finallyResult { result in
           continuation.resume(returning: result)
         }
       }
+#else
+      fatalError()
+#endif
     }
   }
 }
@@ -38,6 +44,7 @@ extension Promise where Error == Swift.Error {
     let source = PromiseSource<Value, Error>()
     self.init(source: source)
 
+#if canImport(_Concurrency)
     Task {
       do {
         let value = try await block()
@@ -46,6 +53,9 @@ extension Promise where Error == Swift.Error {
         source.reject(error)
       }
     }
+#else
+      fatalError()
+#endif
   }
 }
 
@@ -53,11 +63,15 @@ extension Promise where Error == Swift.Error {
 extension Promise where Error == Never {
   public var asyncValue: Value {
     get async {
+#if canImport(_Concurrency)
       await withUnsafeContinuation { continuation in
         self.finallyResult { result in
           continuation.resume(with: result)
         }
       }
+#else
+      fatalError()
+#endif
     }
   }
 
@@ -65,12 +79,14 @@ extension Promise where Error == Never {
     let source = PromiseSource<Value, Never>()
     self.init(source: source)
 
+#if canImport(_Concurrency)
     Task {
       let value = await block()
       source.resolve(value)
     }
+#else
+      fatalError()
+#endif
   }
 
 }
-
-#endif
