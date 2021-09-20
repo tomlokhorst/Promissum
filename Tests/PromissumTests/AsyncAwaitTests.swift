@@ -5,6 +5,8 @@
 //  Created by Tom Lokhorst on 2021-03-06.
 //
 
+#if canImport(_Concurrency)
+
 import XCTest
 import Promissum
 
@@ -145,3 +147,5 @@ private func getErrorPromise() -> Promise<Void, NSError> {
     }
   }
 }
+
+#endif

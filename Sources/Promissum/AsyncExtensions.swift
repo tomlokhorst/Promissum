@@ -5,6 +5,8 @@
 //  Created by Tom Lokhorst on 2021-03-06.
 //
 
+#if canImport(_Concurrency)
+
 import Foundation
 
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
@@ -70,3 +72,5 @@ extension Promise where Error == Never {
   }
 
 }
+
+#endif
