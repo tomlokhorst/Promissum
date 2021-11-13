@@ -159,6 +159,7 @@ If you still need pods support, you can use the 5.x.x versions of this package, 
 Releases
 --------
 
+ - **7.0.0** - 2021-11-13 - Add async/await support. Remove PromissumUIKit extensions
  - **6.0.0** - 2021-02-21 - Move public State struct into PromiseSource. Remove CocoaPods support
  - 5.0.1 - 2020-10-07 - Pass promise method options to Alamofire
  - **5.0.0** - 2020-08-22 - Update Alamofire+Promise to Alamofire 5, requires iOS 10
