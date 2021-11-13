@@ -12,66 +12,6 @@ import Promissum
 
 class CombinatorTests: XCTestCase {
 
-  func testFlattenValueValue() {
-    var value: Int?
-
-    let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
-    let source2 = PromiseSource<Int, NSError>()
-    let outer = source1.promise
-    let inner = source2.promise
-
-    let p = flatten(outer)
-      .then { x in
-        value = x
-      }
-
-    source1.resolve(inner)
-    source2.resolve(42)
-
-    expectation(p) {
-      XCTAssert(value == 42, "Value should be 42")
-    }
-  }
-
-  func testFlattenValueError() {
-    var error: NSError?
-
-    let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
-    let source2 = PromiseSource<Int, NSError>()
-    let outer = source1.promise
-    let inner = source2.promise
-
-    let p = flatten(outer)
-      .trap { e in
-        error = e
-      }
-
-    source1.resolve(inner)
-    source2.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
-
-    expectation(p) {
-      XCTAssert(error?.code == 42, "Error should be 42")
-    }
-  }
-
-  func testFlattenErrorError() {
-    var error: NSError?
-
-    let source1 = PromiseSource<Promise<Int, NSError>, NSError>()
-    let outer = source1.promise
-
-    let p = flatten(outer)
-      .trap { e in
-        error = e
-      }
-
-    source1.reject(NSError(domain: PromissumErrorDomain, code: 42, userInfo: nil))
-
-    expectation(p) {
-      XCTAssert(error?.code == 42, "Error should be 42")
-    }
-  }
-
   func testBothValue() {
     var value: Int?
 

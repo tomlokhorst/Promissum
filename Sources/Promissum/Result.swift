@@ -8,7 +8,7 @@
 
 import Foundation
 
-///// The Result type is used for Promises that are Resolved or Rejected.
+/// The Result type is used for Promises that are Resolved or Rejected.
 extension Result {
 
   /// Optional value, set when Result is Value.

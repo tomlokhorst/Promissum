@@ -8,13 +8,11 @@ let package = Package(
   ],
   products: [
     .library(name: "Promissum", targets: ["Promissum"]),
-    .library(name: "PromissumUIKit", targets: ["PromissumUIKit"]),
   ],
   dependencies: [
   ],
   targets: [
     .target(name: "Promissum"),
-    .target(name: "PromissumUIKit", dependencies: ["Promissum"]),
     .testTarget(name: "PromissumTests", dependencies: ["Promissum"]),
   ],
   swiftLanguageVersions: [.v5]
