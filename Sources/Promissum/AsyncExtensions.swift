@@ -9,6 +9,8 @@ import Foundation
 
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise {
+
+  /// Async property that returns the value of the promise when it is resolved, or throws when the promise is rejected.
   public var asyncValue: Value {
     get async throws {
 #if canImport(_Concurrency)
@@ -23,6 +25,7 @@ extension Promise {
     }
   }
 
+  /// Async property that returns the result of a promise, when it is resolved or rejected.
   public var asyncResult: Result<Value, Error> {
     get async {
 #if canImport(_Concurrency)
@@ -40,6 +43,16 @@ extension Promise {
 
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise where Error == Swift.Error {
+
+  /// Initialize a Promise using an async closure that can throw an error.
+  /// Used to transform an async function into a promise.
+  ///
+  /// Example:
+  /// ```
+  /// Promise {
+  ///   try await myAsyncFunction()
+  /// }
+  /// ```
   public convenience init(block: @escaping () async throws -> Value) {
     let source = PromiseSource<Value, Error>()
     self.init(source: source)
@@ -61,6 +74,8 @@ extension Promise where Error == Swift.Error {
 
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension Promise where Error == Never {
+
+  /// Async property that returns the value of the promise when it is resolved.
   public var asyncValue: Value {
     get async {
 #if canImport(_Concurrency)
@@ -75,6 +90,15 @@ extension Promise where Error == Never {
     }
   }
 
+  /// Initialize a Promise using an async closure.
+  /// Used to transform an async function into a promise.
+  ///
+  /// Example:
+  /// ```
+  /// Promise {
+  ///   await myAsyncFunction()
+  /// }
+  /// ```
   public convenience init(block: @escaping () async -> Value) {
     let source = PromiseSource<Value, Never>()
     self.init(source: source)
