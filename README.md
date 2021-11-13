@@ -7,7 +7,7 @@ It has useful combinators for working with promises like; `whenAll` for doing so
 
 Promissum really shines when used to combine asynchronous operations from different libraries. There are currently some basic extensions to UIKit and Alamofire, contributions for extensions to other libraries are very welcome.
 
-This library has an extensive set of regression tests, documentation, and has been used in several high profile production apps at [Q42](http://q42.com/swift).
+This library has an extensive set of regression tests, documentation, and has been used in several high profile production apps at [Q42](https://q42.com/en).
 
 
 Example
@@ -40,8 +40,6 @@ Alamofire.request(url).responseJSONPromise()
     self.errorView.alpha = 1
   }
 ```
-
-See [FadeExample/ViewController.swift](https://github.com/tomlokhorst/PromissumAlamofire/blob/develop/examples/FadeExample/FadeExample/ViewController.swift) for an extended version of this example.
 
 
 Cancellation
@@ -147,7 +145,7 @@ Once you have SPM setup, add a dependency using Xcode or by editing Package.swif
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tomlokhorst/Promissum.git", from: "6.0.0"),
+    .package(url: "https://github.com/tomlokhorst/Promissum.git", from: "7.0.0"),
 ]
 ```
 
@@ -187,4 +185,4 @@ Releases
 Licence & Credits
 -----------------
 
-Promissum is written by [Tom Lokhorst](https://twitter.com/tomlokhorst) and available under the [MIT license](https://github.com/tomlokhorst/promissum/blob/master/LICENSE), so feel free to use it in commercial and non-commercial projects.
+Promissum is written by [Tom Lokhorst](https://twitter.com/tomlokhorst) and available under the [MIT license](https://github.com/tomlokhorst/promissum/blob/main/LICENSE), so feel free to use it in commercial and non-commercial projects.
