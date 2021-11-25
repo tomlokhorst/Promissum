@@ -268,7 +268,7 @@ public class Promise<Value, Error> where Error: Swift.Error {
   }
 
   /// Register a handler to be called when Promise is resolved _or_ rejected.
-  /// A `Result<Valule, Error>` argument is passed to the handler.
+  /// A `Result<Value, Error>` argument is passed to the handler.
   ///
   /// The handler is either called directly, if Promise is already resolved or rejected,
   /// or at a later point in time when the Promise becomes Resolved or Rejected.
