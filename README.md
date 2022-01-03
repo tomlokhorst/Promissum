@@ -145,7 +145,7 @@ Once you have SPM setup, add a dependency using Xcode or by editing Package.swif
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tomlokhorst/Promissum.git", from: "7.0.0"),
+    .package(url: "https://github.com/tomlokhorst/Promissum.git", from: "7.1.0"),
 ]
 ```
 
@@ -157,6 +157,7 @@ If you still need pods support, you can use the 5.x.x versions of this package, 
 Releases
 --------
 
+ - 7.1.0 - 2022-01-03 - Move down async/await support to iOS 13. Requires Xcode 13.2
  - **7.0.0** - 2021-11-13 - Add async/await support. Remove PromissumUIKit extensions
  - **6.0.0** - 2021-02-21 - Move public State struct into PromiseSource. Remove CocoaPods support
  - 5.0.1 - 2020-10-07 - Pass promise method options to Alamofire
