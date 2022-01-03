@@ -7,7 +7,7 @@
 
 import Foundation
 
-@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 extension Promise {
 
   /// Async property that returns the value of the promise when it is resolved, or throws when the promise is rejected.
@@ -41,7 +41,7 @@ extension Promise {
   }
 }
 
-@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 extension Promise where Error == Swift.Error {
 
   /// Initialize a Promise using an async closure that can throw an error.
@@ -72,7 +72,7 @@ extension Promise where Error == Swift.Error {
   }
 }
 
-@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 extension Promise where Error == Never {
 
   /// Async property that returns the value of the promise when it is resolved.
