@@ -42,6 +42,30 @@ Alamofire.request(url).responseJSONPromise()
 ```
 
 
+Async/Await
+-----------
+
+Interop with Swift's async await is available via the `.asyncValue` and `.asyncResult` properties, as well as a custom `Promise` initializer.
+
+```swift
+// Go from Promise to async/await
+func downloadProject(url: URL) async throws -> Project {
+  let data = try await downloadPromise(url: url).asyncValue
+  let project = try parse(data)
+  return project
+}
+
+
+// Go from async/await to Promise
+func submitProject(project: Project) -> Promise<Void, Error> {
+  Promise {
+    let data = try encode(project)
+    try await upload(data)
+  }
+}
+```
+
+
 Cancellation
 ------------
 
